@@ -1,0 +1,186 @@
+<section
+  id="naming-conventions"
+  class="mb-12 bg-white rounded-lg shadow-md p-8 scroll-mt-4"
+>
+  <h2 class="text-3xl font-bold text-gray-900 mb-6">Naming Conventions</h2>
+
+  <p class="text-gray-700 mb-6">
+    Using consistent naming conventions makes your code more readable and
+    maintainable. Here are the common conventions used in JavaScript.
+  </p>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+    <!-- Rules -->
+    <div>
+      <h3 class="text-xl font-semibold text-gray-900 mb-4">Basic Rules</h3>
+      <ul class="space-y-3">
+        <li class="flex items-start">
+          <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+          <div>
+            <p class="font-medium">Must be valid identifiers</p>
+            <p class="text-sm text-gray-600">
+              Can contain letters, digits, underscores, and dollar signs
+            </p>
+          </div>
+        </li>
+        <li class="flex items-start">
+          <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+          <div>
+            <p class="font-medium">
+              Must start with a letter, underscore, or dollar sign
+            </p>
+            <p class="text-sm text-gray-600">Cannot start with a number</p>
+          </div>
+        </li>
+        <li class="flex items-start">
+          <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+          <div>
+            <p class="font-medium">Cannot be reserved keywords</p>
+            <p class="text-sm text-gray-600">
+              Words like <code>if</code>, <code>for</code>,
+              <code>function</code>, etc.
+            </p>
+          </div>
+        </li>
+        <li class="flex items-start">
+          <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+          <div>
+            <p class="font-medium">Case-sensitive</p>
+            <p class="text-sm text-gray-600">
+              <code>myVar</code> and <code>myvar</code> are different variables
+            </p>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Conventions -->
+    <div>
+      <h3 class="text-xl font-semibold text-gray-900 mb-4">
+        Common Conventions
+      </h3>
+      <ul class="space-y-3">
+        <li class="flex items-start">
+          <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+          <div>
+            <p class="font-medium">camelCase for variables and functions</p>
+            <p class="text-sm text-gray-600">
+              <code>firstName</code>, <code>calculateTotal()</code>
+            </p>
+          </div>
+        </li>
+        <li class="flex items-start">
+          <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+          <div>
+            <p class="font-medium">PascalCase for classes and constructors</p>
+            <p class="text-sm text-gray-600">
+              <code>Person</code>, <code>UserProfile</code>
+            </p>
+          </div>
+        </li>
+        <li class="flex items-start">
+          <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+          <div>
+            <p class="font-medium">UPPER_SNAKE_CASE for constants</p>
+            <p class="text-sm text-gray-600">
+              <code>MAX_USERS</code>, <code>API_KEY</code>
+            </p>
+          </div>
+        </li>
+        <li class="flex items-start">
+          <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+          <div>
+            <p class="font-medium">Use descriptive names</p>
+            <p class="text-sm text-gray-600">
+              Prefer <code>userAge</code> over <code>a</code>
+            </p>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div id = "code" class="code-block">
+    <div class="language-tag">javascript</div>
+    <button class="copy-button">Copy</button>
+    <pre><code><span class="comment">// Good variable naming examples</span>
+
+              <span class="comment">// camelCase for variables</span>
+              <span class="keyword">let</span> <span class="variable">firstName</span> <span class="operator">=</span> <span class="string">'John'</span>;
+              <span class="keyword">let</span> <span class="variable">userAge</span> <span class="operator">=</span> <span class="number">25</span>;
+              <span class="keyword">let</span> <span class="variable">isActive</span> <span class="operator">=</span> <span class="keyword">true</span>;
+
+              <span class="comment">// camelCase for functions</span>
+              <span class="keyword">function</span> <span class="function">calculateTotal</span>(<span class="variable">price</span>, <span class="variable">quantity</span>) {
+                <span class="keyword">return</span> <span class="variable">price</span> <span class="operator">*</span> <span class="variable">quantity</span>;
+              }
+
+              <span class="comment">// PascalCase for classes</span>
+              <span class="keyword">class</span> <span class="variable">User</span> {
+                <span class="function">constructor</span>(<span class="variable">name</span>, <span class="variable">email</span>) {
+                  <span class="variable">this</span>.<span class="variable">name</span> <span class="operator">=</span> <span class="variable">name</span>;
+                  <span class="variable">this</span>.<span class="variable">email</span> <span class="operator">=</span> <span class="variable">email</span>;
+                }
+              }
+
+              <span class="comment">// UPPER_SNAKE_CASE for constants</span>
+              <span class="keyword">const</span> <span class="variable">MAX_USERS</span> <span class="operator">=</span> <span class="number">100</span>;
+              <span class="keyword">const</span> <span class="variable">API_BASE_URL</span> <span class="operator">=</span> <span class="string">'https://api.example.com'</span>;
+
+              <span class="comment">// Bad naming examples (avoid these)</span>
+              <span class="keyword">let</span> <span class="variable">x</span> <span class="operator">=</span> <span class="string">'John'</span>;           <span class="comment">// Not descriptive</span>
+              <span class="keyword">let</span> <span class="variable">user_name</span> <span class="operator">=</span> <span class="string">'John'</span>;    <span class="comment">// Inconsistent with camelCase</span>
+              <span class="keyword">let</span> <span class="variable">UserAge</span> <span class="operator">=</span> <span class="number">25</span>;          <span class="comment">// PascalCase for a variable</span></code></pre>
+  </div>
+
+  <div class="mt-8 p-6 bg-primary-50 rounded-lg border-l-4 border-primary-500">
+    <h3 class="text-xl font-semibold text-primary-800 mb-2">Semantic Naming</h3>
+    <p class="text-gray-700 mb-4">
+      Good variable names should clearly communicate their purpose and content.
+      They should be:
+    </p>
+    <ul class="space-y-2">
+      <li class="flex items-start">
+        <i class="fas fa-check-circle text-primary-600 mt-1 mr-2"></i>
+        <span
+          ><strong>Descriptive</strong>: Clearly indicate what the variable
+          represents</span
+        >
+      </li>
+      <li class="flex items-start">
+        <i class="fas fa-check-circle text-primary-600 mt-1 mr-2"></i>
+        <span><strong>Concise</strong>: Not unnecessarily long</span>
+      </li>
+      <li class="flex items-start">
+        <i class="fas fa-check-circle text-primary-600 mt-1 mr-2"></i>
+        <span
+          ><strong>Pronounceable</strong>: Easy to discuss in conversation</span
+        >
+      </li>
+      <li class="flex items-start">
+        <i class="fas fa-check-circle text-primary-600 mt-1 mr-2"></i>
+        <span
+          ><strong>Consistent</strong>: Follow the same patterns throughout your
+          codebase</span
+        >
+      </li>
+    </ul>
+  </div>
+
+  <div class="mt-6 flex items-center justify-between">
+    <a
+      href="#data-types"
+      class="text-primary-600 hover:text-primary-700 flex items-center"
+    >
+      <i class="fas fa-arrow-left mr-2"></i>
+      Previous: Data Types
+    </a>
+    <a
+      href="#best-practices"
+      class="text-primary-600 hover:text-primary-700 flex items-center"
+    >
+      Next: Best Practices
+      <i class="fas fa-arrow-right ml-2"></i>
+    </a>
+  </div>
+</section>

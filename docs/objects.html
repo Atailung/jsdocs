@@ -1,0 +1,2607 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JavaScript Objects - JS Fundamentals</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet" />
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: {
+                50: '#f0f9ff',
+                100: '#e0f2fe',
+                200: '#bae6fd',
+                300: '#7dd3fc',
+                400: '#38bdf8',
+                500: '#0ea5e9',
+                600: '#0284c7',
+                700: '#0369a1',
+                800: '#075985',
+                900: '#0c4a6e',
+              },
+              code: {
+                bg: '#1e293b',
+                text: '#e2e8f0'
+              }
+            },
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+              mono: ['Fira Code', 'monospace'],
+            },
+            keyframes: {
+              fadeIn: {
+                '0%': { opacity: '0', transform: 'translateY(10px)' },
+                '100%': { opacity: '1', transform: 'translateY(0)' }
+              },
+              float: {
+                '0%, 100%': { transform: 'translateY(0)' },
+                '50%': { transform: 'translateY(-10px)' }
+              },
+              pulse: {
+                '0%, 100%': { opacity: '1' },
+                '50%': { opacity: '0.7' }
+              },
+              highlight: {
+                '0%': { backgroundColor: 'transparent' },
+                '40%': { backgroundColor: 'rgba(14, 165, 233, 0.2)' },
+                '100%': { backgroundColor: 'transparent' }
+              },
+              typewriter: {
+                '0%': { width: '0%' },
+                '100%': { width: '100%' }
+              },
+              codeSlide: {
+                '0%': { transform: 'translateX(-20px)', opacity: '0' },
+                '100%': { transform: 'translateX(0)', opacity: '1' }
+              },
+              objectGrow: {
+                '0%': { transform: 'scale(0.95)', opacity: '0.8' },
+                '100%': { transform: 'scale(1)', opacity: '1' }
+              },
+              propertySlide: {
+                '0%': { transform: 'translateX(-10px)', opacity: '0' },
+                '100%': { transform: 'translateX(0)', opacity: '1' }
+              },
+              rotateKey: {
+                '0%': { transform: 'rotate(-5deg)' },
+                '100%': { transform: 'rotate(5deg)' }
+              }
+            },
+            animation: {
+              'fade-in': 'fadeIn 0.5s ease-out forwards',
+              'float': 'float 3s ease-in-out infinite',
+              'pulse': 'pulse 2s ease-in-out infinite',
+              'highlight': 'highlight 2s ease-in-out',
+              'typewriter': 'typewriter 2s steps(40, end)',
+              'code-slide': 'codeSlide 0.5s ease-out forwards',
+              'object-grow': 'objectGrow 0.5s ease-out forwards',
+              'property-slide': 'propertySlide 0.4s ease-out forwards',
+              'rotate-key': 'rotateKey 2s ease-in-out infinite alternate'
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      body {
+        font-family: 'Inter', sans-serif;
+        scroll-behavior: smooth;
+      }
+      
+      pre, code {
+        font-family: 'Fira Code', monospace;
+      }
+      
+      pre {
+        background-color: theme('colors.code.bg');
+        color: theme('colors.code.text');
+        padding: 1rem;
+        border-radius: 0.5rem;
+        overflow-x: auto;
+        position: relative;
+      }
+      
+      .code-block {
+        position: relative;
+        margin: 1.5rem 0;
+      }
+      
+      .code-block .copy-button {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+        background-color: rgba(255, 255, 255, 0.1);
+        color: #e2e8f0;
+        border: none;
+        border-radius: 0.25rem;
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+        cursor: pointer;
+        opacity: 0;
+        transition: opacity 0.2s ease-in-out;
+      }
+      
+      .code-block:hover .copy-button {
+        opacity: 1;
+      }
+      
+      .code-block .copy-button:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+      }
+      
+      .code-block .copy-button.copied {
+        background-color: rgba(16, 185, 129, 0.2);
+      }
+      
+      .code-block .language-tag {
+        position: absolute;
+        top: 0.5rem;
+        left: 0.5rem;
+        background-color: rgba(255, 255, 255, 0.1);
+        color: #e2e8f0;
+        border-radius: 0.25rem;
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+      }
+      
+      .progress-bar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 3px;
+        background: theme('colors.primary.500');
+        z-index: 50;
+        width: 0%;
+        transition: width 0.2s ease;
+      }
+      
+      .toc-link {
+        display: block;
+        padding: 0.5rem 1rem;
+        color: #64748b;
+        border-left: 2px solid #e2e8f0;
+        transition: all 0.2s ease;
+      }
+      
+      .toc-link:hover {
+        color: #0ea5e9;
+        border-left-color: #0ea5e9;
+        background-color: rgba(14, 165, 233, 0.05);
+      }
+      
+      .toc-link.active {
+        color: #0ea5e9;
+        border-left-color: #0ea5e9;
+        font-weight: 500;
+      }
+      
+      .section-highlight {
+        animation: highlight 2s ease-in-out;
+      }
+      
+      .typewriter {
+        overflow: hidden;
+        white-space: nowrap;
+        border-right: 2px solid #0ea5e9;
+        animation: typewriter 2s steps(40, end), pulse 1s infinite;
+      }
+      
+      .object-card {
+        transition: all 0.3s ease;
+        border-left: 4px solid transparent;
+      }
+      
+      .object-card:hover {
+        transform: translateY(-5px);
+        border-left: 4px solid theme('colors.primary.500');
+      }
+      
+      .keyword {
+        color: #f472b6;
+        font-weight: 500;
+      }
+      
+      .string {
+        color: #a3e635;
+      }
+      
+      .number {
+        color: #fb923c;
+      }
+      
+      .comment {
+        color: #94a3b8;
+        font-style: italic;
+      }
+      
+      .function {
+        color: #38bdf8;
+      }
+      
+      .variable {
+        color: #e2e8f0;
+      }
+      
+      .operator {
+        color: #e879f9;
+      }
+      
+      .parameter {
+        color: #d8b4fe;
+      }
+      
+      .property {
+        color: #60a5fa;
+      }
+      
+      /* Custom scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+      
+      ::-webkit-scrollbar-track {
+        background: #f1f5f9;
+      }
+      
+      ::-webkit-scrollbar-thumb {
+        background: #94a3b8;
+        border-radius: 4px;
+      }
+      
+      ::-webkit-scrollbar-thumb:hover {
+        background: #64748b;
+      }
+      
+      /* Interactive example styles */
+      .interactive-demo {
+        border: 2px solid #e2e8f0;
+        border-radius: 0.5rem;
+        overflow: hidden;
+      }
+      
+      .interactive-demo-header {
+        background-color: #f8fafc;
+        padding: 0.75rem 1rem;
+        border-bottom: 2px solid #e2e8f0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      
+      .interactive-demo-content {
+        padding: 1rem;
+      }
+      
+      .interactive-demo-output {
+        background-color: #f1f5f9;
+        border-radius: 0.25rem;
+        padding: 1rem;
+        margin-top: 1rem;
+        min-height: 3rem;
+      }
+      
+      .tab-button {
+        padding: 0.5rem 1rem;
+        border-radius: 0.25rem;
+        font-weight: 500;
+        transition: all 0.2s ease;
+      }
+      
+      .tab-button.active {
+        background-color: #0ea5e9;
+        color: white;
+      }
+      
+      .tab-content {
+        display: none;
+      }
+      
+      .tab-content.active {
+        display: block;
+        animation: fadeIn 0.3s ease-out forwards;
+      }
+      
+      .code-comparison {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+      
+      @media (min-width: 768px) {
+        .code-comparison {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+      
+      .code-comparison-item {
+        opacity: 0;
+        animation: fadeIn 0.5s ease-out forwards;
+      }
+      
+      .code-comparison-item:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+      
+      .object-visual {
+        position: relative;
+        padding: 2rem;
+        border-radius: 0.5rem;
+        background-color: #f8fafc;
+        overflow: hidden;
+        margin: 2rem 0;
+      }
+      
+      .object-container {
+        border: 2px solid #38bdf8;
+        border-radius: 0.5rem;
+        padding: 1.5rem;
+        background-color: #e0f2fe;
+        max-width: 500px;
+        margin: 0 auto;
+        position: relative;
+      }
+      
+      .object-title {
+        position: absolute;
+        top: -12px;
+        left: 20px;
+        background-color: #e0f2fe;
+        padding: 0 0.5rem;
+        font-weight: 600;
+        color: #0284c7;
+      }
+      
+      .object-property {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.5rem;
+        margin: 0.5rem 0;
+        border-radius: 0.25rem;
+        background-color: #f0f9ff;
+        border-left: 3px solid #38bdf8;
+        transition: all 0.3s ease;
+      }
+      
+      .object-property:hover {
+        transform: translateX(5px);
+        background-color: #bae6fd;
+      }
+      
+      .object-key {
+        font-weight: 500;
+        color: #0284c7;
+      }
+      
+      .object-value {
+        color: #0f172a;
+      }
+      
+      .object-method {
+        background-color: #dbeafe;
+        border-left-color: #3b82f6;
+      }
+      
+      .object-method .object-value {
+        color: #1e40af;
+        font-style: italic;
+      }
+      
+      .object-demo-controls {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin-top: 1.5rem;
+        flex-wrap: wrap;
+      }
+      
+      .object-demo-button {
+        background-color: #0ea5e9;
+        color: white;
+        border: none;
+        border-radius: 0.5rem;
+        padding: 0.5rem 1rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      
+      .object-demo-button:hover {
+        background-color: #0284c7;
+      }
+      
+      .object-demo-button:disabled {
+        background-color: #94a3b8;
+        cursor: not-allowed;
+      }
+      
+      .object-demo-input {
+        border: 2px solid #e2e8f0;
+        border-radius: 0.5rem;
+        padding: 0.5rem;
+        width: 8rem;
+        text-align: center;
+      }
+      
+      .object-demo-input:focus {
+        outline: none;
+        border-color: #38bdf8;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-50 text-gray-800">
+    <!-- Progress Bar -->
+    <div class="progress-bar" id="progressBar"></div>
+    
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-primary-700 to-primary-900 text-white py-12 relative overflow-hidden">
+      <div class="absolute inset-0 bg-gradient-to-r from-primary-700/30 to-primary-900/30"></div>
+      <div class="container mx-auto px-4 relative z-10">
+        <div class="flex justify-between items-center mb-8">
+          <div class="flex items-center space-x-2">
+            <div class="bg-white text-primary-600 h-10 w-10 rounded-lg flex items-center justify-center shadow-lg animate-float">
+              <span class="text-xl font-bold">JS</span>
+            </div>
+            <a href="/" class="text-xl font-semibold tracking-tight hover:text-primary-200 transition-colors">JSFundamentals</a>
+          </div>
+          <div class="flex items-center space-x-6">
+            <a href="/" class="text-white/80 hover:text-white transition-colors duration-200">Home</a>
+            <a href="#" class="text-white/80 hover:text-white transition-colors duration-200">Docs</a>
+            <a href="#" class="text-white/80 hover:text-white transition-colors duration-200">Examples</a>
+            <a href="#" class="text-white/80 hover:text-white transition-colors duration-200">Community</a>
+            <div class="dark-mode-toggle ml-4 text-white/80 hover:text-white cursor-pointer">
+              <i class="fas fa-moon text-lg"></i>
+            </div>
+          </div>
+        </div>
+        
+        <div class="max-w-3xl">
+          <h1 class="text-4xl md:text-5xl font-bold leading-tight mb-4">JavaScript Objects</h1>
+          <p class="text-xl text-white/90 mb-8 leading-relaxed">Master the art of working with objects - the fundamental building blocks that power JavaScript applications and enable complex data structures and patterns.</p>
+          <div class="flex flex-wrap gap-4">
+            <a href="#basics" class="bg-white text-primary-700 hover:bg-gray-100 px-6 py-3 rounded-lg font-medium transition-all duration-200 shadow-md hover:shadow-lg flex items-center">
+              <span>Start Learning</span>
+              <i class="fas fa-arrow-right ml-2"></i>
+            </a>
+            <a href="#interactive-demo" class="bg-transparent border border-white/30 backdrop-blur-sm text-white hover:bg-white/10 px-6 py-3 rounded-lg font-medium transition-all duration-200">
+              <i class="fas fa-code mr-2"></i>
+              <span>Try It Yourself</span>
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Decorative Elements -->
+      <div class="absolute right-0 top-0 h-full w-1/3 opacity-10">
+        <div class="absolute right-20 top-20 text-6xl animate-float" style="animation-delay: 0.5s;">{</div>
+        <div class="absolute right-60 top-40 text-4xl animate-float" style="animation-delay: 1s;">}</div>
+        <div class="absolute right-40 top-60 text-5xl animate-float" style="animation-delay: 1.5s;">:</div>
+        <div class="absolute right-80 top-80 text-7xl animate-float" style="animation-delay: 2s;">Object</div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container mx-auto px-4 py-8 md:py-16">
+      <div class="flex flex-col lg:flex-row gap-8">
+        <!-- Sidebar / TOC -->
+        <div class="lg:w-1/4">
+          <div class="bg-white rounded-lg shadow-md p-6 sticky top-4">
+            <h2 class="text-xl font-semibold text-gray-900 mb-4">Table of Contents</h2>
+            <nav class="toc">
+              <a href="#basics" class="toc-link">Object Basics</a>
+              <a href="#creating" class="toc-link">Creating Objects</a>
+              <a href="#properties" class="toc-link">Properties & Methods</a>
+              <a href="#accessing" class="toc-link">Accessing Object Data</a>
+              <a href="#modifying" class="toc-link">Modifying Objects</a>
+              <a href="#object-methods" class="toc-link">Object Methods</a>
+              <a href="#destructuring" class="toc-link">Object Destructuring</a>
+              <a href="#prototypes" class="toc-link">Prototypes & Inheritance</a>
+              <a href="#best-practices" class="toc-link">Best Practices</a>
+              <a href="#interactive-demo" class="toc-link">Interactive Demo</a>
+              <a href="#common-patterns" class="toc-link">Common Patterns</a>
+            </nav>
+            
+            <div class="mt-8 p-4 bg-primary-50 rounded-lg border border-primary-100">
+              <h3 class="text-sm font-semibold text-primary-800 mb-2">Learning Progress</h3>
+              <div class="w-full bg-gray-200 rounded-full h-2.5">
+                <div class="bg-primary-500 h-2.5 rounded-full" style="width: 0%" id="readingProgress"></div>
+              </div>
+              <p class="text-xs text-gray-500 mt-2">Scroll to track your progress</p>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Main Content -->
+        <main class="lg:w-3/4">
+          <!-- Object Basics -->
+          <section id="basics" class="mb-12 bg-white rounded-lg shadow-md p-8 scroll-mt-4">
+            <h2 class="text-3xl font-bold text-gray-900 mb-6">Object Basics</h2>
+            
+            <p class="text-gray-700 mb-4">
+              Objects are collections of related data and functionality, stored as key-value pairs. They are one of the most fundamental and powerful data structures in JavaScript.
+            </p>
+            
+            <div class="my-6 p-6 bg-primary-50 rounded-lg border-l-4 border-primary-500">
+              <h3 class="text-xl font-semibold text-primary-800 mb-2">Why Objects Matter</h3>
+              <p class="text-gray-700">
+                Objects allow us to:
+              </p>
+              <ul class="mt-2 space-y-2">
+                <li class="flex items-start">
+                  <i class="fas fa-check-circle text-primary-500 mt-1 mr-2"></i>
+                  <span>Store related data together in a structured way</span>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-check-circle text-primary-500 mt-1 mr-2"></i>
+                  <span>Model real-world entities with properties and behaviors</span>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-check-circle text-primary-500 mt-1 mr-2"></i>
+                  <span>Create reusable templates for data through prototypes</span>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-check-circle text-primary-500 mt-1 mr-2"></i>
+                  <span>Organize code in a modular, maintainable way</span>
+                </li>
+              </ul>
+            </div>
+            
+            <div class="object-visual my-8">
+              <div class="object-container">
+                <div class="object-title">user</div>
+                <div class="object-property">
+                  <span class="object-key">name:</span>
+                  <span class="object-value">"John Doe"</span>
+                </div>
+                <div class="object-property">
+                  <span class="object-key">age:</span>
+                  <span class="object-value">30</span>
+                </div>
+                <div class="object-property">
+                  <span class="object-key">isActive:</span>
+                  <span class="object-value">true</span>
+                </div>
+                <div class="object-property object-method">
+                  <span class="object-key">greet:</span>
+                  <span class="object-value">function() {...}</span>
+                </div>
+              </div>
+            </div>
+            
+            <p class="text-gray-700 mb-4">
+              In JavaScript, objects consist of properties, which are key-value pairs. The keys (or property names) are strings or symbols, and the values can be any data type, including other objects, arrays, or functions (which are then called methods).
+            </p>
+            
+            <div class="code-block">
+              <div class="language-tag">javascript</div>
+              <button class="copy-button">Copy</button>
+              <pre><code><span class="comment">// A simple object with various property types</span>
+<span class="keyword">const</span> <span class="variable">user</span> <span class="operator">=</span> {
+  <span class="property">name</span>: <span class="string">'John Doe'</span>,
+  <span class="property">age</span>: <span class="number">30</span>,
+  <span class="property">isActive</span>: <span class="keyword">true</span>,
+  <span class="property">address</span>: {
+    <span class="property">street</span>: <span class="string">'123 Main St'</span>,
+    <span class="property">city</span>: <span class="string">'New York'</span>,
+    <span class="property">zipCode</span>: <span class="string">'10001'</span>
+  },
+  <span class="property">hobbies</span>: [<span class="string">'reading'</span>, <span class="string">'coding'</span>, <span class="string">'hiking'</span>],
+  <span class="property">greet</span>: <span class="keyword">function</span>() {
+    <span class="keyword">return</span> <span class="string">`Hello, my name is ${</span><span class="variable">this</span>.<span class="property">name</span><span class="string">}`</span>;
+  }
+};
+
+<span class="comment">// Accessing object properties</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">user</span>.<span class="property">name</span>); <span class="comment">// 'John Doe'</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">user</span>.<span class="property">address</span>.<span class="property">city</span>); <span class="comment">// 'New York'</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">user</span>.<span class="property">hobbies</span>[<span class="number">1</span>]); <span class="comment">// 'coding'</span>
+
+<span class="comment">// Calling an object method</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">user</span>.<span class="function">greet</span>()); <span class="comment">// 'Hello, my name is John Doe'</span></code></pre>
+            </div>
+            
+            <div class="mt-6 flex items-center justify-between">
+              <span class="text-sm text-gray-500">
+                <i class="fas fa-lightbulb text-yellow-500 mr-2"></i>
+                Objects are the building blocks of JavaScript applications
+              </span>
+              <a href="#creating" class="text-primary-600 hover:text-primary-700 flex items-center">
+                Next: Creating Objects
+                <i class="fas fa-arrow-right ml-2"></i>
+              </a>
+            </div>
+          </section>
+          
+          <!-- Creating Objects -->
+          <section id="creating" class="mb-12 bg-white rounded-lg shadow-md p-8 scroll-mt-4">
+            <h2 class="text-3xl font-bold text-gray-900 mb-6">Creating Objects</h2>
+            
+            <p class="text-gray-700 mb-4">
+              There are several ways to create objects in JavaScript. Let's explore the different methods.
+            </p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-8">
+              <!-- Object Literal -->
+              <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+                  <span class="bg-primary-100 text-primary-600 p-2 rounded-lg mr-3">
+                    <i class="fas fa-brackets-curly"></i>
+                  </span>
+                  Object Literal
+                </h3>
+                <p class="text-gray-600 mb-4">
+                  The most common way to create an object is using curly braces <code>{}</code>.
+                </p>
+                <div class="code-block">
+                  <pre><code><span class="comment">// Empty object</span>
+<span class="keyword">const</span> <span class="variable">emptyObject</span> <span class="operator">=</span> {};
+
+<span class="comment">// Object with properties</span>
+<span class="keyword">const</span> <span class="variable">person</span> <span class="operator">=</span> {
+  <span class="property">name</span>: <span class="string">'Alice'</span>,
+  <span class="property">age</span>: <span class="number">28</span>,
+  <span class="property">isEmployed</span>: <span class="keyword">true</span>
+};</code></pre>
+                </div>
+              </div>
+              
+              <!-- Object Constructor -->
+              <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+                  <span class="bg-primary-100 text-primary-600 p-2 rounded-lg mr-3">
+                    <i class="fas fa-wand-magic-sparkles"></i>
+                  </span>
+                  Object Constructor
+                </h3>
+                <p class="text-gray-600 mb-4">
+                  You can use the <code>Object()</code> constructor to create objects.
+                </p>
+                <div class="code-block">
+                  <pre><code><span class="comment">// Empty object</span>
+<span class="keyword">const</span> <span class="variable">emptyObject</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="function">Object</span>();
+
+<span class="comment">// Adding properties</span>
+<span class="variable">emptyObject</span>.<span class="property">name</span> <span class="operator">=</span> <span class="string">'Bob'</span>;
+<span class="variable">emptyObject</span>.<span class="property">age</span> <span class="operator">=</span> <span class="number">32</span>;
+<span class="variable">emptyObject</span>.<span class="property">isEmployed</span> <span class="operator">=</span> <span class="keyword">false</span>;</code: <span class="operator">=</span> <span class="keyword">false</span>;</code></pre>
+                </div>
+              </div>
+              
+              <!-- Constructor Function -->
+              <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+                  <span class="bg-primary-100 text-primary-600 p-2 rounded-lg mr-3">
+                    <i class="fas fa-hammer"></i>
+                  </span>
+                  Constructor Function
+                </h3>
+                <p class="text-gray-600 mb-4">
+                  Constructor functions create objects with a specific structure and behavior.
+                </p>
+                <div class="code-block">
+                  <pre><code><span class="comment">// Constructor function</span>
+<span class="keyword">function</span> <span class="function">Person</span>(<span class="parameter">name</span>, <span class="parameter">age</span>, <span class="parameter">isEmployed</span>) {
+  <span class="variable">this</span>.<span class="property">name</span> <span class="operator">=</span> <span class="parameter">name</span>;
+  <span class="variable">this</span>.<span class="property">age</span> <span class="operator">=</span> <span class="parameter">age</span>;
+  <span class="variable">this</span>.<span class="property">isEmployed</span> <span class="operator">=</span> <span class="parameter">isEmployed</span>;
+  <span class="variable">this</span>.<span class="property">greet</span> <span class="operator">=</span> <span class="keyword">function</span>() {
+    <span class="keyword">return</span> <span class="string">`Hello, I'm ${</span><span class="variable">this</span>.<span class="property">name</span><span class="string">}`</span>;
+  };
+}
+
+<span class="comment">// Creating instances</span>
+<span class="keyword">const</span> <span class="variable">person1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="function">Person</span>(<span class="string">'Charlie'</span>, <span class="number">35</span>, <span class="keyword">true</span>);
+<span class="keyword">const</span> <span class="variable">person2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="function">Person</span>(<span class="string">'Diana'</span>, <span class="number">27</span>, <span class="keyword">true</span>);</code></pre>
+                </div>
+              </div>
+              
+              <!-- ES6 Classes -->
+              <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+                  <span class="bg-primary-100 text-primary-600 p-2 rounded-lg mr-3">
+                    <i class="fas fa-cubes"></i>
+                  </span>
+                  ES6 Classes
+                </h3>
+                <p class="text-gray-600 mb-4">
+                  Modern JavaScript uses classes to create objects with a cleaner syntax.
+                </p>
+                <div class="code-block">
+                  <pre><code><span class="comment">// Class definition</span>
+<span class="keyword">class</span> <span class="variable">Person</span> {
+  <span class="function">constructor</span>(<span class="parameter">name</span>, <span class="parameter">age</span>, <span class="parameter">isEmployed</span>) {
+    <span class="variable">this</span>.<span class="property">name</span> <span class="operator">=</span> <span class="parameter">name</span>;
+    <span class="variable">this</span>.<span class="property">age</span> <span class="operator">=</span> <span class="parameter">age</span>;
+    <span class="variable">this</span>.<span class="property">isEmployed</span> <span class="operator">=</span> <span class="parameter">isEmployed</span>;
+  }
+  
+  <span class="function">greet</span>() {
+    <span class="keyword">return</span> <span class="string">`Hello, I'm ${</span><span class="variable">this</span>.<span class="property">name</span><span class="string">}`</span>;
+  }
+}
+
+<span class="comment">// Creating instances</span>
+<span class="keyword">const</span> <span class="variable">person1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="function">Person</span>(<span class="string">'Eve'</span>, <span class="number">29</span>, <span class="keyword">false</span>);</code></pre>
+                </div>
+              </div>
+              
+              <!-- Object.create() -->
+              <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+                  <span class="bg-primary-100 text-primary-600 p-2 rounded-lg mr-3">
+                    <i class="fas fa-clone"></i>
+                  </span>
+                  Object.create()
+                </h3>
+                <p class="text-gray-600 mb-4">
+                  Creates a new object with the specified prototype object and properties.
+                </p>
+                <div class="code-block">
+                  <pre><code><span class="comment">// Create a prototype object</span>
+<span class="keyword">const</span> <span class="variable">personProto</span> <span class="operator">=</span> {
+  <span class="function">greet</span>() {
+    <span class="keyword">return</span> <span class="string">`Hello, I'm ${</span><span class="variable">this</span>.<span class="property">name</span><span class="string">}`</span>;
+  }
+};
+
+<span class="comment">// Create a new object with the prototype</span>
+<span class="keyword">const</span> <span class="variable">person</span> <span class="operator">=</span> <span class="variable">Object</span>.<span class="function">create</span>(<span class="variable">personProto</span>);
+<span class="variable">person</span>.<span class="property">name</span> <span class="operator">=</span> <span class="string">'Frank'</span>;
+<span class="variable">person</span>.<span class="property">age</span> <span class="operator">=</span> <span class="number">31</span>;
+
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">person</span>.<span class="function">greet</span>()); <span class="comment">// "Hello, I'm Frank"</span></code></pre>
+                </div>
+              </div>
+              
+              <!-- Factory Function -->
+              <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+                  <span class="bg-primary-100 text-primary-600 p-2 rounded-lg mr-3">
+                    <i class="fas fa-industry"></i>
+                  </span>
+                  Factory Function
+                </h3>
+                <p class="text-gray-600 mb-4">
+                  Functions that create and return new objects without using <code>new</code>.
+                </p>
+                <div class="code-block">
+                  <pre><code><span class="comment">// Factory function</span>
+<span class="keyword">function</span> <span class="function">createPerson</span>(<span class="parameter">name</span>, <span class="parameter">age</span>, <span class="parameter">isEmployed</span>) {
+  <span class="keyword">return</span> {
+    <span class="property">name</span>,  <span class="comment">// Shorthand for name: name</span>
+    <span class="property">age</span>,
+    <span class="property">isEmployed</span>,
+    <span class="function">greet</span>() {
+      <span class="keyword">return</span> <span class="string">`Hello, I'm ${</span><span class="variable">this</span>.<span class="property">name</span><span class="string">}`</span>;
+    }
+  };
+}
+
+<span class="keyword">const</span> <span class="variable">person1</span> <span class="operator">=</span> <span class="function">createPerson</span>(<span class="string">'Grace'</span>, <span class="number">33</span>, <span class="keyword">true</span>);
+<span class="keyword">const</span> <span class="variable">person2</span> <span class="operator">=</span> <span class="function">createPerson</span>(<span class="string">'Henry'</span>, <span class="number">26</span>, <span class="keyword">false</span>);</code></pre>
+                </div>
+              </div>
+            </div>
+            
+            <div class="mt-6 p-6 bg-yellow-50 rounded-lg border-l-4 border-yellow-500">
+              <h3 class="text-xl font-semibold text-yellow-800 mb-2">Choosing the Right Method</h3>
+              <p class="text-gray-700 mb-4">
+                Each method of creating objects has its own use cases:
+              </p>
+              <ul class="space-y-2">
+                <li class="flex items-start">
+                  <i class="fas fa-check-circle text-yellow-600 mt-1 mr-2"></i>
+                  <div>
+                    <p class="font-medium">Object Literals</p>
+                    <p class="text-sm text-gray-600">Best for one-off objects or when you need a simple data structure.</p>
+                  </div>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-check-circle text-yellow-600 mt-1 mr-2"></i>
+                  <div>
+                    <p class="font-medium">Constructor Functions / Classes</p>
+                    <p class="text-sm text-gray-600">Ideal when you need multiple instances with the same structure and behavior.</p>
+                  </div>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-check-circle text-yellow-600 mt-1 mr-2"></i>
+                  <div>
+                    <p class="font-medium">Object.create()</p>
+                    <p class="text-sm text-gray-600">Useful when you want fine-grained control over object inheritance.</p>
+                  </div>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-check-circle text-yellow-600 mt-1 mr-2"></i>
+                  <div>
+                    <p class="font-medium">Factory Functions</p>
+                    <p class="text-sm text-gray-600">Great for creating objects with private data through closures.</p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            
+            <div class="mt-6 flex items-center justify-between">
+              <a href="#basics" class="text-primary-600 hover:text-primary-700 flex items-center">
+                <i class="fas fa-arrow-left mr-2"></i>
+                Previous: Basics
+              </a>
+              <a href="#properties" class="text-primary-600 hover:text-primary-700 flex items-center">
+                Next: Properties & Methods
+                <i class="fas fa-arrow-right ml-2"></i>
+              </a>
+            </div>
+          </section>
+          
+          <!-- Properties & Methods -->
+          <section id="properties" class="mb-12 bg-white rounded-lg shadow-md p-8 scroll-mt-4">
+            <h2 class="text-3xl font-bold text-gray-900 mb-6">Properties & Methods</h2>
+            
+            <p class="text-gray-700 mb-4">
+              Objects in JavaScript consist of properties and methods. Properties are key-value pairs, and methods are functions stored as property values.
+            </p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-8">
+              <!-- Properties -->
+              <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">Properties</h3>
+                <p class="text-gray-600 mb-4">
+                  Properties are the data stored in an object. They can be of any data type.
+                </p>
+                <div class="code-block">
+                  <pre><code><span class="keyword">const</span> <span class="variable">person</span> <span class="operator">=</span> {
+  <span class="comment">// String property</span>
+  <span class="property">name</span>: <span class="string">'John Doe'</span>,
+  
+  <span class="comment">// Number property</span>
+  <span class="property">age</span>: <span class="number">30</span>,
+  
+  <span class="comment">// Boolean property</span>
+  <span class="property">isEmployed</span>: <span class="keyword">true</span>,
+  
+  <span class="comment">// Array property</span>
+  <span class="property">hobbies</span>: [<span class="string">'reading'</span>, <span class="string">'coding'</span>],
+  
+  <span class="comment">// Object property (nested object)</span>
+  <span class="property">address</span>: {
+    <span class="property">street</span>: <span class="string">'123 Main St'</span>,
+    <span class="property">city</span>: <span class="string">'New York'</span>
+  }
+};</code></pre>
+                </div>
+              </div>
+              
+              <!-- Methods -->
+              <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">Methods</h3>
+                <p class="text-gray-600 mb-4">
+                  Methods are functions stored as object properties. They can access and modify the object's data.
+                </p>
+                <div class="code-block">
+                  <pre><code><span class="keyword">const</span> <span class="variable">calculator</span> <span class="operator">=</span> {
+  <span class="comment">// Data properties</span>
+  <span class="property">value</span>: <span class="number">0</span>,
+  
+  <span class="comment">// Method using function declaration</span>
+  <span class="property">add</span>: <span class="keyword">function</span>(<span class="parameter">num</span>) {
+    <span class="variable">this</span>.<span class="property">value</span> <span class="operator">+=</span> <span class="parameter">num</span>;
+    <span class="keyword">return</span> <span class="variable">this</span>.<span class="property">value</span>;
+  },
+  
+  <span class="comment">// Method using shorthand syntax (ES6)</span>
+  <span class="function">subtract</span>(<span class="parameter">num</span>) {
+    <span class="variable">this</span>.<span class="property">value</span> <span class="operator">-=</span> <span class="parameter">num</span>;
+    <span class="keyword">return</span> <span class="variable">this</span>.<span class="property">value</span>;
+  },
+  
+  <span class="comment">// Method using arrow function</span>
+  <span class="property">reset</span>: () <span class="operator">=></span> {
+    <span class="variable">this</span>.<span class="property">value</span> <span class="operator">=</span> <span class="number">0</span>;
+    <span class="keyword">return</span> <span class="variable">this</span>.<span class="property">value</span>;
+  }
+};</code></pre>
+                </div>
+              </div>
+            </div>
+            
+            <div class="mt-6 p-6 bg-primary-50 rounded-lg border-l-4 border-primary-500">
+              <h3 class="text-xl font-semibold text-primary-800 mb-2">The 'this' Keyword</h3>
+              <p class="text-gray-700 mb-4">
+                In object methods, <code>this</code> refers to the object the method belongs to. It allows methods to access and modify the object's properties.
+              </p>
+              <div class="code-block mt-4">
+                <pre><code><span class="keyword">const</span> <span class="variable">person</span> <span class="operator">=</span> {
+  <span class="property">firstName</span>: <span class="string">'John'</span>,
+  <span class="property">lastName</span>: <span class="string">'Doe'</span>,
+  
+  <span class="comment">// Method using this to access other properties</span>
+  <span class="function">getFullName</span>() {
+    <span class="keyword">return</span> <span class="string">`${</span><span class="variable">this</span>.<span class="property">firstName</span><span class="string">} ${</span><span class="variable">this</span>.<span class="property">lastName</span><span class="string">}`</span>;
+  },
+  
+  <span class="function">setName</span>(<span class="parameter">first</span>, <span class="parameter">last</span>) {
+    <span class="variable">this</span>.<span class="property">firstName</span> <span class="operator">=</span> <span class="parameter">first</span>;
+    <span class="variable">this</span>.<span class="property">lastName</span> <span class="operator">=</span> <span class="parameter">last</span>;
+  }
+};
+
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">person</span>.<span class="function">getFullName</span>()); <span class="comment">// "John Doe"</span>
+<span class="variable">person</span>.<span class="function">setName</span>(<span class="string">'Jane'</span>, <span class="string">'Smith'</span>);
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">person</span>.<span class="function">getFullName</span>()); <span class="comment">// "Jane Smith"</span></code></pre>
+              </div>
+              <div class="mt-4">
+                <p class="text-gray-700">
+                  <strong>Note:</strong> Arrow functions don't have their own <code>this</code> context. They inherit <code>this</code> from the surrounding scope, which can cause unexpected behavior in object methods.
+                </p>
+              </div>
+            </div>
+            
+            <div class="mt-6 flex items-center justify-between">
+              <a href="#creating" class="text-primary-600 hover:text-primary-700 flex items-center">
+                <i class="fas fa-arrow-left mr-2"></i>
+                Previous: Creating Objects
+              </a>
+              <a href="#accessing" class="text-primary-600 hover:text-primary-700 flex items-center">
+                Next: Accessing Object Data
+                <i class="fas fa-arrow-right ml-2"></i>
+              </a>
+            </div>
+          </section>
+          
+          <!-- Accessing Object Data -->
+          <section id="accessing" class="mb-12 bg-white rounded-lg shadow-md p-8 scroll-mt-4">
+            <h2 class="text-3xl font-bold text-gray-900 mb-6">Accessing Object Data</h2>
+            
+            <p class="text-gray-700 mb-4">
+              There are multiple ways to access properties and methods in JavaScript objects.
+            </p>
+            
+            <div class="code-block">
+              <div class="language-tag">javascript</div>
+              <button class="copy-button">Copy</button>
+              <pre><code><span class="keyword">const</span> <span class="variable">person</span> <span class="operator">=</span> {
+  <span class="property">name</span>: <span class="string">'John Doe'</span>,
+  <span class="property">age</span>: <span class="number">30</span>,
+  <span class="property">address</span>: {
+    <span class="property">street</span>: <span class="string">'123 Main St'</span>,
+    <span class="property">city</span>: <span class="string">'New York'</span>
+  },
+  <span class="property">hobbies</span>: [<span class="string">'reading'</span>, <span class="string">'coding'</span>, <span class="string">'hiking'</span>],
+  <span class="function">greet</span>() {
+    <span class="keyword">return</span> <span class="string">`Hello, my name is ${</span><span class="variable">this</span>.<span class="property">name</span><span class="string">}`</span>;
+  }
+};
+
+<span class="comment">// 1. Dot Notation</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">person</span>.<span class="property">name</span>); <span class="comment">// 'John Doe'</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">person</span>.<span class="property">address</span>.<span class="property">city</span>); <span class="comment">// 'New York'</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">person</span>.<span class="property">hobbies</span>[<span class="number">1</span>]); <span class="comment">// 'coding'</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">person</span>.<span class="function">greet</span>()); <span class="comment">// 'Hello, my name is John Doe'</span>
+
+<span class="comment">// 2. Bracket Notation</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">person</span>[<span class="string">'name'</span>]); <span class="comment">// 'John Doe'</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">person</span>[<span class="string">'address'</span>][<span class="string">'city'</span>]); <span class="comment">// 'New York'</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">person</span>[<span class="string">'hobbies'</span>][<span class="number">1</span>]); <span class="comment">// 'coding'</span>
+
+<span class="comment">// Using variables with bracket notation</span>
+<span class="keyword">const</span> <span class="variable">propertyName</span> <span class="operator">=</span> <span class="string">'age'</span>;
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">person</span>[<span class="variable">propertyName</span>]); <span class="comment">// 30</span></code></pre>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-8">
+              <!-- Dot Notation -->
+              <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">Dot Notation</h3>
+                <p class="text-gray-600 mb-4">
+                  The most common way to access object properties.
+                </p>
+                <div class="mt-4">
+                  <h4 class="font-medium text-gray-900 mb-2">Advantages:</h4>
+                  <ul class="space-y-1 text-gray-600 list-disc pl-5">
+                    <li>Cleaner, more readable syntax</li>
+                    <li>Better autocomplete in IDEs</li>
+                    <li>Slightly faster performance</li>
+                  </ul>
+                </div>
+                <div class="mt-4">
+                  <h4 class="font-medium text-gray-900 mb-2">Limitations:</h4>
+                  <ul class="space-y-1 text-gray-600 list-disc pl-5">
+                    <li>Cannot use variables as property names</li>
+                    <li>Cannot use property names with spaces or special characters</li>
+                    <li>Cannot use property names that start with a number</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <!-- Bracket Notation -->
+              <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">Bracket Notation</h3>
+                <p class="text-gray-600 mb-4">
+                  More flexible but slightly more verbose.
+                </p>
+                <div class="mt-4">
+                  <h4 class="font-medium text-gray-900 mb-2">Advantages:</h4>
+                  <ul class="space-y-1 text-gray-600 list-disc pl-5">
+                    <li>Can use variables as property names</li>
+                    <li>Can access properties with spaces or special characters</li>
+                    <li>Can access properties that start with a number</li>
+                    <li>Can use expressions to compute property names</li>
+                  </ul>
+                </div>
+                <div class="mt-4">
+                  <h4 class="font-medium text-gray-900 mb-2">Example with dynamic access:</h4>
+                  <div class="code-block">
+                    <pre><code><span class="keyword">const</span> <span class="variable">user</span> <span class="operator">=</span> {
+  <span class="property">name</span>: <span class="string">'Alice'</span>,
+  <span class="property">age</span>: <span class="number">28</span>,
+  <span class="string">'user-id'</span>: <span class="string">'ABC123'</span>
+};
+
+<span class="keyword">function</span> <span class="function">getProperty</span>(<span class="parameter">obj</span>, <span class="parameter">prop</span>) {
+  <span class="keyword">return</span> <span class="parameter">obj</span>[<span class="parameter">prop</span>];
+}
+
+<span class="variable">console</span>.<span class="function">log</span>(<span class="function">getProperty</span>(<span class="variable">user</span>, <span class="string">'name'</span>)); <span class="comment">// 'Alice'</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">user</span>[<span class="string">'user-id'</span>]); <span class="comment">// 'ABC123'</span></code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="mt-6 p-6 bg-yellow-50 rounded-lg border-l-4 border-yellow-500">
+              <h3 class="text-xl font-semibold text-yellow-800 mb-2">Optional Chaining</h3>
+              <p class="text-gray-700 mb-4">
+                The optional chaining operator (<code>?.</code>) allows you to access deeply nested object properties without worrying about whether intermediate properties exist.
+              </p>
+              <div class="code-block mt-4">
+                <pre><code><span class="keyword">const</span> <span class="variable">user</span> <span class="operator">=</span> {
+  <span class="property">name</span>: <span class="string">'John'</span>,
+  <span class="property">address</span>: {
+    <span class="property">city</span>: <span class="string">'New York'</span>
+  }
+};
+
+<span class="comment">// Without optional chaining - can cause errors</span>
+<span class="comment">// console.log(user.employment.company); // Error: Cannot read property 'company' of undefined</span>
+
+<span class="comment">// With optional chaining - safe access</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">user</span>?.<span class="property">employment</span>?.<span class="property">company</span>); <span class="comment">// undefined (no error)</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">user</span>?.<span class="property">address</span>?.<span class="property">city</span>); <span class="comment">// 'New York'</span>
+
+<span class="comment">// Works with methods too</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">user</span>?.<span class="function">getDetails</span>?.()); <span class="comment">// undefined (no error)</span></code></pre>
+              </div>
+            </div>
+            
+            <div class="mt-6 flex items-center justify-between">
+              <a href="#properties" class="text-primary-600 hover:text-primary-700 flex items-center">
+                <i class="fas fa-arrow-left mr-2"></i>
+                Previous: Properties & Methods
+              </a>
+              <a href="#modifying" class="text-primary-600 hover:text-primary-700 flex items-center">
+                Next: Modifying Objects
+                <i class="fas fa-arrow-right ml-2"></i>
+              </a>
+            </div>
+          </section>
+          
+          <!-- Modifying Objects -->
+          <section id="modifying" class="mb-12 bg-white rounded-lg shadow-md p-8 scroll-mt-4">
+            <h2 class="text-3xl font-bold text-gray-900 mb-6">Modifying Objects</h2>
+            
+            <p class="text-gray-700 mb-4">
+              Objects in JavaScript are mutable, meaning you can change their properties after creation.
+            </p>
+            
+            <div class="code-block">
+              <div class="language-tag">javascript</div>
+              <button class="copy-button">Copy</button>
+              <pre><code><span class="keyword">const</span> <span class="variable">person</span> <span class="operator">=</span> {
+  <span class="property">name</span>: <span class="string">'John Doe'</span>,
+  <span class="property">age</span>: <span class="number">30</span>
+};
+
+<span class="comment">// Adding new properties</span>
+<span class="variable">person</span>.<span class="property">email</span> <span class="operator">=</span> <span class="string">'john@example.com'</span>;
+<span class="variable">person</span>[<span class="string">'phone'</span>] <span class="operator">=</span> <span class="string">'555-1234'</span>;
+
+<span class="comment">// Modifying existing properties</span>
+<span class="variable">person</span>.<span class="property">age</span> <span class="operator">=</span> <span class="number">31</span>;
+<span class="variable">person</span>[<span class="string">'name'</span>] <span class="operator">=</span> <span class="string">'John Smith'</span>;
+
+<span class="comment">// Adding nested objects</span>
+<span class="variable">person</span>.<span class="property">address</span> <span class="operator">=</span> {
+  <span class="property">street</span>: <span class="string">'123 Main St'</span>,
+  <span class="property">city</span>: <span class="string">'New York'</span>
+};
+
+<span class="comment">// Deleting properties</span>
+<span class="keyword">delete</span> <span class="variable">person</span>.<span class="property">phone</span>;
+
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">person</span>);</code></pre>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-8">
+              <!-- Adding & Modifying Properties -->
+              <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">Adding & Modifying Properties</h3>
+                <p class="text-gray-600 mb-4">
+                  You can add new properties or modify existing ones using dot or bracket notation.
+                </p>
+                <div class="code-block">
+                  <pre><code><span class="keyword">const</span> <span class="variable">user</span> <span class="operator">=</span> {
+  <span class="property">name</span>: <span class="string">'Alice'</span>
+};
+
+<span class="comment">// Adding properties</span>
+<span class="variable">user</span>.<span class="property">age</span> <span class="operator">=</span> <span class="number">28</span>;
+<span class="variable">user</span>[<span class="string">'isActive'</span>] <span class="operator">=</span> <span class="keyword">true</span>;
+
+<span class="comment">// Adding a method</span>
+<span class="variable">user</span>.<span class="property">greet</span> <span class="operator">=</span> <span class="keyword">function</span>() {
+  <span class="keyword">return</span> <span class="string">`Hello, I'm ${</span><span class="variable">this</span>.<span class="property">name</span><span class="string">}`</span>;
+};
+
+<span class="comment">// Modifying properties</span>
+<span class="variable">user</span>.<span class="property">name</span> <span class="operator">=</span> <span class="string">'Alicia'</span>;</code></pre>
+                </div>
+              </div>
+              
+              <!-- Deleting Properties -->
+              <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">Deleting Properties</h3>
+                <p class="text-gray-600 mb-4">
+                  The <code>delete</code> operator removes a property from an object.
+                </p>
+                <div class="code-block">
+                  <pre><code><span class="keyword">const</span> <span class="variable">user</span> <span class="operator">=</span> {
+  <span class="property">name</span>: <span class="string">'Bob'</span>,
+  <span class="property">age</span>: <span class="number">32</span>,
+  <span class="property">email</span>: <span class="string">'bob@example.com'</span>,
+  <span class="property">phone</span>: <span class="string">'555-5678'</span>
+};
+
+<span class="comment">// Delete a property</span>
+<span class="keyword">delete</span> <span class="variable">user</span>.<span class="property">phone</span>;
+
+<span class="comment">// Delete using bracket notation</span>
+<span class="keyword">delete</span> <span class="variable">user</span>[<span class="string">'email'</span>];
+
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">user</span>);
+<span class="comment">// { name: 'Bob', age: 32 }</span></code></pre>
+                </div>
+              </div>
+            </div>
+            
+            <div class="mt-6 p-6 bg-primary-50 rounded-lg border-l-4 border-primary-500">
+              <h3 class="text-xl font-semibold text-primary-800 mb-2">Object Immutability</h3>
+              <p class="text-gray-700 mb-4">
+                While objects declared with <code>const</code> can have their properties modified, sometimes you want to prevent modifications to ensure data integrity.
+              </p>
+              <div class="code-block mt-4">
+                <pre><code><span class="comment">// Object.freeze() - makes an object completely immutable</span>
+<span class="keyword">const</span> <span class="variable">frozenUser</span> <span class="operator">=</span> <span class="variable">Object</span>.<span class="function">freeze</span>({
+  <span class="property">name</span>: <span class="string">'Charlie'</span>,
+  <span class="property">age</span>: <span class="number">35</span>
+});
+
+<span class="comment">// These will fail silently in non-strict mode</span>
+<span class="comment">// or throw errors in strict mode</span>
+<span class="variable">frozenUser</span>.<span class="property">age</span> <span class="operator">=</span> <span class="number">36</span>;
+<span class="variable">frozenUser</span>.<span class="property">email</span> <span class="operator">=</span> <span class="string">'charlie@example.com'</span>;
+<span class="keyword">delete</span> <span class="variable">frozenUser</span>.<span class="property">name</span>;
+
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">frozenUser</span>);
+<span class="comment">// Still { name: 'Charlie', age: 35 }</span>
+
+<span class="comment">// Object.seal() - prevents adding/deleting properties</span>
+<span class="comment">// but allows modifying existing properties</span>
+<span class="keyword">const</span> <span class="variable">sealedUser</span> <span class="operator">=</span> <span class="variable">Object</span>.<span class="function">seal</span>({
+  <span class="property">name</span>: <span class="string">'Diana'</span>,
+  <span class="property">age</span>: <span class="number">27</span>
+});
+
+<span class="comment">// This works</span>
+<span class="variable">sealedUser</span>.<span class="property">age</span> <span class="operator">=</span> <span class="number">28</span>;
+
+<span class="comment">// These will fail</span>
+<span class="variable">sealedUser</span>.<span class="property">email</span> <span class="operator">=</span> <span class="string">'diana@example.com'</span>;
+<span class="keyword">delete</span> <span class="variable">sealedUser</span>.<span class="property">name</span>;</code></pre>
+              </div>
+            </div>
+            
+            <div class="mt-6 flex items-center justify-between">
+              <a href="#accessing" class="text-primary-600 hover:text-primary-700 flex items-center">
+                <i class="fas fa-arrow-left mr-2"></i>
+                Previous: Accessing Object Data
+              </a>
+              <a href="#object-methods" class="text-primary-600 hover:text-primary-700 flex items-center">
+                Next: Object Methods
+                <i class="fas fa-arrow-right ml-2"></i>
+              </a>
+            </div>
+          </section>
+          
+          <!-- Object Methods -->
+          <section id="object-methods" class="mb-12 bg-white rounded-lg shadow-md p-8 scroll-mt-4">
+            <h2 class="text-3xl font-bold text-gray-900 mb-6">Object Methods</h2>
+            
+            <p class="text-gray-700 mb-4">
+              JavaScript provides several built-in methods for working with objects through the <code>Object</code> constructor.
+            </p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-8">
+              <!-- Object.keys(), values(), entries() -->
+              <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">Object.keys(), values(), entries()</h3>
+                <p class="text-gray-600 mb-4">
+                  Methods for getting arrays of an object's keys, values, or key-value pairs.
+                </p>
+                <div class="code-block">
+                  <pre><code><span class="keyword">const</span> <span class="variable">person</span> <span class="operator">=</span> {
+  <span class="property">name</span>: <span class="string">'John'</span>,
+  <span class="property">age</span>: <span class="number">30</span>,
+  <span class="property">city</span>: <span class="string">'New York'</span>
+};
+
+<span class="comment">// Get all keys</span>
+<span class="keyword">const</span> <span class="variable">keys</span> <span class="operator">=</span> <span class="variable">Object</span>.<span class="function">keys</span>(<span class="variable">person</span>);
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">keys</span>);
+<span class="comment">// ['name', 'age', 'city']</span>
+
+<span class="comment">// Get all values</span>
+<span class="keyword">const</span> <span class="variable">values</span> <span class="operator">=</span> <span class="variable">Object</span>.<span class="function">values</span>(<span class="variable">person</span>);
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">values</span>);
+<span class="comment">// ['John', 30, 'New York']</span>
+
+<span class="comment">// Get all entries (key-value pairs)</span>
+<span class="keyword">const</span> <span class="variable">entries</span> <span class="operator">=</span> <span class="variable">Object</span>.<span class="function">entries</span>(<span class="variable">person</span>);
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">entries</span>);
+<span class="comment">// [['name', 'John'], ['age', 30], ['city', 'New York']]</span></code></pre>
+                </div>
+              </div>
+              
+              <!-- Object.assign() -->
+              <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">Object.assign()</h3>
+                <p class="text-gray-600 mb-4">
+                  Copies properties from one or more source objects to a target object.
+                </p>
+                <div class="code-block">
+                  <pre><code><span class="keyword">const</span> <span class="variable">target</span> <span class="operator">=</span> { <span class="property">a</span>: <span class="number">1</span>, <span class="property">b</span>: <span class="number">2</span> };
+<span class="keyword">const</span> <span class="variable">source1</span> <span class="operator">=</span> { <span class="property">b</span>: <span class="number">3</span>, <span class="property">c</span>: <span class="number">4</span> };
+<span class="keyword">const</span> <span class="variable">source2</span> <span class="operator">=</span> { <span class="property">c</span>: <span class="number">5</span>, <span class="property">d</span>: <span class="number">6</span> };
+
+<span class="comment">// Copy properties from sources to target</span>
+<span class="keyword">const</span> <span class="variable">result</span> <span class="operator">=</span> <span class="variable">Object</span>.<span class="function">assign</span>(<span class="variable">target</span>, <span class="variable">source1</span>, <span class="variable">source2</span>);
+
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">target</span>);
+<span class="comment">// { a: 1, b: 3, c: 5, d: 6 }</span>
+
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">result</span> <span class="operator">===</span> <span class="variable">target</span>);
+<span class="comment">// true (result is the modified target)</span>
+
+<span class="comment">// Creating a new object without modifying sources</span>
+<span class="keyword">const</span> <span class="variable">newObj</span> <span class="operator">=</span> <span class="variable">Object</span>.<span class="function">assign</span>({}, <span class="variable">target</span>, <span class="variable">source1</span>);</code></pre>
+                </div>
+              </div>
+              
+              <!-- Object.hasOwnProperty() -->
+              <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">hasOwnProperty()</h3>
+                <p class="text-gray-600 mb-4">
+                  Checks if an object has a specific property as its own (not inherited).
+                </p>
+                <div class="code-block">
+                  <pre><code><span class="keyword">const</span> <span class="variable">person</span> <span class="operator">=</span> {
+  <span class="property">name</span>: <span class="string">'John'</span>,
+  <span class="property">age</span>: <span class="number">30</span>
+};
+
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">person</span>.<span class="function">hasOwnProperty</span>(<span class="string">'name'</span>));
+<span class="comment">// true</span>
+
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">person</span>.<span class="function">hasOwnProperty</span>(<span class="string">'toString'</span>));
+<span class="comment">// false (toString is inherited from Object.prototype)</span>
+
+<span class="comment">// Safer alternative in modern code</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">Object</span>.<span class="function">hasOwn</span>(<span class="variable">person</span>, <span class="string">'name'</span>));
+<span class="comment">// true</span></code></pre>
+                </div>
+              </div>
+              
+              <!-- Object.is() -->
+              <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">Object.is()</h3>
+                <p class="text-gray-600 mb-4">
+                  Determines if two values are the same value.
+                </p>
+                <div class="code-block">
+                  <pre><code><span class="comment">// Similar to === but with some differences</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">Object</span>.<span class="function">is</span>(<span class="number">5</span>, <span class="number">5</span>));
+<span class="comment">// true</span>
+
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">Object</span>.<span class="function">is</span>(<span class="number">5</span>, <span class="string">'5'</span>));
+<span class="comment">// false</span>
+
+<span class="comment">// Differences from ===</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">Object</span>.<span class="function">is</span>(<span class="number">0</span>, <span class="operator">-</span><span class="number">0</span>));
+<span class="comment">// false (=== would return true)</span>
+
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">Object</span>.<span class="function">is</span>(<span class="variable">NaN</span>, <span class="variable">NaN</span>));
+<span class="comment">// true (=== would return false)</span></code></pre>
+                </div>
+              </div>
+            </div>
+            
+            <div class="mt-6 p-6 bg-primary-50 rounded-lg border-l-4 border-primary-500">
+              <h3 class="text-xl font-semibold text-primary-800 mb-2">Spread Operator with Objects</h3>
+              <p class="text-gray-700 mb-4">
+                The spread operator (<code>...</code>) provides a concise way to copy properties from one object to another.
+              </p>
+              <div class="code-block mt-4">
+                <pre><code><span class="keyword">const</span> <span class="variable">person</span> <span class="operator">=</span> {
+  <span class="property">name</span>: <span class="string">'John'</span>,
+  <span class="property">age</span>: <span class="number">30</span>
+};
+
+<span class="comment">// Creating a copy of an object</span>
+<span class="keyword">const</span> <span class="variable">personCopy</span> <span class="operator">=</span> { ...<span class="variable">person</span> };
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">personCopy</span>);
+<span class="comment">// { name: 'John', age: 30 }</span>
+
+<span class="comment">// Merging objects (similar to Object.assign)</span>
+<span class="keyword">const</span> <span class="variable">details</span> <span class="operator">=</span> { <span class="property">job</span>: <span class="string">'Developer'</span>, <span class="property">city</span>: <span class="string">'New York'</span> };
+<span class="keyword">const</span> <span class="variable">completeProfile</span> <span class="operator">=</span> { ...<span class="variable">person</span>, ...<span class="variable">details</span> };
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">completeProfile</span>);
+<span class="comment">// { name: 'John', age: 30, job: 'Developer', city: 'New York' }</span>
+
+<span class="comment">// Overriding properties</span>
+<span class="keyword">const</span> <span class="variable">updatedPerson</span> <span class="operator">=</span> { ...<span class="variable">person</span>, <span class="property">age</span>: <span class="number">31</span>, <span class="property">email</span>: <span class="string">'john@example.com'</span> };
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">updatedPerson</span>);
+<span class="comment">// { name: 'John', age: 31, email: 'john@example.com' }</span></code></pre>
+              </div>
+            </div>
+            
+            <div class="mt-6 flex items-center justify-between">
+              <a href="#modifying" class="text-primary-600 hover:text-primary-700 flex items-center">
+                <i class="fas fa-arrow-left mr-2"></i>
+                Previous: Modifying Objects
+              </a>
+              <a href="#destructuring" class="text-primary-600 hover:text-primary-700 flex items-center">
+                Next: Object Destructuring
+                <i class="fas fa-arrow-right ml-2"></i>
+              </a>
+            </div>
+          </section>
+          
+          <!-- Object Destructuring -->
+          <section id="destructuring" class="mb-12 bg-white rounded-lg shadow-md p-8 scroll-mt-4">
+            <h2 class="text-3xl font-bold text-gray-900 mb-6">Object Destructuring</h2>
+            
+            <p class="text-gray-700 mb-4">
+              Object destructuring is a convenient way to extract values from objects and assign them to variables.
+            </p>
+            
+            <div class="code-block">
+              <div class="language-tag">javascript</div>
+              <button class="copy-button">Copy</button>
+              <pre><code><span class="comment">// Basic destructuring</span>
+<span class="keyword">const</span> <span class="variable">person</span> <span class="operator">=</span> {
+  <span class="property">name</span>: <span class="string">'John Doe'</span>,
+  <span class="property">age</span>: <span class="number">30</span>,
+  <span class="property">job</span>: <span class="string">'Developer'</span>,
+  <span class="property">address</span>: {
+    <span class="property">city</span>: <span class="string">'New York'</span>,
+    <span class="property">country</span>: <span class="string">'USA'</span>
+  }
+};
+
+<span class="keyword">const</span> { <span class="variable">name</span>, <span class="variable">age</span>, <span class="variable">job</span> } <span class="operator">=</span> <span class="variable">person</span>;
+
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">name</span>);  <span class="comment">// 'John Doe'</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">age</span>);   <span class="comment">// 30</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">job</span>);   <span class="comment">// 'Developer'</span></code></pre>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-8">
+              <!-- Renaming Variables -->
+              <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">Renaming Variables</h3>
+                <p class="text-gray-600 mb-4">
+                  You can assign object properties to variables with different names.
+                </p>
+                <div class="code-block">
+                  <pre><code><span class="keyword">const</span> <span class="variable">person</span> <span class="operator">=</span> {
+  <span class="property">name</span>: <span class="string">'John Doe'</span>,
+  <span class="property">age</span>: <span class="number">30</span>
+};
+
+<span class="comment">// Rename variables during destructuring</span>
+<span class="keyword">const</span> { <span class="property">name</span>: <span class="variable">fullName</span>, <span class="property">age</span>: <span class="variable">years</span> } <span class="operator">=</span> <span class="variable">person</span>;
+
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">fullName</span>); <span class="comment">// 'John Doe'</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">years</span>);    <span class="comment">// 30</span>
+
+<span class="comment">// name and age are not defined</span>
+<span class="comment">// console.log(name); // ReferenceError</span></code></pre>
+                </div>
+              </div>
+              
+              <!-- Default Values -->
+              <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">Default Values</h3>
+                <p class="text-gray-600 mb-4">
+                  You can provide fallback values for properties that might not exist.
+                </p>
+                <div class="code-block">
+                  <pre><code><span class="keyword">const</span> <span class="variable">person</span> <span class="operator">=</span> {
+  <span class="property">name</span>: <span class="string">'John Doe'</span>,
+  <span class="property">age</span>: <span class="number">30</span>
+};
+
+<span class="comment">// Provide default values</span>
+<span class="keyword">const</span> { 
+  <span class="property">name</span>, 
+  <span class="property">age</span>, 
+  <span class="property">job</span> <span class="operator">=</span> <span class="string">'Unknown'</span>,
+  <span class="property">email</span> <span class="operator">=</span> <span class="string">'no-email@example.com'</span>
+} <span class="operator">=</span> <span class="variable">person</span>;
+
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">job</span>);   <span class="comment">// 'Unknown'</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">email</span>); <span class="comment">// 'no-email@example.com'</span></code></pre>
+                </div>
+              </div>
+              
+              <!-- Nested Destructuring -->
+              <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">Nested Destructuring</h3>
+                <p class="text-gray-600 mb-4">
+                  You can destructure nested objects to extract deeper properties.
+                </p>
+                <div class="code-block">
+                  <pre><code><span class="keyword">const</span> <span class="variable">person</span> <span class="operator">=</span> {
+  <span class="property">name</span>: <span class="string">'John Doe'</span>,
+  <span class="property">age</span>: <span class="number">30</span>,
+  <span class="property">address</span>: {
+    <span class="property">street</span>: <span class="string">'123 Main St'</span>,
+    <span class="property">city</span>: <span class="string">'New York'</span>,
+    <span class="property">country</span>: <span class="string">'USA'</span>
+  }
+};
+
+<span class="comment">// Destructuring nested objects</span>
+<span class="keyword">const</span> { 
+  <span class="property">name</span>, 
+  <span class="property">address</span>: { <span class="property">city</span>, <span class="property">country</span> } 
+} <span class="operator">=</span> <span class="variable">person</span>;
+
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">name</span>);    <span class="comment">// 'John Doe'</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">city</span>);    <span class="comment">// 'New York'</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">country</span>); <span class="comment">// 'USA'</span>
+
+<span class="comment">// address is not defined</span>
+<span class="comment">// console.log(address); // ReferenceError</span></code></pre>
+                </div>
+              </div>
+              
+              <!-- Function Parameters -->
+              <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">Function Parameters</h3>
+                <p class="text-gray-600 mb-4">
+                  Destructuring is particularly useful in function parameters.
+                </p>
+                <div class="code-block">
+                  <pre><code><span class="comment">// Without destructuring</span>
+<span class="keyword">function</span> <span class="function">printUserInfo</span>(<span class="parameter">user</span>) {
+  <span class="variable">console</span>.<span class="function">log</span>(<span class="string">`Name: ${</span><span class="parameter">user</span>.<span class="property">name</span><span class="string">}, Age: ${</span><span class="parameter">user</span>.<span class="property">age</span><span class="string">}`</span>);
+}
+
+<span class="comment">// With destructuring</span>
+<span class="keyword">function</span> <span class="function">printUserInfo</span>({ <span class="parameter">name</span>, <span class="parameter">age</span>, <span class="parameter">job</span> <span class="operator">=</span> <span class="string">'Unknown'</span> }) {
+  <span class="variable">console  <span class="string">'Unknown'</span> }) {
+  <span class="variable">console</span>.<span class="function">log</span>(<span class="string">`Name: ${</span><span class="parameter">name</span><span class="string">}, Age: ${</span><span class="parameter">age</span><span class="string">}, Job: ${</span><span class="parameter">job</span><span class="string">}`</span>);
+}
+
+<span class="comment">// Using the function</span>
+<span class="function">printUserInfo</span>({ <span class="property">name</span>: <span class="string">'Alice'</span>, <span class="property">age</span>: <span class="number">28</span> });
+<span class="comment">// "Name: Alice, Age: 28, Job: Unknown"</span>
+
+<span class="comment">// With default parameter</span>
+<span class="keyword">function</span> <span class="function">createUser</span>({ <span class="parameter">name</span>, <span class="parameter">age</span> } <span class="operator">=</span> { <span class="property">name</span>: <span class="string">'Guest'</span>, <span class="property">age</span>: <span class="number">0</span> }) {
+  <span class="keyword">return</span> { <span class="property">name</span>, <span class="property">age</span>, <span class="property">createdAt</span>: <span class="keyword">new</span> <span class="function">Date</span>() };
+}</code></pre>
+                </div>
+              </div>
+            </div>
+            
+            <div class="mt-6 p-6 bg-primary-50 rounded-lg border-l-4 border-primary-500">
+              <h3 class="text-xl font-semibold text-primary-800 mb-2">Practical Use Cases</h3>
+              <div class="code-block mt-4">
+                <pre><code><span class="comment">// 1. Swapping variables</span>
+<span class="keyword">let</span> <span class="variable">a</span> <span class="operator">=</span> <span class="string">'first'</span>;
+<span class="keyword">let</span> <span class="variable">b</span> <span class="operator">=</span> <span class="string">'second'</span>;
+
+<span class="comment">// Swap values</span>
+[<span class="variable">a</span>, <span class="variable">b</span>] <span class="operator">=</span> [<span class="variable">b</span>, <span class="variable">a</span>];
+
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">a</span>, <span class="variable">b</span>); <span class="comment">// 'second', 'first'</span>
+
+<span class="comment">// 2. Return multiple values from a function</span>
+<span class="keyword">function</span> <span class="function">getUserInfo</span>() {
+  <span class="comment">// Some logic to get user data</span>
+  <span class="keyword">return</span> {
+    <span class="property">name</span>: <span class="string">'John'</span>,
+    <span class="property">age</span>: <span class="number">30</span>,
+    <span class="property">isAdmin</span>: <span class="keyword">false</span>
+  };
+}
+
+<span class="keyword">const</span> { <span class="variable">name</span>, <span class="variable">isAdmin</span> } <span class="operator">=</span> <span class="function">getUserInfo</span>();
+
+<span class="comment">// 3. API response handling</span>
+<span class="keyword">async</span> <span class="keyword">function</span> <span class="function">fetchUserData</span>() {
+  <span class="keyword">const</span> <span class="variable">response</span> <span class="operator">=</span> <span class="keyword">await</span> <span class="function">fetch</span>(<span class="string">'https://api.example.com/user'</span>);
+  <span class="keyword">const</span> { <span class="variable">id</span>, <span class="variable">name</span>, <span class="variable">email</span>, <span class="variable">settings</span>: { <span class="variable">theme</span>, <span class="variable">notifications</span> } } <span class="operator">=</span> <span class="keyword">await</span> <span class="variable">response</span>.<span class="function">json</span>();
+  
+  <span class="comment">// Use the extracted data</span>
+  <span class="variable">console</span>.<span class="function">log</span>(<span class="variable">id</span>, <span class="variable">name</span>, <span class="variable">email</span>, <span class="variable">theme</span>, <span class="variable">notifications</span>);
+}</code></pre>
+              </div>
+            </div>
+            
+            <div class="mt-6 flex items-center justify-between">
+              <a href="#object-methods" class="text-primary-600 hover:text-primary-700 flex items-center">
+                <i class="fas fa-arrow-left mr-2"></i>
+                Previous: Object Methods
+              </a>
+              <a href="#prototypes" class="text-primary-600 hover:text-primary-700 flex items-center">
+                Next: Prototypes & Inheritance
+                <i class="fas fa-arrow-right ml-2"></i>
+              </a>
+            </div>
+          </section>
+          
+          <!-- Prototypes & Inheritance -->
+          <section id="prototypes" class="mb-12 bg-white rounded-lg shadow-md p-8 scroll-mt-4">
+            <h2 class="text-3xl font-bold text-gray-900 mb-6">Prototypes & Inheritance</h2>
+            
+            <p class="text-gray-700 mb-4">
+              JavaScript uses a prototype-based inheritance model, where objects can inherit properties and methods from other objects.
+            </p>
+            
+            <div class="my-6 p-6 bg-primary-50 rounded-lg border-l-4 border-primary-500">
+              <h3 class="text-xl font-semibold text-primary-800 mb-2">Understanding Prototypes</h3>
+              <p class="text-gray-700">
+                Every JavaScript object has a prototype, which is another object that it inherits properties and methods from. This creates a prototype chain that ends with <code>Object.prototype</code>.
+              </p>
+              <div class="code-block mt-4">
+                <pre><code><span class="comment">// Creating an object</span>
+<span class="keyword">const</span> <span class="variable">person</span> <span class="operator">=</span> {
+  <span class="property">name</span>: <span class="string">'John'</span>,
+  <span class="function">greet</span>() {
+    <span class="keyword">return</span> <span class="string">`Hello, I'm ${</span><span class="variable">this</span>.<span class="property">name</span><span class="string">}`</span>;
+  }
+};
+
+<span class="comment">// person's prototype is Object.prototype</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">Object</span>.<span class="function">getPrototypeOf</span>(<span class="variable">person</span>) <span class="operator">===</span> <span class="variable">Object</span>.<span class="property">prototype</span>);
+<span class="comment">// true</span>
+
+<span class="comment">// Accessing a method from the prototype chain</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">person</span>.<span class="function">toString</span>()); <span class="comment">// "[object Object]"</span>
+<span class="comment">// toString is inherited from Object.prototype</span></code></pre>
+              </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-8">
+              <!-- Prototype Inheritance -->
+              <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">Prototype Inheritance</h3>
+                <p class="text-gray-600 mb-4">
+                  Creating inheritance relationships between objects.
+                </p>
+                <div class="code-block">
+                  <pre><code><span class="comment">// Parent object</span>
+<span class="keyword">const</span> <span class="variable">animal</span> <span class="operator">=</span> {
+  <span class="property">type</span>: <span class="string">'Animal'</span>,
+  <span class="function">makeSound</span>() {
+    <span class="keyword">return</span> <span class="string">'Some generic sound'</span>;
+  }
+};
+
+<span class="comment">// Child object inheriting from animal</span>
+<span class="keyword">const</span> <span class="variable">dog</span> <span class="operator">=</span> <span class="variable">Object</span>.<span class="function">create</span>(<span class="variable">animal</span>);
+<span class="variable">dog</span>.<span class="property">breed</span> <span class="operator">=</span> <span class="string">'Labrador'</span>;
+<span class="variable">dog</span>.<span class="function">makeSound</span> <span class="operator">=</span> <span class="keyword">function</span>() {
+  <span class="keyword">return</span> <span class="string">'Woof!'</span>;
+};
+
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">dog</span>.<span class="property">type</span>); <span class="comment">// 'Animal' (inherited)</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">dog</span>.<span class="property">breed</span>); <span class="comment">// 'Labrador'</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">dog</span>.<span class="function">makeSound</span>()); <span class="comment">// 'Woof!' (overridden)</span>
+
+<span class="comment">// Check the prototype chain</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">Object</span>.<span class="function">getPrototypeOf</span>(<span class="variable">dog</span>) <span class="operator">===</span> <span class="variable">animal</span>);
+<span class="comment">// true</span></code></pre>
+                </div>
+              </div>
+              
+              <!-- Constructor Functions & Prototypes -->
+              <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">Constructor Functions & Prototypes</h3>
+                <p class="text-gray-600 mb-4">
+                  Using constructor functions to create objects with shared methods.
+                </p>
+                <div class="code-block">
+                  <pre><code><span class="comment">// Constructor function</span>
+<span class="keyword">function</span> <span class="function">Person</span>(<span class="parameter">name</span>, <span class="parameter">age</span>) {
+  <span class="variable">this</span>.<span class="property">name</span> <span class="operator">=</span> <span class="parameter">name</span>;
+  <span class="variable">this</span>.<span class="property">age</span> <span class="operator">=</span> <span class="parameter">age</span>;
+}
+
+<span class="comment">// Adding a method to the prototype</span>
+<span class="variable">Person</span>.<span class="property">prototype</span>.<span class="function">greet</span> <span class="operator">=</span> <span class="keyword">function</span>() {
+  <span class="keyword">return</span> <span class="string">`Hello, I'm ${</span><span class="variable">this</span>.<span class="property">name</span><span class="string">}`</span>;
+};
+
+<span class="comment">// Creating instances</span>
+<span class="keyword">const</span> <span class="variable">person1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="function">Person</span>(<span class="string">'John'</span>, <span class="number">30</span>);
+<span class="keyword">const</span> <span class="variable">person2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="function">Person</span>(<span class="string">'Jane'</span>, <span class="number">25</span>);
+
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">person1</span>.<span class="function">greet</span>()); <span class="comment">// "Hello, I'm John"</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">person2</span>.<span class="function">greet</span>()); <span class="comment">// "Hello, I'm Jane"</span>
+
+<span class="comment">// Both instances share the same method</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">person1</span>.<span class="function">greet</span> <span class="operator">===</span> <span class="variable">person2</span>.<span class="function">greet</span>);
+<span class="comment">// true</span></code></pre>
+                </div>
+              </div>
+            </div>
+            
+            <div class="mt-6 p-6 bg-yellow-50 rounded-lg border-l-4 border-yellow-500">
+              <h3 class="text-xl font-semibold text-yellow-800 mb-2">ES6 Classes</h3>
+              <p class="text-gray-700 mb-4">
+                ES6 introduced a class syntax that provides a cleaner way to work with prototypes and inheritance.
+              </p>
+              <div class="code-block mt-4">
+                <pre><code><span class="comment">// Parent class</span>
+<span class="keyword">class</span> <span class="variable">Animal</span> {
+  <span class="function">constructor</span>(<span class="parameter">name</span>) {
+    <span class="variable">this</span>.<span class="property">name</span> <span class="operator">=</span> <span class="parameter">name</span>;
+  }
+  
+  <span class="function">makeSound</span>() {
+    <span class="keyword">return</span> <span class="string">'Some generic sound'</span>;
+  }
+}
+
+<span class="comment">// Child class extending Animal</span>
+<span class="keyword">class</span> <span class="variable">Dog</span> <span class="keyword">extends</span> <span class="variable">Animal</span> {
+  <span class="function">constructor</span>(<span class="parameter">name</span>, <span class="parameter">breed</span>) {
+    <span class="keyword">super</span>(<span class="parameter">name</span>); <span class="comment">// Call parent constructor</span>
+    <span class="variable">this</span>.<span class="property">breed</span> <span class="operator">=</span> <span class="parameter">breed</span>;
+  }
+  
+  <span class="function">makeSound</span>() {
+    <span class="keyword">return</span> <span class="string">'Woof!'</span>;
+  }
+  
+  <span class="function">fetch</span>() {
+    <span class="keyword">return</span> <span class="string">`${</span><span class="variable">this</span>.<span class="property">name</span><span class="string">} is fetching`</span>;
+  }
+}
+
+<span class="keyword">const</span> <span class="variable">dog</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="function">Dog</span>(<span class="string">'Rex'</span>, <span class="string">'German Shepherd'</span>);
+
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">dog</span>.<span class="property">name</span>);        <span class="comment">// 'Rex'</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">dog</span>.<span class="property">breed</span>);       <span class="comment">// 'German Shepherd'</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">dog</span>.<span class="function">makeSound</span>()); <span class="comment">// 'Woof!'</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">dog</span>.<span class="function">fetch</span>());     <span class="comment">// 'Rex is fetching'</span>
+
+<span class="comment">// Checking inheritance</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">dog</span> <span class="keyword">instanceof</span> <span class="variable">Dog</span>);    <span class="comment">// true</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">dog</span> <span class="keyword">instanceof</span> <span class="variable">Animal</span>); <span class="comment">// true</span></code></pre>
+              </div>
+            </div>
+            
+            <div class="mt-6 flex items-center justify-between">
+              <a href="#destructuring" class="text-primary-600 hover:text-primary-700 flex items-center">
+                <i class="fas fa-arrow-left mr-2"></i>
+                Previous: Object Destructuring
+              </a>
+              <a href="#best-practices" class="text-primary-600 hover:text-primary-700 flex items-center">
+                Next: Best Practices
+                <i class="fas fa-arrow-right ml-2"></i>
+              </a>
+            </div>
+          </section>
+          
+          <!-- Best Practices -->
+          <section id="best-practices" class="mb-12 bg-white rounded-lg shadow-md p-8 scroll-mt-4">
+            <h2 class="text-3xl font-bold text-gray-900 mb-6">Best Practices</h2>
+            
+            <p class="text-gray-700 mb-4">
+              Following these best practices will help you write cleaner, more maintainable JavaScript code when working with objects.
+            </p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+              <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+                  <span class="bg-green-100 text-green-600 p-2 rounded-lg mr-3">
+                    <i class="fas fa-check"></i>
+                  </span>
+                  Do
+                </h3>
+                <ul class="space-y-4">
+                  <li class="flex items-start">
+                    <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                    <div>
+                      <p class="font-medium">Use object literals for simple data structures</p>
+                      <p class="text-sm text-gray-600">They're concise and easy to read</p>
+                    </div>
+                  </li>
+                  <li class="flex items-start">
+                    <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                    <div>
+                      <p class="font-medium">Use classes for complex objects with methods</p>
+                      <p class="text-sm text-gray-600">Provides a cleaner syntax for inheritance and shared methods</p>
+                    </div>
+                  </li>
+                  <li class="flex items-start">
+                    <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                    <div>
+                      <p class="font-medium">Use property shorthand when variable names match property names</p>
+                      <p class="text-sm text-gray-600"><code>{ name, age }</code> instead of <code>{ name: name, age: age }</code></p>
+                    </div>
+                  </li>
+                  <li class="flex items-start">
+                    <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                    <div>
+                      <p class="font-medium">Use computed property names for dynamic keys</p>
+                      <p class="text-sm text-gray-600"><code>{ [dynamicKey]: value }</code></p>
+                    </div>
+                  </li>
+                  <li class="flex items-start">
+                    <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                    <div>
+                      <p class="font-medium">Use destructuring to extract properties</p>
+                      <p class="text-sm text-gray-600">Makes code cleaner and more readable</p>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              
+              <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+                  <span class="bg-red-100 text-red-600 p-2 rounded-lg mr-3">
+                    <i class="fas fa-times"></i>
+                  </span>
+                  Don't
+                </h3>
+                <ul class="space-y-4">
+                  <li class="flex items-start">
+                    <i class="fas fa-times-circle text-red-500 mt-1 mr-2"></i>
+                    <div>
+                      <p class="font-medium">Avoid modifying built-in object prototypes</p>
+                      <p class="text-sm text-gray-600">Can lead to conflicts with other code and future JavaScript features</p>
+                    </div>
+                  </li>
+                  <li class="flex items-start">
+                    <i class="fas fa-times-circle text-red-500 mt-1 mr-2"></i>
+                    <div>
+                      <p class="font-medium">Don't use arrow functions for object methods that use <code>this</code></p>
+                      <p class="text-sm text-gray-600">Arrow functions don't have their own <code>this</code> context</p>
+                    </div>
+                  </li>
+                  <li class="flex items-start">
+                    <i class="fas fa-times-circle text-red-500 mt-1 mr-2"></i>
+                    <div>
+                      <p class="font-medium">Avoid using <code>delete</code> on object properties</p>
+                      <p class="text-sm text-gray-600">It's slow and can change the object's hidden class in engines</p>
+                    </div>
+                  </li>
+                  <li class="flex items-start">
+                    <i class="fas fa-times-circle text-red-500 mt-1 mr-2"></i>
+                    <div>
+                      <p class="font-medium">Don't use <code>for...in</code> without <code>hasOwnProperty</code> checks</p>
+                      <p class="text-sm text-gray-600">It iterates over inherited properties too</p>
+                    </div>
+                  </li>
+                  <li class="flex items-start">
+                    <i class="fas fa-times-circle text-red-500 mt-1 mr-2"></i>
+                    <div>
+                      <p class="font-medium">Avoid creating deeply nested object structures</p>
+                      <p class="text-sm text-gray-600">Makes code harder to read and maintain</p>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            
+            <div class="code-block">
+              <div class="language-tag">javascript</div>
+              <button class="copy-button">Copy</button>
+              <pre><code><span class="comment">// Good practices</span>
+
+<span class="comment">// 1. Use object literals for simple data</span>
+<span class="keyword">const</span> <span class="variable">user</span> <span class="operator">=</span> {
+  <span class="property">name</span>: <span class="string">'John'</span>,
+  <span class="property">age</span>: <span class="number">30</span>
+};
+
+<span class="comment">// 2. Use property shorthand</span>
+<span class="keyword">const</span> <span class="variable">name</span> <span class="operator">=</span> <span class="string">'Alice'</span>;
+<span class="keyword">const</span> <span class="variable">age</span> <span class="operator">=</span> <span class="number">25</span>;
+<span class="keyword">const</span> <span class="variable">person</span> <span class="operator">=</span> { <span class="property">name</span>, <span class="property">age</span> }; <span class="comment">// Instead of { name: name, age: age }</span>
+
+<span class="comment">// 3. Use computed property names</span>
+<span class="keyword">const</span> <span class="variable">propertyName</span> <span class="operator">=</span> <span class="string">'email'</span>;
+<span class="keyword">const</span> <span class="variable">contact</span> <span class="operator">=</span> {
+  [<span class="variable">propertyName</span>]: <span class="string">'john@example.com'</span>
+};
+
+<span class="comment">// 4. Use classes for complex objects</span>
+<span class="keyword">class</span> <span class="variable">Product</span> {
+  <span class="function">constructor</span>(<span class="parameter">name</span>, <span class="parameter">price</span>) {
+    <span class="variable">this</span>.<span class="property">name</span> <span class="operator">=</span> <span class="parameter">name</span>;
+    <span class="variable">this</span>.<span class="property">price</span> <span class="operator">=</span> <span class="parameter">price</span>;
+  }
+  
+  <span class="function">getDiscountedPrice</span>(<span class="parameter">discount</span>) {
+    <span class="keyword">return</span> <span class="variable">this</span>.<span class="property">price</span> <span class="operator">*</span> (<span class="number">1</span> <span class="operator">-</span> <span class="parameter">discount</span>);
+  }
+}
+
+<span class="comment">// 5. Use Object.assign or spread for shallow copies</span>
+<span class="keyword">const</span> <span class="variable">original</span> <span class="operator">=</span> { <span class="property">a</span>: <span class="number">1</span>, <span class="property">b</span>: <span class="number">2</span> };
+<span class="keyword">const</span> <span class="variable">copy1</span> <span class="operator">=</span> <span class="variable">Object</span>.<span class="function">assign</span>({}, <span class="variable">original</span>);
+<span class="keyword">const</span> <span class="variable">copy2</span> <span class="operator">=</span> { ...<span class="variable">original</span> };</code></pre>
+            </div>
+            
+            <div class="mt-8 p-6 bg-yellow-50 rounded-lg border-l-4 border-yellow-500">
+              <h3 class="text-xl font-semibold text-yellow-800 mb-2">Performance Considerations</h3>
+              <p class="text-gray-700 mb-4">
+                When working with objects, keep these performance tips in mind:
+              </p>
+              <ul class="space-y-2">
+                <li class="flex items-start">
+                  <i class="fas fa-bolt text-yellow-600 mt-1 mr-2"></i>
+                  <span>Initialize objects with all properties they'll need to avoid hidden class changes</span>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-bolt text-yellow-600 mt-1 mr-2"></i>
+                  <span>Use <code>Object.keys()</code>, <code>Object.values()</code>, or <code>Object.entries()</code> instead of <code>for...in</code> loops</span>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-bolt text-yellow-600 mt-1 mr-2"></i>
+                  <span>Set properties to <code>null</code> instead of using <code>delete</code> when you want to remove them</span>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-bolt text-yellow-600 mt-1 mr-2"></i>
+                  <span>Be careful with deep object cloning, as it can be expensive for large objects</span>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-bolt text-yellow-600 mt-1 mr-2"></i>
+                  <span>Use object pooling for frequently created and discarded objects in performance-critical code</span>
+                </li>
+              </ul>
+            </div>
+            
+            <div class="mt-6 flex items-center justify-between">
+              <a href="#prototypes" class="text-primary-600 hover:text-primary-700 flex items-center">
+                <i class="fas fa-arrow-left mr-2"></i>
+                Previous: Prototypes & Inheritance
+              </a>
+              <a href="#interactive-demo" class="text-primary-600 hover:text-primary-700 flex items-center">
+                Next: Interactive Demo
+                <i class="fas fa-arrow-right ml-2"></i>
+              </a>
+            </div>
+          </section>
+          
+          <!-- Interactive Demo -->
+          <section id="interactive-demo" class="mb-12 bg-white rounded-lg shadow-md p-8 scroll-mt-4">
+            <h2 class="text-3xl font-bold text-gray-900 mb-6">Interactive Demo</h2>
+            
+            <p class="text-gray-700 mb-6">
+              Try out different object operations and see how they work. This interactive demo will help you understand the concepts better.
+            </p>
+            
+            <div class="interactive-demo">
+              <div class="interactive-demo-header">
+                <h3 class="font-semibold">Object Explorer</h3>
+                <div class="flex space-x-2">
+                  <button class="tab-button active" data-tab="creation-demo">Creation</button>
+                  <button class="tab-button" data-tab="properties-demo">Properties</button>
+                  <button class="tab-button" data-tab="methods-demo">Methods</button>
+                </div>
+              </div>
+              
+              <div class="interactive-demo-content">
+                <div class="tab-content active" id="creation-demo">
+                  <p class="text-gray-700 mb-4">
+                    Different ways to create objects in JavaScript.
+                  </p>
+                  <div class="code-block">
+                    <pre><code><span class="comment">// Object literal</span>
+<span class="keyword">const</span> <span class="variable">person</span> <span class="operator">=</span> {
+  <span class="property">name</span>: <span class="string">'John Doe'</span>,
+  <span class="property">age</span>: <span class="number">30</span>,
+  <span class="property">isEmployed</span>: <span class="keyword">true</span>
+};
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">person</span>);
+
+<span class="comment">// Object constructor</span>
+<span class="keyword">const</span> <span class="variable">car</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="function">Object</span>();
+<span class="variable">car</span>.<span class="property">make</span> <span class="operator">=</span> <span class="string">'Toyota'</span>;
+<span class="variable">car</span>.<span class="property">model</span> <span class="operator">=</span> <span class="string">'Corolla'</span>;
+<span class="variable">car</span>.<span class="property">year</span> <span class="operator">=</span> <span class="number">2022</span>;
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">car</span>);
+
+<span class="comment">// Class syntax</span>
+<span class="keyword">class</span> <span class="variable">Product</span> {
+  <span class="function">constructor</span>(<span class="parameter">name</span>, <span class="parameter">price</span>) {
+    <span class="variable">this</span>.<span class="property">name</span> <span class="operator">=</span> <span class="parameter">name</span>;
+    <span class="variable">this</span>.<span class="property">price</span> <span class="operator">=</span> <span class="parameter">price</span>;
+  }
+}
+<span class="keyword">const</span> <span class="variable">laptop</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="function">Product</span>(<span class="string">'MacBook Pro'</span>, <span class="number">1999</span>);
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">laptop</span>);</code></pre>
+                  </div>
+                  <button class="mt-4 bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-md transition-colors" id="run-creation">
+                    Run Example
+                  </button>
+                  <div class="interactive-demo-output" id="creation-output">
+                    <p class="text-gray-500 italic">Output will appear here...</p>
+                  </div>
+                </div>
+                
+                <div class="tab-content" id="properties-demo">
+                  <p class="text-gray-700 mb-4">
+                    Working with object properties.
+                  </p>
+                  <div class="code-block">
+                    <pre><code><span class="keyword">const</span> <span class="variable">user</span> <span class="operator">=</span> {
+  <span class="property">name</span>: <span class="string">'Alice'</span>,
+  <span class="property">age</span>: <span class="number">28</span>
+};
+<span class="variable">console</span>.<span class="function">log</span>(<span class="string">'Original object:'</span>, <span class="variable">user</span>);
+
+<span class="comment">// Adding properties</span>
+<span class="variable">user</span>.<span class="property">email</span> <span class="operator">=</span> <span class="string">'alice@example.com'</span>;
+<span class="variable">user</span>[<span class="string">'isAdmin'</span>] <span class="operator">=</span> <span class="keyword">false</span>;
+<span class="variable">console</span>.<span class="function">log</span>(<span class="string">'After adding properties:'</span>, <span class="variable">user</span>);
+
+<span class="comment">// Modifying properties</span>
+<span class="variable">user</span>.<span class="property">age</span> <span class="operator">=</span> <span class="number">29</span>;
+<span class="variable">console</span>.<span class="function">log</span>(<span class="string">'After modifying age:'</span>, <span class="variable">user</span>);
+
+<span class="comment">// Deleting properties</span>
+<span class="keyword">delete</span> <span class="variable">user</span>.<span class="property">isAdmin</span>;
+<span class="variable">console</span>.<span class="function">log</span>(<span class="string">'After deleting isAdmin:'</span>, <span class="variable">user</span>);
+
+<span class="comment">// Checking if property exists</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="string">'Has email:'</span>, <span class="string">'email'</span> <span class="keyword">in</span> <span class="variable">user</span>);
+<span class="variable">console</span>.<span class="function">log</span>(<span class="string">'Has isAdmin:'</span>, <span class="string">'isAdmin'</span> <span class="keyword">in</span> <span class="variable">user</span>);</code></pre>
+                  </div>
+                  <button class="mt-4 bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-md transition-colors" id="run-properties">
+                    Run Example
+                  </button>
+                  <div class="interactive-demo-output" id="properties-output">
+                    <p class="text-gray-500 italic">Output will appear here...</p>
+                  </div>
+                </div>
+                
+                <div class="tab-content" id="methods-demo">
+                  <p class="text-gray-700 mb-4">
+                    Working with object methods.
+                  </p>
+                  <div class="code-block">
+                    <pre><code><span class="keyword">const</span> <span class="variable">person</span> <span class="operator">=</span> {
+  <span class="property">firstName</span>: <span class="string">'John'</span>,
+  <span class="property">lastName</span>: <span class="string">'Doe'</span>,
+  
+  <span class="comment">// Method using function declaration</span>
+  <span class="property">getFullName</span>: <span class="keyword">function</span>() {
+    <span class="keyword">return</span> <span class="string">`${</span><span class="variable">this</span>.<span class="property">firstName</span><span class="string">} ${</span><span class="variable">this</span>.<span class="property">lastName</span><span class="string">}`</span>;
+  },
+  
+  <span class="comment">// Method using shorthand syntax (ES6)</span>
+  <span class="function">greet</span>() {
+    <span class="keyword">return</span> <span class="string">`Hello, my name is ${</span><span class="variable">this</span>.<span class="function">getFullName</span>()<span class="string">}`</span>;
+  }
+};
+
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">person</span>.<span class="function">getFullName</span>());
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">person</span>.<span class="function">greet</span>());
+
+<span class="comment">// Object methods</span>
+<span class="keyword">const</span> <span class="variable">user</span> <span class="operator">=</span> {
+  <span class="property">name</span>: <span class="string">'Alice'</span>,
+  <span class="property">age</span>: <span class="number">28</span>,
+  <span class="property">email</span>: <span class="string">'alice@example.com'</span>
+};
+
+<span class="variable">console</span>.<span class="function">log</span>(<span class="string">'Keys:'</span>, <span class="variable">Object</span>.<span class="function">keys</span>(<span class="variable">user</span>));
+<span class="variable">console</span>.<span class="function">log</span>(<span class="string">'Values:'</span>, <span class="variable">Object</span>.<span class="function">values</span>(<span class="variable">user</span>));
+<span class="variable">console</span>.<span class="function">log</span>(<span class="string">'Entries:'</span>, <span class="variable">Object</span>.<span class="function">entries</span>(<span class="variable">user</span>));</code></pre>
+                  </div>
+                  <button class="mt-4 bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-md transition-colors" id="run-methods">
+                    Run Example
+                  </button>
+                  <div class="interactive-demo-output" id="methods-output">
+                    <p class="text-gray-500 italic">Output will appear here...</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="mt-6 flex items-center justify-between">
+              <a href="#best-practices" class="text-primary-600 hover:text-primary-700 flex items-center">
+                <i class="fas fa-arrow-left mr-2"></i>
+                Previous: Best Practices
+              </a>
+              <a href="#common-patterns" class="text-primary-600 hover:text-primary-700 flex items-center">
+                Next: Common Patterns
+                <i class="fas fa-arrow-right ml-2"></i>
+              </a>
+            </div>
+          </section>
+          
+          <!-- Common Patterns -->
+          <section id="common-patterns" class="mb-12 bg-white rounded-lg shadow-md p-8 scroll-mt-4">
+            <h2 class="text-3xl font-bold text-gray-900 mb-6">Common Object Patterns</h2>
+            
+            <p class="text-gray-700 mb-4">
+              These common object patterns and techniques will help you write more effective JavaScript code.
+            </p>
+            
+            <div class="space-y-8">
+              <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">Object Composition</h3>
+                <p class="text-gray-700 mb-4">
+                  Combining simple objects to create more complex ones.
+                </p>
+                <div class="code-block">
+                  <div class="language-tag">javascript</div>
+                  <button class="copy-button">Copy</button>
+                  <pre><code><span class="comment">// Creating behavior objects</span>
+<span class="keyword">const</span> <span class="variable">canEat</span> <span class="operator">=</span> {
+  <span class="function">eat</span>(<span class="parameter">food</span>) {
+    <span class="variable">console</span>.<span class="function">log</span>(<span class="string">`Eating ${</span><span class="parameter">food</span><span class="string">}`</span>);
+  }
+};
+
+<span class="keyword">const</span> <span class="variable">canSleep</span> <span class="operator">=</span> {
+  <span class="function">sleep</span>(<span class="parameter">hours</span>) {
+    <span class="variable">console</span>.<span class="function">log</span>(<span class="string">`Sleeping for ${</span><span class="parameter">hours</span><span class="string">} hours`</span>);
+  }
+};
+
+<span class="keyword">const</span> <span class="variable">canCode</span> <span class="operator">=</span> {
+  <span class="function">code</span>(<span class="parameter">language</span>) {
+    <span class="variable">console</span>.<span class="function">log</span>(<span class="string">`Coding in ${</span><span class="parameter">language</span><span class="string">}`</span>);
+  }
+};
+
+<span class="comment">// Creating a person with composed behaviors</span>
+<span class="keyword">function</span> <span class="function">createPerson</span>(<span class="parameter">name</span>) {
+  <span class="keyword">return</span> {
+    <span class="property">name</span>,
+    ...<span class="variable">canEat</span>,
+    ...<span class="variable">canSleep</span>
+  };
+}
+
+<span class="comment">// Creating a programmer with additional behaviors</span>
+<span class="keyword">function</span> <span class="function">createProgrammer</span>(<span class="parameter">name</span>) {
+  <span class="keyword">return</span> {
+    ...<span class="function">createPerson</span>(<span class="parameter">name</span>),
+    ...<span class="variable">canCode</span>
+  };
+}
+
+<span class="keyword">const</span> <span class="variable">person</span> <span class="operator">=</span> <span class="function">createPerson</span>(<span class="string">'John'</span>);
+<span class="variable">person</span>.<span class="function">eat</span>(<span class="string">'pizza'</span>);
+<span class="variable">person</span>.<span class="function">sleep</span>(<span class="number">8</span>);
+
+<span class="keyword">const</span> <span class="variable">programmer</span> <span class="operator">=</span> <span class="function">createProgrammer</span>(<span class="string">'Jane'</span>);
+<span class="variable">programmer</span>.<span class="function">eat</span>(<span class="string">'sushi'</span>);
+<span class="variable">programmer</span>.<span class="function">code</span>(<span class="string">'JavaScript'</span>);</code></pre>
+                </div>
+              </div>
+              
+              <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">Module Pattern</h3>
+                <p class="text-gray-700 mb-4">
+                  Creating private variables and methods using closures.
+                </p>
+                <div class="code-block">
+                  <div class="language-tag">javascript</div>
+                  <button class="copy-button">Copy</button>
+                  <pre><code><span class="keyword">const</span> <span class="variable">counter</span> <span class="operator">=</span> (<span class="keyword">function</span>() {
+  <span class="comment">// Private variables</span>
+  <span class="keyword">let</span> <span class="variable">count</span> <span class="operator">=</span> <span class="number">0</span>;
+  
+  <span class="comment">// Private function</span>
+  <span class="keyword">function</span> <span class="function">validate</span>(<span class="parameter">n</span>) {
+    <span class="keyword">return</span> <span class="keyword">typeof</span> <span class="parameter">n</span> <span class="operator">===</span> <span class="string">'number'</span> <span class="operator">&&</span> <span class="variable">Number</span>.<span class="function">isInteger</span>(<span class="parameter">n</span>);
+  }
+  
+  <span class="comment">// Public interface</span>
+  <span class="keyword">return</span> {
+    <span class="function">increment</span>() {
+      <span class="variable">count</span><span class="operator">++</span>;
+      <span class="keyword">return</span> <span class="variable">count</span>;
+    },
+    <span class="function">decrement</span>() {
+      <span class="variable">count</span><span class="operator">--</span>;
+      <span class="keyword">return</span> <span class="variable">count</span>;
+    },
+    <span class="function">getValue</span>() {
+      <span class="keyword">return</span> <span class="variable">count</span>;
+    },
+    <span class="function">setCount</span>(<span class="parameter">n</span>) {
+      <span class="keyword">if</span> (<span class="function">validate</span>(<span class="parameter">n</span>)) {
+        <span class="variable">count</span> <span class="operator">=</span> <span class="parameter">n</span>;
+        <span class="keyword">return</span> <span class="keyword">true</span>;
+      }
+      <span class="keyword">return</span> <span class="keyword">false</span>;
+    }
+  };
+})();
+
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">counter</span>.<span class="function">getValue</span>()); <span class="comment">// 0</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">counter</span>.<span class="function">increment</span>()); <span class="comment">// 1</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">counter</span>.<span class="function">increment</span>()); <span class="comment">// 2</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">counter</span>.<span class="function">decrement</span>()); <span class="comment">// 1</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">counter</span>.<span class="function">setCount</span>(<span class="number">10</span>)); <span class="comment">// true</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">counter</span>.<span class="function">getValue</span>()); <span class="comment">// 10</span>
+
+<span class="comment">// Private variables and methods are not accessible</span>
+<span class="comment">// console.log(counter.count); // undefined</span>
+<span class="comment">// console.log(counter.validate); // undefined</span></code></pre>
+                </div>
+              </div>
+              
+              <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">Factory Pattern</h3>
+                <p class="text-gray-700 mb-4">
+                  Creating objects with a factory function.
+                </p>
+                <div class="code-block">
+                  <div class="language-tag">javascript</div>
+                  <button class="copy-button">Copy</button>
+                  <pre><code><span class="comment">// User factory function</span>
+<span class="keyword">function</span> <span class="function">createUser</span>({ <span class="parameter">name</span>, <span class="parameter">age</span>, <span class="parameter">role</span> <span class="operator">=</span> <span class="string">'user'</span> }) {
+  <span class="keyword">return</span> {
+    <span class="property">name</span>,
+    <span class="property">age</span>,
+    <span class="property">role</span>,
+    <span class="property">createdAt</span>: <span class="keyword">new</span> <span class="function">Date</span>(),
+    <span class="function">describe</span>() {
+      <span class="keyword">return</span> <span class="string">`${</span><span class="variable">this</span>.<span class="property">name</span><span class="string">} is ${</span><span class="variable">this</span>.<span class="property">age</span><span class="string">} years old and has the role of ${</span><span class="variable">this</span>.<span class="property">role</span><span class="string">}`</span>;
+    },
+    <span class="function">hasPermission</span>(<span class="parameter">permission</span>) {
+      <span class="keyword">const</span> <span class="variable">permissions</span> <span class="operator">=</span> {
+        <span class="property">user</span>: [<span class="string">'read'</span>],
+        <span class="property">editor</span>: [<span class="string">'read'</span>, <span class="string">'write'</span>],
+        <span class="property">admin</span>: [<span class="string">'read'</span>, <span class="string">'write'</span>, <span class="string">'delete'</span>]
+      };
+      <span class="keyword">return</span> <span class="variable">permissions</span>[<span class="variable">this</span>.<span class="property">role</span>].<span class="function">includes</span>(<span class="parameter">permission</span>);
+    }
+  };
+}
+
+<span class="keyword">const</span> <span class="variable">user1</span> <span class="operator">=</span> <span class="function">createUser</span>({ <span class="property">name</span>: <span class="string">'John'</span>, <span class="property">age</span>: <span class="number">30</span> });
+<span class="keyword">const</span> <span class="variable">user2</span> <span class="operator">=</span> <span class="function">createUser</span>({ <span class="property">name</span>: <span class="string">'Jane'</span>, <span class="property">age</span>: <span class="number">28</span>, <span class="property">role</span>: <span class="string">'admin'</span> });
+
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">user1</span>.<span class="function">describe</span>());
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">user1</span>.<span class="function">hasPermission</span>(<span class="string">'read'</span>)); <span class="comment">// true</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">user1</span>.<span class="function">hasPermission</span>(<span class="string">'write'</span>)); <span class="comment">// false</span>
+
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">user2</span>.<span class="function">describe</span>());
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">user2</span>.<span class="function">hasPermission</span>(<span class="string">'delete'</span>)); <span class="comment">// true</span></code></pre>
+                </div>
+              </div>
+              
+              <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">Singleton Pattern</h3>
+                <p class="text-gray-700 mb-4">
+                  Ensuring only one instance of an object exists.
+                </p>
+                <div class="code-block">
+                  <div class="language-tag">javascript</div>
+                  <button class="copy-button">Copy</button>
+                  <pre><code><span class="keyword">const</span> <span class="variable">Database</span> <span class="operator">=</span> (<span class="keyword">function</span>() {
+  <span class="keyword">let</span> <span class="variable">instance</span>;
+  
+  <span class="comment">// Private constructor function</span>
+  <span class="keyword">function</span> <span class="function">createInstance</span>() {
+    <span class="keyword">const</span> <span class="variable">object</span> <span class="operator">=</span> {
+      <span class="property">data</span>: {},
+      <span class="function">insert</span>(<span class="parameter">key</span>, <span class="parameter">value</span>) {
+        <span class="variable">this</span>.<span class="property">data</span>[<span class="parameter">key</span>] <span class="operator">=</span> <span class="parameter">value</span>;
+      },
+      <span class="function">get</span>(<span class="parameter">key</span>) {
+        <span class="keyword">return</span> <span class="variable">this</span>.<span class="property">data</span>[<span class="parameter">key</span>];
+      },
+      <span class="function">delete</span>(<span class="parameter">key</span>) {
+        <span class="keyword">delete</span> <span class="variable">this</span>.<span class="property">data</span>[<span class="parameter">key</span>];
+      }
+    };
+    <span class="keyword">return</span> <span class="variable">object</span>;
+  }
+  
+  <span class="keyword">return</span> {
+    <span class="comment">// Public method to get the instance</span>
+    <span class="function">getInstance</span>() {
+      <span class="keyword">if</span> (!<span class="variable">instance</span>) {
+        <span class="variable">instance</span> <span class="operator">=</span> <span class="function">createInstance</span>();
+      }
+      <span class="keyword">return</span> <span class="variable">instance</span>;
+    }
+  };
+})();
+
+<span class="comment">// Usage</span>
+<span class="keyword">const</span> <span class="variable">db1</span> <span class="operator">=</span> <span class="variable">Database</span>.<span class="function">getInstance</span>();
+<span class="keyword">const</span> <span class="variable">db2</span> <span class="operator">=</span> <span class="variable">Database</span>.<span class="function">getInstance</span>();
+
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">db1</span> <span class="operator">===</span> <span class="variable">db2</span>); <span class="comment">// true - same instance</span>
+
+<span class="variable">db1</span>.<span class="function">insert</span>(<span class="string">'user'</span>, { <span class="property">name</span>: <span class="string">'John'</span> });
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">db2</span>.<span class="function">get</span>(<span class="string">'user'</span>)); <span class="comment">// { name: 'John' }</span></code></pre>
+                </div>
+              </div>
+            </div>
+            
+            <div class="mt-8 p-6 bg-primary-50 rounded-lg border-l-4 border-primary-500">
+              <h3 class="text-xl font-semibold text-primary-800 mb-2">Further Learning</h3>
+              <p class="text-gray-700 mb-4">
+                To deepen your understanding of JavaScript objects and related concepts, explore these resources:
+              </p>
+              <ul class="space-y-2">
+                <li class="flex items-start">
+                  <i class="fas fa-book text-primary-600 mt-1 mr-2"></i>
+                  <a href="#" class="text-primary-600 hover:text-primary-700">MDN Web Docs: JavaScript Objects</a>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-book text-primary-600 mt-1 mr-2"></i>
+                  <a href="#" class="text-primary-600 hover:text-primary-700">JavaScript: The Good Parts by Douglas Crockford</a>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-book text-primary-600 mt-1 mr-2"></i>
+                  <a href="#" class="text-primary-600 hover:text-primary-700">You Don't Know JS: this & Object Prototypes by Kyle Simpson</a>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-video text-primary-600 mt-1 mr-2"></i>
+                  <a href="#" class="text-primary-600 hover:text-primary-700">Object-Oriented JavaScript (Course)</a>
+                </li>
+              </ul>
+            </div>
+            
+            <div class="mt-6 flex items-center justify-between">
+              <a href="#interactive-demo" class="text-primary-600 hover:text-primary-700 flex items-center">
+                <i class="fas fa-arrow-left mr-2"></i>
+                Previous: Interactive Demo
+              </a>
+              <a href="/" class="text-primary-600 hover:text-primary-700 flex items-center">
+                Back to Home
+                <i class="fas fa-home ml-2"></i>
+              </a>
+            </div>
+          </section>
+        </main>
+      </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+      <div class="container mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+          <div>
+            <div class="flex items-center space-x-2 mb-4">
+              <div class="bg-white text-primary-600 h-8 w-8 rounded-lg flex items-center justify-center shadow-lg">
+                <span class="text-sm font-bold">JS</span>
+              </div>
+              <span class="text-lg font-semibold tracking-tight">JSFundamentals</span>
+            </div>
+            <p class="text-gray-400 text-sm">Your comprehensive guide to mastering JavaScript fundamentals and beyond.</p>
+          </div>
+          
+          <div>
+            <h3 class="text-lg font-semibold mb-4">Resources
+            </h3>
+            <ul class="space-y-2 text-gray-400">
+              <li><a href="#" class="hover:text-white transition-colors">Documentation</a></li>
+              <li><a href="#" class="hover:text-white transition-colors">Tutorials</a></li>
+              <li><a href="#" class="hover:text-white transition-colors">Examples</a></li>
+              <li><a href="#" class="hover:text-white transition-colors">Cheat Sheets</a></li>
+            </ul>
+          </div>
+          
+          <div>
+            <h3 class="text-lg font-semibold mb-4">Community</h3>
+            <ul class="space-y-2 text-gray-400">
+              <li><a href="#" class="hover:text-white transition-colors">Forums</a></li>
+              <li><a href="#" class="hover:text-white transition-colors">Discord</a></li>
+              <li><a href="#" class="hover:text-white transition-colors">GitHub</a></li>
+              <li><a href="#" class="hover:text-white transition-colors">Stack Overflow</a></li>
+            </ul>
+          </div>
+          
+          <div>
+            <h3 class="text-lg font-semibold mb-4">Connect</h3>
+            <div class="flex space-x-4 mb-4">
+              <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                <i class="fab fa-twitter text-xl"></i>
+              </a>
+              <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                <i class="fab fa-github text-xl"></i>
+              </a>
+              <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                <i class="fab fa-linkedin text-xl"></i>
+              </a>
+              <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                <i class="fab fa-youtube text-xl"></i>
+              </a>
+            </div>
+            <p class="text-gray-400 text-sm">Contact us at <a href="mailto:hello@jsfundamentals.dev" class="text-primary-400 hover:text-primary-300">hello@jsfundamentals.dev</a></p>
+          </div>
+        </div>
+        
+        <div class="pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center">
+          <p class="text-gray-500 text-sm">Created by Arun | JavaScript Learning Journey | April 2025</p>
+          <div class="flex space-x-6 mt-4 md:mt-0">
+            <a href="#" class="text-gray-500 hover:text-gray-400 text-sm">Privacy Policy</a>
+            <a href="#" class="text-gray-500 hover:text-gray-400 text-sm">Terms of Service</a>
+            <a href="#" class="text-gray-500 hover:text-gray-400 text-sm">Cookie Policy</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+    
+    <script>
+      // Progress bar
+      window.addEventListener('scroll', () => {
+        const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrolled = (winScroll / height) * 100;
+        document.getElementById('progressBar').style.width = scrolled + '%';
+        
+        // Update reading progress
+        document.getElementById('readingProgress').style.width = scrolled + '%';
+        
+        // Highlight active section in TOC
+        const sections = document.querySelectorAll('section[id]');
+        let currentSection = '';
+        
+        sections.forEach(section => {
+          const sectionTop = section.offsetTop;
+          const sectionHeight = section.offsetHeight;
+          
+          if (pageYOffset >= sectionTop - 100 && pageYOffset < sectionTop + sectionHeight - 100) {
+            currentSection = section.getAttribute('id');
+          }
+        });
+        
+        document.querySelectorAll('.toc-link').forEach(link => {
+          link.classList.remove('active');
+          if (link.getAttribute('href').substring(1) === currentSection) {
+            link.classList.add('active');
+          }
+        });
+      });
+      
+      // Tab switching for interactive demo
+      document.querySelectorAll('.tab-button').forEach(button => {
+        button.addEventListener('click', () => {
+          // Remove active class from all buttons and content
+          document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+          document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+          
+          // Add active class to clicked button and corresponding content
+          button.classList.add('active');
+          const tabId = button.getAttribute('data-tab');
+          document.getElementById(tabId).classList.add('active');
+        });
+      });
+      
+      // Copy button functionality
+      document.querySelectorAll('.copy-button').forEach(button => {
+        button.addEventListener('click', () => {
+          const codeBlock = button.nextElementSibling;
+          const code = codeBlock.textContent;
+          
+          navigator.clipboard.writeText(code).then(() => {
+            button.textContent = 'Copied!';
+            button.classList.add('copied');
+            
+            setTimeout(() => {
+              button.textContent = 'Copy';
+              button.classList.remove('copied');
+            }, 2000);
+          });
+        });
+      });
+      
+      // Interactive demo functionality
+      document.getElementById('run-creation')?.addEventListener('click', () => {
+        const output = document.getElementById('creation-output');
+        output.innerHTML = '';
+        
+        try {
+          // Object literal
+          const person = {
+            name: 'John Doe',
+            age: 30,
+            isEmployed: true
+          };
+          appendOutput(output, 'Object literal:', person);
+          
+          // Object constructor
+          const car = new Object();
+          car.make = 'Toyota';
+          car.model = 'Corolla';
+          car.year = 2022;
+          appendOutput(output, 'Object constructor:', car);
+          
+          // Class syntax
+          class Product {
+            constructor(name, price) {
+              this.name = name;
+              this.price = price;
+            }
+          }
+          const laptop = new Product('MacBook Pro', 1999);
+          appendOutput(output, 'Class syntax:', laptop);
+        } catch (error) {
+          appendOutput(output, `Error: ${error.message}`, true);
+        }
+      });
+      
+      document.getElementById('run-properties')?.addEventListener('click', () => {
+        const output = document.getElementById('properties-output');
+        output.innerHTML = '';
+        
+        try {
+          const user = {
+            name: 'Alice',
+            age: 28
+          };
+          appendOutput(output, 'Original object:', user);
+          
+          // Adding properties
+          user.email = 'alice@example.com';
+          user['isAdmin'] = false;
+          appendOutput(output, 'After adding properties:', user);
+          
+          // Modifying properties
+          user.age = 29;
+          appendOutput(output, 'After modifying age:', user);
+          
+          // Deleting properties
+          delete user.isAdmin;
+          appendOutput(output, 'After deleting isAdmin:', user);
+          
+          // Checking if property exists
+          appendOutput(output, `Has email: ${'email' in user}`);
+          appendOutput(output, `Has isAdmin: ${'isAdmin' in user}`);
+        } catch (error) {
+          appendOutput(output, `Error: ${error.message}`, true);
+        }
+      });
+      
+      document.getElementById('run-methods')?.addEventListener('click', () => {
+        const output = document.getElementById('methods-output');
+        output.innerHTML = '';
+        
+        try {
+          const person = {
+            firstName: 'John',
+            lastName: 'Doe',
+            
+            // Method using function declaration
+            getFullName: function() {
+              return `${this.firstName} ${this.lastName}`;
+            },
+            
+            // Method using shorthand syntax (ES6)
+            greet() {
+              return `Hello, my name is ${this.getFullName()}`;
+            }
+          };
+          
+          appendOutput(output, `getFullName(): ${person.getFullName()}`);
+          appendOutput(output, `greet(): ${person.greet()}`);
+          
+          // Object methods
+          const user = {
+            name: 'Alice',
+            age: 28,
+            email: 'alice@example.com'
+          };
+          
+          appendOutput(output, 'Keys:', Object.keys(user));
+          appendOutput(output, 'Values:', Object.values(user));
+          appendOutput(output, 'Entries:', Object.entries(user));
+        } catch (error) {
+          appendOutput(output, `Error: ${error.message}`, true);
+        }
+      });
+      
+      function appendOutput(element, text, value = null, isError = false) {
+        const p = document.createElement('p');
+        p.className = isError ? 'text-red-600' : 'text-gray-800';
+        
+        if (value === null) {
+          p.textContent = text;
+        } else {
+          p.textContent = text + ' ';
+          
+          const code = document.createElement('code');
+          code.className = 'bg-gray-100 px-1 py-0.5 rounded text-primary-700';
+          
+          if (typeof value === 'object') {
+            code.textContent = JSON.stringify(value);
+          } else {
+            code.textContent = String(value);
+          }
+          
+          p.appendChild(code);
+        }
+        
+        element.appendChild(p);
+      }
+      
+      // Smooth scrolling for anchor links
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+          e.preventDefault();
+          
+          const targetId = this.getAttribute('href');
+          const targetElement = document.querySelector(targetId);
+          
+          if (targetElement) {
+            // Add highlight effect
+            targetElement.classList.add('section-highlight');
+            
+            // Remove highlight after animation completes
+            setTimeout(() => {
+              targetElement.classList.remove('section-highlight');
+            }, 2000);
+            
+            // Scroll to the element
+            window.scrollTo({
+              top: targetElement.offsetTop - 20,
+              behavior: 'smooth'
+            });
+          }
+        });
+      });
+      
+      // Dark mode toggle (simplified implementation)
+      const darkModeToggle = document.querySelector('.dark-mode-toggle');
+      darkModeToggle?.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        const icon = darkModeToggle.querySelector('i');
+        if (icon.classList.contains('fa-moon')) {
+          icon.classList.remove('fa-moon');
+          icon.classList.add('fa-sun');
+        } else {
+          icon.classList.remove('fa-sun');
+          icon.classList.add('fa-moon');
+        }
+      });
+    </script>
+  </body>
+</html>

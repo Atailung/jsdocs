@@ -1,0 +1,116 @@
+body {
+  font-family: "Inter", sans-serif;
+  scroll-behavior: smooth;
+}
+
+pre,
+code {
+  font-family: "Fira Code", monospace;
+}
+
+pre {
+  background-color: theme("colors.code.bg");
+  color: theme("colors.code.text");
+  padding: 1rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  position: relative;
+}
+
+.topic-card {
+  transition: all 0.3s ease;
+  border-left: 4px solid transparent;
+}
+
+.topic-card:hover {
+  transform: translateY(-5px);
+  border-left: 4px solid theme("colors.primary.500");
+}
+
+.nav-indicator {
+  position: absolute;
+  height: 3px;
+  bottom: 0;
+  left: 0;
+  background-color: theme("colors.primary.400");
+  transition: all 0.3s ease;
+}
+
+.hero-gradient {
+  background: linear-gradient(135deg, #0ea5e9 0%, #3b82f6 100%);
+}
+
+.card-appear {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+.card-appear:nth-child(1) {
+  animation-delay: 0.1s;
+}
+.card-appear:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.card-appear:nth-child(3) {
+  animation-delay: 0.3s;
+}
+.card-appear:nth-child(4) {
+  animation-delay: 0.4s;
+}
+.card-appear:nth-child(5) {
+  animation-delay: 0.5s;
+}
+.card-appear:nth-child(6) {
+  animation-delay: 0.6s;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: theme("colors.primary.500");
+  z-index: 50;
+  width: 0%;
+  transition: width 0.2s ease;
+}
+
+.dark-mode-toggle {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.dark-mode-toggle:hover {
+  transform: rotate(30deg);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #94a3b8;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}

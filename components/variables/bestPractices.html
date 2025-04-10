@@ -1,0 +1,224 @@
+<section
+  id="best-practices"
+  class="mb-12 bg-white rounded-lg shadow-md p-8 scroll-mt-4"
+>
+  <h2 class="text-3xl font-bold text-gray-900 mb-6">Best Practices</h2>
+
+  <p class="text-gray-700 mb-6">
+    Following these best practices will help you write cleaner, more
+    maintainable JavaScript code.
+  </p>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+    <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+      <h3 class="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+        <span class="bg-green-100 text-green-600 p-2 rounded-lg mr-3">
+          <i class="fas fa-check"></i>
+        </span>
+        Do
+      </h3>
+      <ul class="space-y-4">
+        <li class="flex items-start">
+          <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+          <div>
+            <p class="font-medium">Use <code>const</code> by default</p>
+            <p class="text-sm text-gray-600">
+              Only use <code>let</code> when you need to reassign a variable
+            </p>
+          </div>
+        </li>
+        <li class="flex items-start">
+          <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+          <div>
+            <p class="font-medium">
+              Declare variables at the top of their scope
+            </p>
+            <p class="text-sm text-gray-600">
+              Makes it clear what variables are used in that scope
+            </p>
+          </div>
+        </li>
+        <li class="flex items-start">
+          <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+          <div>
+            <p class="font-medium">Initialize variables when declaring them</p>
+            <p class="text-sm text-gray-600">
+              Prevents undefined values and makes code clearer
+            </p>
+          </div>
+        </li>
+        <li class="flex items-start">
+          <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+          <div>
+            <p class="font-medium">Use descriptive variable names</p>
+            <p class="text-sm text-gray-600">
+              Makes code self-documenting and easier to understand
+            </p>
+          </div>
+        </li>
+        <li class="flex items-start">
+          <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+          <div>
+            <p class="font-medium">
+              Keep variables in the smallest scope needed
+            </p>
+            <p class="text-sm text-gray-600">
+              Reduces potential for bugs and name collisions
+            </p>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+      <h3 class="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+        <span class="bg-red-100 text-red-600 p-2 rounded-lg mr-3">
+          <i class="fas fa-times"></i>
+        </span>
+        Don't
+      </h3>
+      <ul class="space-y-4">
+        <li class="flex items-start">
+          <i class="fas fa-times-circle text-red-500 mt-1 mr-2"></i>
+          <div>
+            <p class="font-medium">Avoid using <code>var</code></p>
+            <p class="text-sm text-gray-600">
+              Use <code>let</code> and <code>const</code> instead for better
+              scoping
+            </p>
+          </div>
+        </li>
+        <li class="flex items-start">
+          <i class="fas fa-times-circle text-red-500 mt-1 mr-2"></i>
+          <div>
+            <p class="font-medium">Don't use global variables unnecessarily</p>
+            <p class="text-sm text-gray-600">
+              Can lead to naming conflicts and hard-to-track bugs
+            </p>
+          </div>
+        </li>
+        <li class="flex items-start">
+          <i class="fas fa-times-circle text-red-500 mt-1 mr-2"></i>
+          <div>
+            <p class="font-medium">Avoid single-letter variable names</p>
+            <p class="text-sm text-gray-600">
+              Except for loop counters or well-established conventions
+            </p>
+          </div>
+        </li>
+        <li class="flex items-start">
+          <i class="fas fa-times-circle text-red-500 mt-1 mr-2"></i>
+          <div>
+            <p class="font-medium">
+              Don't reuse variables for different purposes
+            </p>
+            <p class="text-sm text-gray-600">
+              Creates confusion and potential bugs
+            </p>
+          </div>
+        </li>
+        <li class="flex items-start">
+          <i class="fas fa-times-circle text-red-500 mt-1 mr-2"></i>
+          <div>
+            <p class="font-medium">
+              Avoid declaring multiple variables in one statement
+            </p>
+            <p class="text-sm text-gray-600">
+              Makes code harder to read and modify
+            </p>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div id = "code" class="code-block">
+    <div class="language-tag">javascript</div>
+    <button class="copy-button">Copy</button>
+    <pre><code><span class="comment">// Good practices</span>
+
+              <span class="comment">// Use const by default</span>
+              <span class="keyword">const</span> <span class="variable">API_URL</span> <span class="operator">=</span> <span class="string">'https://api.example.com'</span>;
+              <span class="keyword">const</span> <span class="variable">user</span> <span class="operator">=</span> {
+                <span class="variable">name</span>: <span class="string">'John'</span>,
+                <span class="variable">age</span>: <span class="number">25</span>
+              };
+
+              <span class="comment">// Use let only when you need to reassign</span>
+              <span class="keyword">let</span> <span class="variable">count</span> <span class="operator">=</span> <span class="number">0</span>;
+              <span class="variable">count</span> <span class="operator">=</span> <span class="variable">count</span> <span class="operator">+</span> <span class="number">1</span>;
+
+              <span class="comment">// Keep variables in the smallest scope needed</span>
+              <span class="keyword">function</span> <span class="function">calculateTotal</span>(<span class="variable">items</span>) {
+                <span class="keyword">const</span> <span class="variable">TAX_RATE</span> <span class="operator">=</span> <span class="number">0.1</span>; <span class="comment">// Only needed in this function</span>
+                <span class="keyword">let</span> <span class="variable">subtotal</span> <span class="operator">=</span> <span class="number">0</span>;
+                
+                <span class="keyword">for</span> (<span class="keyword">const</span> <span class="variable">item</span> <span class="keyword">of</span> <span class="variable">items</span>) {
+                  <span class="variable">subtotal</span> <span class="operator">+=</span> <span class="variable">item</span>.<span class="variable">price</span>;
+                }
+                
+                <span class="keyword">return</span> <span class="variable">subtotal</span> <span class="operator">*</span> (<span class="number">1</span> <span class="operator">+</span> <span class="variable">TAX_RATE</span>);
+              }
+
+              <span class="comment">// Bad practices</span>
+
+              <span class="comment">// Avoid var</span>
+              <span class="keyword">var</span> <span class="variable">score</span> <span class="operator">=</span> <span class="number">100</span>; <span class="comment">// Use let or const instead</span>
+
+              <span class="comment">// Avoid multiple declarations in one statement</span>
+              <span class="keyword">let</span> <span class="variable">a</span> <span class="operator">=</span> <span class="number">1</span>, <span class="variable">b</span> <span class="operator">=</span> <span class="number">2</span>, <span class="variable">c</span> <span class="operator">=</span> <span class="number">3</span>; <span class="comment">// Hard to read</span>
+
+              <span class="comment">// Better as:</span>
+              <span class="keyword">let</span> <span class="variable">a</span> <span class="operator">=</span> <span class="number">1</span>;
+              <span class="keyword">let</span> <span class="variable">b</span> <span class="operator">=</span> <span class="number">2</span>;
+              <span class="keyword">let</span> <span class="variable">c</span> <span class="operator">=</span> <span class="number">3</span>;</code></pre>
+  </div>
+
+  <div class="mt-8 p-6 bg-yellow-50 rounded-lg border-l-4 border-yellow-500">
+    <h3 class="text-xl font-semibold text-yellow-800 mb-2">
+      Performance Considerations
+    </h3>
+    <p class="text-gray-700 mb-4">
+      While modern JavaScript engines are highly optimized, there are still some
+      performance considerations to keep in mind:
+    </p>
+    <ul class="space-y-2">
+      <li class="flex items-start">
+        <i class="fas fa-bolt text-yellow-600 mt-1 mr-2"></i>
+        <span
+          >Declare variables outside of loops when they don't need to be
+          recreated each iteration</span
+        >
+      </li>
+      <li class="flex items-start">
+        <i class="fas fa-bolt text-yellow-600 mt-1 mr-2"></i>
+        <span
+          >Be cautious with closures that capture large variable scopes</span
+        >
+      </li>
+      <li class="flex items-start">
+        <i class="fas fa-bolt text-yellow-600 mt-1 mr-2"></i>
+        <span
+          >Avoid creating unnecessary variables that are used only once</span
+        >
+      </li>
+    </ul>
+  </div>
+
+  <div class="mt-6 flex items-center justify-between">
+    <a
+      href="#naming-conventions"
+      class="text-primary-600 hover:text-primary-700 flex items-center"
+    >
+      <i class="fas fa-arrow-left mr-2"></i>
+      Previous: Naming Conventions
+    </a>
+    <a
+      href="#interactive-demo"
+      class="text-primary-600 hover:text-primary-700 flex items-center"
+    >
+      Next: Interactive Demo
+      <i class="fas fa-arrow-right ml-2"></i>
+    </a>
+  </div>
+</section>

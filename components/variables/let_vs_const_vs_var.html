@@ -1,0 +1,202 @@
+<style>
+  #demo{
+    background-color:rgb(104, 105, 107);
+    border-radius:15px;
+
+    font-color:rgb(40, 43, 48)
+
+  }
+</style>
+
+
+<section
+  id="let-vs-const"
+  class="mb-12 bg-white rounded-lg shadow-md p-8 scroll-mt-4"
+>
+  <h2 class="text-3xl font-bold text-gray-900 mb-6">let vs const vs var</h2>
+
+  <p class="text-gray-700 mb-6">
+    Understanding the differences between
+    <code class="bg-gray-100 text-primary-700 px-1 py-0.5 rounded">let</code>,
+    <code class="bg-gray-100 text-primary-700 px-1 py-0.5 rounded">const</code>,
+    and
+    <code class="bg-gray-100 text-primary-700 px-1 py-0.5 rounded">var</code>
+    is crucial for writing clean, bug-free JavaScript code.
+  </p>
+
+  <div class="overflow-x-auto">
+    <table class="min-w-full bg-white border border-gray-200 rounded-lg">
+      <thead>
+        <tr class="bg-gray-100">
+          <th class="py-3 px-4 text-left text-gray-700 font-semibold border-b">
+            Feature
+          </th>
+          <th class="py-3 px-4 text-left text-gray-700 font-semibold border-b">
+            let
+          </th>
+          <th class="py-3 px-4 text-left text-gray-700 font-semibold border-b">
+            const
+          </th>
+          <th class="py-3 px-4 text-left text-gray-700 font-semibold border-b">
+            var
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="py-3 px-4 border-b">Scope</td>
+          <td class="py-3 px-4 border-b">Block</td>
+          <td class="py-3 px-4 border-b">Block</td>
+          <td class="py-3 px-4 border-b">Function</td>
+        </tr>
+        <tr>
+          <td class="py-3 px-4 border-b">Reassignment</td>
+          <td class="py-3 px-4 border-b text-green-600">Yes</td>
+          <td class="py-3 px-4 border-b text-red-600">No</td>
+          <td class="py-3 px-4 border-b text-green-600">Yes</td>
+        </tr>
+        <tr>
+          <td class="py-3 px-4 border-b">Redeclaration</td>
+          <td class="py-3 px-4 border-b text-red-600">No</td>
+          <td class="py-3 px-4 border-b text-red-600">No</td>
+          <td class="py-3 px-4 border-b text-green-600">Yes</td>
+        </tr>
+        <tr>
+          <td class="py-3 px-4 border-b">Hoisting</td>
+          <td class="py-3 px-4 border-b">Yes, but in TDZ</td>
+          <td class="py-3 px-4 border-b">Yes, but in TDZ</td>
+          <td class="py-3 px-4 border-b">Yes, initialized as undefined</td>
+        </tr>
+        <tr>
+          <td class="py-3 px-4 border-b">Temporal Dead Zone</td>
+          <td class="py-3 px-4 border-b text-yellow-600">Yes</td>
+          <td class="py-3 px-4 border-b text-yellow-600">Yes</td>
+          <td class="py-3 px-4 border-b text-green-600">No</td>
+        </tr>
+        <tr>
+          <td class="py-3 px-4 border-b">Global Property</td>
+          <td class="py-3 px-4 border-b text-red-600">No</td>
+          <td class="py-3 px-4 border-b text-red-600">No</td>
+          <td class="py-3 px-4 border-b text-green-600">Yes</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="mt-8">
+    <h3 class="text-xl font-semibold text-gray-900 mb-4">
+      Key Differences Explained
+    </h3>
+
+    <div class="space-y-6">
+      <div class="p-4 bg-gray-50 rounded-lg">
+        <h4 class="font-semibold text-gray-900 mb-2">Scope</h4>
+        <p class="text-gray-700">
+          <code class="bg-gray-100 text-primary-700 px-1 py-0.5 rounded"
+            >let</code
+          >
+          and
+          <code class="bg-gray-100 text-primary-700 px-1 py-0.5 rounded"
+            >const</code
+          >
+          are block-scoped, meaning they are only accessible within the block
+          (denoted by <code>{}</code>) where they are defined.
+          <code class="bg-gray-100 text-primary-700 px-1 py-0.5 rounded"
+            >var</code
+          >
+          is function-scoped, meaning it's accessible throughout the entire
+          function it's defined in.
+        </p>
+      </div>
+
+      <div class="p-4 bg-gray-50 rounded-lg">
+        <h4 class="font-semibold text-gray-900 mb-2">Reassignment</h4>
+        <p class="text-gray-700">
+          Variables declared with
+          <code class="bg-gray-100 text-primary-700 px-1 py-0.5 rounded"
+            >let</code
+          >
+          and
+          <code class="bg-gray-100 text-primary-700 px-1 py-0.5 rounded"
+            >var</code
+          >
+          can be reassigned new values. Variables declared with
+          <code class="bg-gray-100 text-primary-700 px-1 py-0.5 rounded"
+            >const</code
+          >
+          cannot be reassigned after initialization.
+        </p>
+      </div>
+
+      <div class="p-4 bg-gray-50 rounded-lg">
+        <h4 class="font-semibold text-gray-900 mb-2">
+          Hoisting & Temporal Dead Zone
+        </h4>
+        <p class="text-gray-700">
+          All declarations are hoisted, but
+          <code class="bg-gray-100 text-primary-700 px-1 py-0.5 rounded"
+            >let</code
+          >
+          and
+          <code class="bg-gray-100 text-primary-700 px-1 py-0.5 rounded"
+            >const</code
+          >
+          are in a "Temporal Dead Zone" (TDZ) until their declaration is
+          reached.
+          <code class="bg-gray-100 text-primary-700 px-1 py-0.5 rounded"
+            >var</code
+          >
+          is hoisted and initialized with  <code>undefined</code>.
+          (The hoisted allow variables desclared with var to be accessed before their decalration, but with the caveat of an initial value of undefined)
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div  id ="demo" class="code-block mt-6 f">
+    <div class="language-tag">javascript</div>
+    <button class="copy-button">Copy</button>
+    <pre >
+      <code>
+        // Scope differences
+        {
+          let blockScoped = 'only available in this block';
+          const alsoBlockScoped = 'same as let';
+          var notBlockScoped = 'available outside this block';
+        }
+
+        // console.log(blockScoped); // ReferenceError
+        // console.log(alsoBlockScoped); // ReferenceError
+        console.log(notBlockScoped); // "available outside this block"
+
+        // Hoisting and TDZ
+        console.log(hoistedVar); // undefined (hoisted)
+        // console.log(hoistedLet); // ReferenceError (in TDZ)
+
+        var hoistedVar = 'I am hoisted';
+        let hoistedLet = 'I am in TDZ until this line';
+
+      </code>
+    </pre>
+  </div>
+
+  <div class="mt-6 flex items-center justify-between">
+    <a
+      href="#declaration"
+      class="text-primary-600 hover:text-primary-700 flex items-center"
+    >
+      <i class="fas fa-arrow-left mr-2"></i>
+      Previous: Declaration Methods
+    </a>
+    <a
+      href="#scope"
+      class="text-primary-600 hover:text-primary-700 flex items-center"
+    >
+      Next: Variable Scope
+      <i class="fas fa-arrow-right ml-2"></i>
+    </a>
+  </div>
+</section>
+
+
+

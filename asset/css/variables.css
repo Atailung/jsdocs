@@ -1,0 +1,211 @@
+body {
+  font-family: "Inter", sans-serif;
+  scroll-behavior: smooth;
+}
+
+pre,
+code {
+  font-family: "Fira Code", monospace;
+}
+
+pre {
+  background-color: theme("colors.code.bg");
+  color: theme("colors.code.text");
+  padding: 1rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  position: relative;
+}
+
+.code-block {
+  position: relative;
+  margin: 1.5rem 0;
+}
+
+.code-block .copy-button {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #e2e8f0;
+  border: none;
+  border-radius: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.code-block:hover .copy-button {
+  opacity: 1;
+}
+
+.code-block .copy-button:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.code-block .copy-button.copied {
+  background-color: rgba(16, 185, 129, 0.2);
+}
+
+.code-block .language-tag {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #e2e8f0;
+  border-radius: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+}
+
+.progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: theme("colors.primary.500");
+  z-index: 50;
+  width: 0%;
+  transition: width 0.2s ease;
+}
+
+.toc-link {
+  display: block;
+  padding: 0.5rem 1rem;
+  color: #64748b;
+  border-left: 2px solid #e2e8f0;
+  transition: all 0.2s ease;
+}
+
+.toc-link:hover {
+  color: #0ea5e9;
+  border-left-color: #0ea5e9;
+  background-color: rgba(14, 165, 233, 0.05);
+}
+
+.toc-link.active {
+  color: #0ea5e9;
+  border-left-color: #0ea5e9;
+  font-weight: 500;
+}
+
+.section-highlight {
+  animation: highlight 2s ease-in-out;
+}
+
+.typewriter {
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 2px solid #0ea5e9;
+  animation: typewriter 2s steps(40, end), pulse 1s infinite;
+}
+
+.variable-card {
+  transition: all 0.3s ease;
+  border-left: 4px solid transparent;
+}
+
+.variable-card:hover {
+  transform: translateY(-5px);
+  border-left: 4px solid theme("colors.primary.500");
+}
+
+.keyword {
+  color: #f472b6;
+  font-weight: 500;
+}
+
+.string {
+  color: #a3e635;
+}
+
+.number {
+  color: #fb923c;
+}
+
+.comment {
+  color: #94a3b8;
+  font-style: italic;
+}
+
+.function {
+  color: #38bdf8;
+}
+
+.variable {
+  color: #e2e8f0;
+}
+
+.operator {
+  color: #e879f9;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #94a3b8;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+
+/* Interactive example styles */
+.interactive-demo {
+  border: 2px solid #e2e8f0;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.interactive-demo-header {
+  background-color: #f8fafc;
+  padding: 0.75rem 1rem;
+  border-bottom: 2px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.interactive-demo-content {
+  padding: 1rem;
+}
+
+.interactive-demo-output {
+  background-color: #f1f5f9;
+  border-radius: 0.25rem;
+  padding: 1rem;
+  margin-top: 1rem;
+  min-height: 3rem;
+}
+
+.tab-button {
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.tab-button.active {
+  background-color: #0ea5e9;
+  color: white;
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+  animation: fadeIn 0.3s ease-out forwards;
+}

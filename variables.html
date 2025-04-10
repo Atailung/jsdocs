@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JavaScript Variables - JS Fundamentals</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="asset/css/variables.css" />
+
+    <script src="asset/js/components.js" defer></script>
+    <script src="asset/js/tailwindcss.js"></script>
+  </head>
+  <body class="bg-gray-50 text-gray-800">
+    <!-- Progress Bar -->
+    <div class="progress-bar" id="progressBar"></div>
+
+    <!-- Header -->
+    <header
+      class="bg-gradient-to-r from-primary-700 to-primary-900 text-white py-12 relative overflow-hidden"
+    >
+      <div
+        class="absolute inset-0 bg-gradient-to-r from-primary-700/30 to-primary-900/30"
+      ></div>
+      <div class="container mx-auto px-4 relative z-10">
+        <div class="flex justify-between items-center mb-8">
+          <div class="flex items-center space-x-2">
+            <div
+              class="bg-white text-primary-600 h-10 w-10 rounded-lg flex items-center justify-center shadow-lg animate-float"
+            >
+              <span class="text-xl font-bold">JS</span>
+            </div>
+            <a
+              href="/"
+              class="text-xl font-semibold tracking-tight hover:text-primary-200 transition-colors"
+              >JSFundamentals</a
+            >
+          </div>
+          <div class="flex items-center space-x-6">
+            <a
+              href="/"
+              class="text-white/80 hover:text-white transition-colors duration-200"
+              >Home</a
+            >
+            <a
+              href="#"
+              class="text-white/80 hover:text-white transition-colors duration-200"
+              >Docs</a
+            >
+            <a
+              href="#"
+              class="text-white/80 hover:text-white transition-colors duration-200"
+              >Examples</a
+            >
+            <a
+              href="#"
+              class="text-white/80 hover:text-white transition-colors duration-200"
+              >Community</a
+            >
+            <div
+              class="dark-mode-toggle ml-4 text-white/80 hover:text-white cursor-pointer"
+            >
+              <i class="fas fa-moon text-lg"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="max-w-3xl">
+          <h1 class="text-4xl md:text-5xl font-bold leading-tight mb-4">
+            JavaScript Variables
+          </h1>
+          <p class="text-xl text-white/90 mb-8 leading-relaxed">
+            Learn how to store, access, and manipulate data in JavaScript using
+            variables - the building blocks of any JavaScript program.
+          </p>
+          <div class="flex flex-wrap gap-4">
+            <a
+              href="#basics"
+              class="bg-white text-primary-700 hover:bg-gray-100 px-6 py-3 rounded-lg font-medium transition-all duration-200 shadow-md hover:shadow-lg flex items-center"
+            >
+              <span>Start Learning</span>
+              <i class="fas fa-arrow-right ml-2"></i>
+            </a>
+            <a
+              href="#interactive-demo"
+              class="bg-transparent border border-white/30 backdrop-blur-sm text-white hover:bg-white/10 px-6 py-3 rounded-lg font-medium transition-all duration-200"
+            >
+              <i class="fas fa-code mr-2"></i>
+              <span>Try It Yourself</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Decorative Elements -->
+      <div class="absolute right-0 top-0 h-full w-1/3 opacity-10">
+        <div
+          class="absolute right-20 top-20 text-6xl animate-float"
+          style="animation-delay: 0.5s"
+        >
+          let
+        </div>
+        <div
+          class="absolute right-60 top-40 text-4xl animate-float"
+          style="animation-delay: 1s"
+        >
+          const
+        </div>
+        <div
+          class="absolute right-40 top-60 text-5xl animate-float"
+          style="animation-delay: 1.5s"
+        >
+          var
+        </div>
+        <div
+          class="absolute right-80 top-80 text-7xl animate-float"
+          style="animation-delay: 2s"
+        >
+          =
+        </div>
+      </div>
+    </header>
+    
+
+    <!-- Main Content -->
+    <div class="container mx-auto px-4 py-8 md:py-16">
+      <div class="flex flex-col lg:flex-row gap-8">
+        <!-- Sidebar / TOC -->
+         
+        <div class="lg:w-1/4">
+          <div class="bg-white rounded-lg shadow-md p-6 sticky top-4">
+            <h2 class="text-xl font-semibold text-gray-900 mb-4">
+              Table of Contents
+            </h2>
+            <nav class="toc">
+              <a href="#basics" class="toc-link">Variable Basics</a>
+              <a href="#declaration" class="toc-link">Declaration Methods</a>
+              <a href="#let-vs-const" class="toc-link">let vs const vs var</a>
+              <a href="#scope" class="toc-link">Variable Scope</a>
+              <a href="#data-types" class="toc-link">Data Types</a>
+              <a href="#naming-conventions" class="toc-link"
+                >Naming Conventions</a
+              >
+              <a href="#best-practices" class="toc-link">Best Practices</a>
+              <a href="#interactive-demo" class="toc-link">Interactive Demo</a>
+              <a href="#common-mistakes" class="toc-link">Common Mistakes</a>
+              <a href="#advanced-concepts" class="toc-link"
+                >Advanced Concepts</a
+              >
+            </nav>
+
+            <div
+              class="mt-8 p-4 bg-primary-50 rounded-lg border border-primary-100"
+            >
+              <h3 class="text-sm font-semibold text-primary-800 mb-2">
+                Learning Progress
+              </h3>
+              <div class="w-full bg-gray-200 rounded-full h-2.5">
+                <div
+                  class="bg-primary-500 h-2.5 rounded-full"
+                  style="width: 0%"
+                  id="readingProgress"
+                ></div>
+              </div>
+              <p class="text-xs text-gray-500 mt-2">
+                Scroll to track your progress
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Main Content -->
+        <main class="lg:w-3/4">
+          <!-- Variable Basics -->
+          <div id = "variables_Basic"></div>
+
+          <!-- Declaration Methods -->
+          <div id = "Variables_Declaration"></div>
+
+          <!-- let vs const vs var -->
+          <div id = "let_vs_const_vs_var"></div>
+
+          <!-- Variable Scope -->
+          <div id = "variables_scope"></div>
+
+          <!-- Data Types -->
+          <div id = "data_type"></div>
+
+          <!-- Naming Conventions -->
+          <div id = "variablesNaming"></div>
+
+          <!-- Best Practices -->
+          <div id = "bestPractices"></div>
+
+          <!-- Interactive Demo -->
+          <div id = "DemoRunCode"></div>
+          
+
+          <!-- Common Mistakes -->
+          <div id = "variablesCommonMistakes"></div>
+
+          <!-- Advanced Concepts -->
+          <div id = "advanced_variables"></div>
+        </main>
+      </div>
+    </div>
+
+    <!-- Footer: Reuseable footer -->
+    <div id="footer"></div>
+
+    <script src="asset/js/variables_js.js"></script>
+  </body>
+</html>

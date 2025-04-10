@@ -1,0 +1,214 @@
+<section
+  id="data-types"
+  class="mb-12 bg-white rounded-lg shadow-md p-8 scroll-mt-4"
+>
+  <h2 class="text-3xl font-bold text-gray-900 mb-6">Data Types</h2>
+
+  <p class="text-gray-700 mb-6">
+    JavaScript variables can hold different types of data. Understanding these
+    types is crucial for effective programming.
+  </p>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+    <div>
+      <h3 class="text-xl font-semibold text-gray-900 mb-4">Primitive Types</h3>
+      <p class="text-gray-600 mb-4">
+        Primitive values are immutable (cannot be changed) and are passed by
+        value.
+      </p>
+
+      <ul  class="space-y-4">
+        <li class="p-3 bg-gray-50 rounded-lg">
+          <span class="font-semibold text-primary-700">String</span>
+          <p class="text-sm text-gray-600 mt-1">
+            Textual data enclosed in quotes.
+          </p>
+          <pre
+          id = "code"class="text-xs mt-2 bg-gray-100 p-2 rounded text-white/10"
+          ><code><span class="keyword">let</span> <span class="variable">name</span> <span class="operator">=</span> <span class="string">'John'</span>;</code></pre>
+        </li>
+        <li class="p-3 bg-gray-50 rounded-lg">
+          <span class="font-semibold text-primary-700">Number</span>
+          <p class="text-sm text-gray-600 mt-1">
+            Numeric values, including integers and floating-point.
+          </p>
+          <pre
+          id = "code" class="text-xs mt-2 bg-gray-100 p-2 rounded"
+          ><code><span class="keyword">let</span> <span class="variable">age</span> <span class="operator">=</span> <span class="number">25</span>;
+                    <span class="keyword">let</span> <span class="variable">price</span> <span class="operator">=</span> <span class="number">19.99</span>;</code></pre>
+        </li>
+        <li class="p-3 bg-gray-50 rounded-lg">
+          <span class="font-semibold text-primary-700">Boolean</span>
+          <p class="text-sm text-gray-600 mt-1">
+            Logical values: true or false.
+          </p>
+          <pre
+          id = "code" class="text-xs mt-2 bg-gray-100 p-2 rounded"
+          ><code><span class="keyword">let</span> <span class="variable">isActive</span> <span class="operator">=</span> <span class="keyword">true</span>;</code></pre>
+        </li>
+        <li class="p-3 bg-gray-50 rounded-lg">
+          <span class="font-semibold text-primary-700">Undefined</span>
+          <p class="text-sm text-gray-600 mt-1">
+            A variable that has been declared but not assigned a value.
+          </p>
+          <pre
+          id = "code" class="text-xs mt-2 bg-gray-100 p-2 rounded"
+          ><code><span class="keyword">let</span> <span class="variable">unassigned</span>; <span class="comment">// value is undefined</span></code></pre>
+        </li>
+        <li class="p-3 bg-gray-50 rounded-lg">
+          <span class="font-semibold text-primary-700">Null</span>
+          <p class="text-sm text-gray-600 mt-1">
+            Represents the intentional absence of any value.
+          </p>
+          <pre
+          id = "code"  class="text-xs mt-2 bg-gray-100 p-2 rounded"
+          ><code><span class="keyword">let</span> <span class="variable">empty</span> <span class="operator">=</span> <span class="keyword">null</span>;</code></pre>
+        </li>
+        <li class="p-3 bg-gray-50 rounded-lg">
+          <span class="font-semibold text-primary-700">Symbol</span>
+          <p class="text-sm text-gray-600 mt-1">
+            Unique and immutable primitive value.
+          </p>
+          <pre
+          id = "code" class="text-xs mt-2 bg-gray-100 p-2 rounded"
+          ><code><span class="keyword">let</span> <span class="variable">id</span> <span class="operator">=</span> <span class="function">Symbol</span>(<span class="string">'id'</span>);</code></pre>
+        </li>
+        <li class="p-3 bg-gray-50 rounded-lg">
+          <span class="font-semibold text-primary-700">BigInt</span>
+          <p class="text-sm text-gray-600 mt-1">
+            For integers larger than the Number type can handle.
+          </p>
+          <pre
+          id = "code" class="text-xs mt-2 bg-gray-100 p-2 rounded"
+          ><code><span class="keyword">let</span> <span class="variable">bigNumber</span> <span class="operator">=</span> <span class="number">9007199254740991n</span>;</code></pre>
+        </li>
+      </ul>
+    </div>
+
+    <div>
+      <h3 class="text-xl font-semibold text-gray-900 mb-4">Reference Types</h3>
+      <p class="text-gray-600 mb-4">
+        Reference values are mutable (can be changed) and are passed by
+        reference.
+      </p>
+
+      <ul class="space-y-4">
+        <li class="p-3 bg-gray-50 rounded-lg">
+          <span class="font-semibold text-primary-700">Object</span>
+          <p class="text-sm text-gray-600 mt-1">
+            Collection of key-value pairs.
+          </p>
+          <pre
+          id = "code" class="text-xs mt-2 bg-gray-100 p-2 rounded"
+          ><code><span class="keyword">let</span> <span class="variable">person</span> <span class="operator">=</span> {
+                      <span class="variable">name</span>: <span class="string">'John'</span>,
+                      <span class="variable">age</span>: <span class="number">25</span>
+                    };</code></pre>
+        </li>
+        <li class="p-3 bg-gray-50 rounded-lg">
+          <span class="font-semibold text-primary-700">Array</span>
+          <p class="text-sm text-gray-600 mt-1">
+            Ordered collection of values.
+          </p>
+          <pre
+          id = "code" class="text-xs mt-2 bg-gray-100 p-2 rounded"
+          ><code><span class="keyword">let</span> <span class="variable">colors</span> <span class="operator">=</span> [<span class="string">'red'</span>, <span class="string">'green'</span>, <span class="string">'blue'</span>];</code></pre>
+        </li>
+        <li class="p-3 bg-gray-50 rounded-lg">
+          <span class="font-semibold text-primary-700">Function</span>
+          <p class="text-sm text-gray-600 mt-1">Reusable block of code.</p>
+          <pre
+          id = "code"  class="text-xs mt-2 bg-gray-100 p-2 rounded"
+          ><code><span class="keyword">let</span> <span class="variable">greet</span> <span class="operator">=</span> <span class="keyword">function</span>(<span class="variable">name</span>) {
+                      <span class="keyword">return</span> <span class="string">`Hello, ${name}!`</span>;
+                    };</code></pre>
+        </li>
+        <li class="p-3 bg-gray-50 rounded-lg">
+          <span class="font-semibold text-primary-700">Date</span>
+          <p class="text-sm text-gray-600 mt-1">
+            Represents a specific point in time.
+          </p>
+          <pre
+          id = "code" class="text-xs mt-2 bg-gray-100 p-2 rounded"
+          ><code><span class="keyword">let</span> <span class="variable">today</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="function">Date</span>();</code></pre>
+        </li>
+        <li class="p-3 bg-gray-50 rounded-lg">
+          <span class="font-semibold text-primary-700">RegExp</span>
+          <p class="text-sm text-gray-600 mt-1">
+            Regular expression for pattern matching.
+          </p>
+          <pre
+          id = "code" class="text-xs mt-2 bg-gray-100 p-2 rounded"
+          ><code><span class="keyword">let</span> <span class="variable">pattern</span> <span class="operator">=</span> <span class="regex">/\d+/g</span>;</code></pre>
+        </li>
+        <li class="p-3 bg-gray-50 rounded-lg">
+          <span class="font-semibold text-primary-700">Map & Set</span>
+          <p class="text-sm text-gray-600 mt-1">
+            Collections with unique keys/values.
+          </p>
+          <pre
+          id = "code"class="text-xs mt-2 bg-gray-100 p-2 rounded"
+          ><code><span class="keyword">let</span> <span class="variable">map</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="function">Map</span>();
+                    <span class="keyword">let</span> <span class="variable">set</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="function">Set</span>();</code></pre>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="p-6 bg-primary-50 rounded-lg border-l-4 border-primary-500 mb-6">
+    <h3 class="text-xl font-semibold text-primary-800 mb-2">
+      Type Coercion & Checking
+    </h3>
+    <p class="text-gray-700 mb-4">
+      JavaScript is a dynamically typed language, which means variables can
+      change types. Understanding type coercion and how to check types is
+      important.
+    </p>
+
+    <div class="code-block mt-4">
+      <div class="language-tag">javascript</div>
+      <button class="copy-button">Copy</button>
+      <pre><code><span class="comment">// Type coercion examples</span>
+                <span class="variable">console</span>.<span class="function">log</span>(<span class="string">'5'</span> <span class="operator">+</span> <span class="number">2</span>);        <span class="comment">// "52" (string concatenation)</span>
+                <span class="variable">console</span>.<span class="function">log</span>(<span class="string">'5'</span> <span class="operator">-</span> <span class="number">2</span>);        <span class="comment">// 3 (numeric subtraction)</span>
+                <span class="variable">console</span>.<span class="function">log</span>(<span class="string">'5'</span> <span class="operator">*</span> <span class="number">2</span>);        <span class="comment">// 10 (numeric multiplication)</span>
+                <span class="variable">console</span>.<span class="function">log</span>(<span class="keyword">true</span> <span class="operator">+</span> <span class="number">1</span>);       <span class="comment">// 2 (true is coerced to 1)</span>
+                <span class="variable">console</span>.<span class="function">log</span>(<span class="keyword">false</span> <span class="operator">+</span> <span class="number">1</span>);      <span class="comment">// 1 (false is coerced to 0)</span>
+
+                <span class="comment">// Checking types</span>
+                <span class="keyword">let</span> <span class="variable">num</span> <span class="operator">=</span> <span class="number">42</span>;
+                <span class="keyword">let</span> <span class="variable">str</span> <span class="operator">=</span> <span class="string">'Hello'</span>;
+                <span class="keyword">let</span> <span class="variable">obj</span> <span class="operator">=</span> { <span class="variable">name</span>: <span class="string">'John'</span> };
+
+                <span class="variable">console</span>.<span class="function">log</span>(<span class="keyword">typeof</span> <span class="variable">num</span>);  <span class="comment">// "number"</span>
+                <span class="variable">console</span>.<span class="function">log</span>(<span class="keyword">typeof</span> <span class="variable">str</span>);  <span class="comment">// "string"</span>
+                <span class="variable">console</span>.<span class="function">log</span>(<span class="keyword">typeof</span> <span class="variable">obj</span>);  <span class="comment">// "object"</span>
+
+                <span class="comment">// Array checking (typeof returns "object" for arrays)</span>
+                <span class="keyword">let</span> <span class="variable">arr</span> <span class="operator">=</span> [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];
+                <span class="variable">console</span>.<span class="function">log</span>(<span class="keyword">typeof</span> <span class="variable">arr</span>);                <span class="comment">// "object"</span>
+                <span class="variable">console</span>.<span class="function">log</span>(<span class="variable">Array</span>.<span class="function">isArray</span>(<span class="variable">arr</span>));              <span class="comment">// true</span>
+
+                <span class="comment">// Null checking</span>
+                <span class="variable">console</span>.<span class="function">log</span>(<span class="keyword">typeof</span> <span class="keyword">null</span>);                <span class="comment">// "object" (this is a known JavaScript quirk)</span>
+                <span class="variable">console</span>.<span class="function">log</span>(<span class="variable">myVar</span> <span class="operator">===</span> <span class="keyword">null</span>);        <span class="comment">// Direct comparison is better</span></code></pre>
+    </div>
+  </div>
+
+  <div class="mt-6 flex items-center justify-between">
+    <a
+      href="#scope"
+      class="text-primary-600 hover:text-primary-700 flex items-center"
+    >
+      <i class="fas fa-arrow-left mr-2"></i>
+      Previous: Variable Scope
+    </a>
+    <a
+      href="#naming-conventions"
+      class="text-primary-600 hover:text-primary-700 flex items-center"
+    >
+      Next: Naming Conventions
+      <i class="fas fa-arrow-right ml-2"></i>
+    </a>
+  </div>
+</section>

@@ -1,0 +1,137 @@
+<section
+  id="interactive-demo"
+  class="mb-12 bg-white rounded-lg shadow-md p-8 scroll-mt-4"
+>
+  <h2 class="text-3xl font-bold text-gray-900 mb-6">Interactive Demo</h2>
+
+  <p class="text-gray-700 mb-6">
+    Try out different variable declarations and see how they behave. This
+    interactive demo will help you understand the concepts better.
+  </p>
+
+  <div class="interactive-demo">
+    <div class="interactive-demo-header">
+      <h3 class="font-semibold">Variable Declaration Explorer</h3>
+      <div class="flex space-x-2">
+        <button class="tab-button active" data-tab="let-demo">let</button>
+        <button class="tab-button" data-tab="const-demo">const</button>
+        <button class="tab-button" data-tab="var-demo">var</button>
+      </div>
+    </div>
+
+    <div class="interactive-demo-content">
+      <div class="tab-content active" id="let-demo">
+        <p class="text-gray-700 mb-4">
+          <code>let</code> declares a block-scoped variable that can be
+          reassigned.
+        </p>
+        <div id="code" class="code-block">
+          <pre><code><span class="keyword">let</span> <span class="variable">count</span> <span class="operator">=</span> <span class="number">1</span>;
+                      <span class="variable">console</span>.<span class="function">log</span>(<span class="variable">count</span>); <span class="comment">// 1</span>
+
+                      <span class="variable">count</span> <span class="operator">=</span> <span class="number">2</span>;
+                      <span class="variable">console</span>.<span class="function">log</span>(<span class="variable">count</span>); <span class="comment">// 2</span>
+
+                      <span class="comment">// Block scope demonstration</span>
+                      {
+                        <span class="keyword">let</span> <span class="variable">blockVar</span> <span class="operator">=</span> <span class="string">'only in this block'</span>;
+                        <span class="variable">console</span>.<span class="function">log</span>(<span class="variable">blockVar</span>); <span class="comment">// 'only in this block'</span>
+                      }
+                      <span class="comment">// console.log(blockVar); // ReferenceError</span></code></pre>
+        </div>
+        <button
+          class="mt-4 bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-md transition-colors"
+          id="run-let"
+        >
+          Run Example
+        </button>
+        <div class="interactive-demo-output" id="let-output">
+          <p class="text-gray-500 italic">Output will appear here...</p>
+        </div>
+      </div>
+
+      <div class="tab-content" id="const-demo">
+        <p class="text-gray-700 mb-4">
+          <code>const</code> declares a block-scoped variable that cannot be
+          reassigned.
+        </p>
+        <div class="code-block">
+          <pre><code><span class="keyword">const</span> <span class="variable">PI</span> <span class="operator">=</span> <span class="number">3.14159</span>;
+                      <span class="variable">console</span>.<span class="function">log</span>(<span class="variable">PI</span>); <span class="comment">// 3.14159</span>
+
+                      <span class="comment">// PI = 3.14; // TypeError: Assignment to constant variable</span>
+
+                      <span class="comment">// Objects declared with const can still be modified</span>
+                      <span class="keyword">const</span> <span class="variable">user</span> <span class="operator">=</span> { <span class="variable">name</span>: <span class="string">'John'</span> };
+                      <span class="variable">user</span>.<span class="variable">name</span> <span class="operator">=</span> <span class="string">'Jane'</span>; <span class="comment">// This works!</span>
+                      <span class="variable">console</span>.<span class="function">log</span>(<span class="variable">user</span>.<span class="variable">name</span>); <span class="comment">// 'Jane'</span>
+
+                      <span class="comment">// But you can't reassign the variable itself</span>
+                      <span class="comment">// user = { name: 'Bob' }; // TypeError</span></code></pre>
+        </div>
+        <button
+          class="mt-4 bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-md transition-colors"
+          id="run-const"
+        >
+          Run Example
+        </button>
+        <div class="interactive-demo-output" id="const-output">
+          <p class="text-gray-500 italic">Output will appear here...</p>
+        </div>
+      </div>
+
+      <div class="tab-content" id="var-demo">
+        <p class="text-gray-700 mb-4">
+          <code>var</code> declares a function-scoped variable that can be
+          reassigned and redeclared.
+        </p>
+        <div id="code" class="code-block">
+          <pre><code><span class="keyword">var</span> <span class="variable">score</span> <span class="operator">=</span> <span class="number">100</span>;
+                  <span class="variable">console</span>.<span class="function">log</span>(<span class="variable">score</span>); <span class="comment">// 100</span>
+
+                  <span class="variable">score</span> <span class="operator">=</span> <span class="number">200</span>;
+                  <span class="variable">console</span>.<span class="function">log</span>(<span class="variable">score</span>); <span class="comment">// 200</span>
+
+                  <span class="comment">// Redeclaration is allowed with var</span>
+                  <span class="keyword">var</span> <span class="variable">score</span> <span class="operator">=</span> <span class="number">300</span>;
+                  <span class="variable">console</span>.<span class="function">log</span>(<span class="variable">score</span>); <span class="comment">// 300</span>
+
+                  <span class="comment">// Function vs block scope demonstration</span>
+                  {
+                    <span class="keyword">var</span> <span class="variable">blockVar</span> <span class="operator">=</span> <span class="string">'not actually block-scoped'</span>;
+                  }
+                  <span class="variable">console</span>.<span class="function">log</span>(<span class="variable">blockVar</span>); <span class="comment">// 'not actually block-scoped'</span></code></pre>
+        </div>
+        <button
+          class="mt-4 bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-md transition-colors"
+          id="run-var"
+        >
+          Run Example
+        </button>
+        <div class="interactive-demo-output" id="var-output">
+          <p class="text-gray-500 italic">Output will appear here...</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-6 flex items-center justify-between">
+    <a
+      href="#best-practices"
+      class="text-primary-600 hover:text-primary-700 flex items-center"
+    >
+      <i class="fas fa-arrow-left mr-2"></i>
+      Previous: Best Practices
+    </a>
+    <a
+      href="#common-mistakes"
+      class="text-primary-600 hover:text-primary-700 flex items-center"
+    >
+      Next: Common Mistakes
+      <i class="fas fa-arrow-right ml-2"></i>
+    </a>
+  </div>
+</section>
+
+
+

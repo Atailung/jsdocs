@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JavaScript Fundamentals Docs</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/main_style.css" />
+
+    <script src="asset/js/tailwindcss.js"></script>
+    <script src="asset/js/components.js" defer></script>
+  </head>
+  <body class="bg-gray-50 text-gray-800">
+    <!-- Progress Bar -->
+    <div class="progress-bar" id="progressBar"></div>
+
+    <!-- Header: Resable Header -->
+    <div id="header"></div>
+
+    <!-- Search Bar -->
+    <div class="container mx-auto px-4 py-6">
+      <div class="bg-white rounded-lg shadow-lg p-4 flex items-center">
+        <i class="fas fa-search text-gray-400 mr-3"></i>
+        <input
+          id="searchInput"
+          type="text"
+          placeholder="Search JavaScript concepts..."
+          class="w-full outline-none text-gray-700"
+        />
+        <button
+          id="searchButton"
+          class="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-md ml-4 transition-colors duration-200"
+        >
+          Search
+        </button>
+      </div>
+      <div
+        id="searchResults"
+        class="bg-white rounded-lg shadow-md mt-2 p-4 hidden"
+      ></div>
+    </div>
+
+    <!-- Include searchComponent -->
+    <script type="module">
+      import { initSearchBar } from "asset/js/searchComponent.js";
+
+      const jsConcepts = [
+        "Variables and Constants",
+        "Data Types",
+        "Functions",
+        "Loops",
+        "Arrays",
+        "Objects",
+        "DOM Manipulation",
+        "Event Handling",
+        "Async/Await",
+        "Promises",
+        "Closures",
+        "Hoisting",
+        "Scope",
+        "Arrow Functions",
+      ];
+
+      initSearchBar({
+        inputId: "searchInput",
+        buttonId: "searchButton",
+        resultId: "searchResults",
+        dataArray: jsConcepts,
+      });
+    </script>
+
+    <!-- Navigation -->
+    <div id="expore-topic"></div>
+
+    <!-- Featured Example: Resuable features section -->
+    <div id="featured"></div>
+    <!-- Learning Path : reusable  -->
+    <div id="learning"></div>
+
+    <!-- Resable:Cat_section -->
+    <div id="CAT"></div>
+
+    <!-- Footer: Reuseable footer -->
+    <div id="footer"></div>
+
+    <script>
+      // Progress bar
+      window.addEventListener("scroll", () => {
+        const winScroll =
+          document.body.scrollTop || document.documentElement.scrollTop;
+        const height =
+          document.documentElement.scrollHeight -
+          document.documentElement.clientHeight;
+        const scrolled = (winScroll / height) * 100;
+        document.getElementById("progressBar").style.width = scrolled + "%";
+      });
+
+      // Dark mode toggle (simplified implementation)
+      const darkModeToggle = document.querySelector(".dark-mode-toggle");
+      darkModeToggle.addEventListener("click", () => {
+        document.body.classList.toggle("dark-mode");
+        const icon = darkModeToggle.querySelector("i");
+        if (icon.classList.contains("fa-moon")) {
+          icon.classList.remove("fa-moon");
+          icon.classList.add("fa-sun");
+        } else {
+          icon.classList.remove("fa-sun");
+          icon.classList.add("fa-moon");
+        }
+      });
+    </script>
+    <script src="/script.js"></script>
+  </body>
+</html>

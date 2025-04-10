@@ -1,0 +1,83 @@
+<section
+  id="basics"
+  class="mb-12 bg-white rounded-lg shadow-md p-8 scroll-mt-4"
+>
+  <h2 class="text-3xl font-bold text-gray-900 mb-6">Variable Basics</h2>
+
+  <p class="text-gray-700 mb-4">
+    Variables are containers for storing data values in JavaScript.
+  </p>
+
+  <div class="my-6 p-6 bg-green-50 rounded-lg border-l-4 border-green-500">
+    <h3 class="text-xl font-semibold text-green-800 mb-2">
+      Why Variables Matter
+    </h3>
+    <ul class="mt-2 space-y-2 list-disc list-inside text-gray-700">
+      <li>Store and reuse data</li>
+      <li>Work with dynamic inputs</li>
+      <li>Track application state</li>
+      <li>Improve code readability</li>
+    </ul>
+  </div>
+
+  <p class="text-gray-700 mb-4">
+    Think of variables as labeled boxes that store data.
+  </p>
+
+  <div id = "code" class="bg-gray-800 text-white rounded-lg p-4 overflow-x-auto relative">
+    <div class="bg-gray-700 text-white px-2 py-1 rounded-b font-mono">
+      JavaScript
+      <button
+        onclick="copyCode()"
+        class="absolute top-4.3 right-2 text-sm text-white bg-green-600 px-3 py-1 rounded hover:bg-green-700"
+      >
+        Copy
+      </button>
+    </div>
+
+    
+
+    <!-- Code Block -->
+    <pre class="mt-2 text-sm font-mono">
+      <code id="code-block">
+      // Creating a variable to store a user's name
+      let userName = 'John';
+
+      // Using the variable
+      console.log('Hello, ' + userName + '!'); // Outputs: "Hello, John!"
+
+      // Changing the value
+      userName = 'Sarah';
+      console.log('Hello, ' + userName + '!'); // Outputs: "Hello, Sarah!"
+      </code>
+    </pre>
+  </div>
+
+  <div class="mt-6 flex items-center justify-between">
+    <span class="text-sm text-gray-500"
+      >💡 Variables let you store and manipulate data</span
+    >
+    <a
+      href="#declaration"
+      class="text-green-600 hover:text-green-700 flex items-center"
+    >
+      Next: Declaration Methods <i class="fas fa-arrow-right ml-2"></i>
+    </a>
+  </div>
+</section>
+
+<!-- Copy Script -->
+<script>
+  function copyCode() {
+    const code = document.getElementById("code-block").innerText;
+    navigator.clipboard
+      .writeText(code)
+      .then(() => {
+        alert("✅ Code copied to clipboard!");
+      })
+      .catch((err) => {
+        alert("❌ Failed to copy code.");
+        console.error(err);
+      });
+  }
+</script>

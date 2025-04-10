@@ -1,0 +1,150 @@
+<section
+  id="declaration"
+  class="mb-12 bg-white rounded-lg shadow-md p-8 scroll-mt-4"
+>
+  <h2 class="text-3xl font-bold text-gray-900 mb-6">Declaration Methods</h2>
+
+  <p class="text-gray-700 mb-4">
+    JavaScript provides three ways to declare variables:
+    <code class="bg-gray-100 text-primary-700 px-1 py-0.5 rounded">let</code>,
+    <code class="bg-gray-100 text-primary-700 px-1 py-0.5 rounded">const</code>,
+    and
+    <code class="bg-gray-100 text-primary-700 px-1 py-0.5 rounded">var</code>.
+    Each has different behaviors and use cases.
+  </p>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 my-8">
+    <!-- let card -->
+    <div
+      class="variable-card bg-white border border-gray-200 rounded-lg shadow-sm p-6"
+    >
+      <div class="flex items-center justify-between mb-4">
+        <div class="bg-primary-100 text-primary-600 p-3 rounded-lg">
+          <i class="fas fa-pencil-alt text-xl"></i>
+        </div>
+        <span
+          class="text-xs font-medium px-2 py-1 rounded-full bg-green-100 text-green-800"
+          >Recommended</span
+        >
+      </div>
+      <h3 class="text-xl font-semibold text-gray-900 mb-2">let</h3>
+      <p class="text-gray-600 mb-4">
+        Block-scoped, reassignable variable declaration.
+      </p>
+      <ul class="text-sm text-gray-600 space-y-2">
+        <li class="flex items-start">
+          <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+          <span>Can be updated</span>
+        </li>
+        <li class="flex items-start">
+          <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+          <span>Block-scoped</span>
+        </li>
+        <li class="flex items-start">
+          <i class="fas fa-times text-red-500 mt-1 mr-2"></i>
+          <span>Cannot be redeclared in same scope</span>
+        </li>
+      </ul>
+    </div>
+
+    <!-- const card -->
+    <div
+      class="variable-card bg-white border border-gray-200 rounded-lg shadow-sm p-6"
+    >
+      <div class="flex items-center justify-between mb-4">
+        <div class="bg-primary-100 text-primary-600 p-3 rounded-lg">
+          <i class="fas fa-lock text-xl"></i>
+        </div>
+        <span
+          class="text-xs font-medium px-2 py-1 rounded-full bg-blue-100 text-blue-800"
+          >Immutable</span
+        >
+      </div>
+      <h3 class="text-xl font-semibold text-gray-900 mb-2">const</h3>
+      <p class="text-gray-600 mb-4">
+        Block-scoped, constant (non-reassignable) declaration.
+      </p>
+      <ul class="text-sm text-gray-600 space-y-2">
+        <li class="flex items-start">
+          <i class="fas fa-times text-red-500 mt-1 mr-2"></i>
+          <span>Cannot be updated</span>
+        </li>
+        <li class="flex items-start">
+          <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+          <span>Block-scoped</span>
+        </li>
+        <li class="flex items-start">
+          <i class="fas fa-times text-red-500 mt-1 mr-2"></i>
+          <span>Cannot be redeclared</span>
+        </li>
+      </ul>
+    </div>
+
+    <!-- var card -->
+    <div
+      class="variable-card bg-white border border-gray-200 rounded-lg shadow-sm p-6"
+    >
+      <div class="flex items-center justify-between mb-4">
+        <div class="bg-primary-100 text-primary-600 p-3 rounded-lg">
+          <i class="fas fa-history text-xl"></i>
+        </div>
+        <span
+          class="text-xs font-medium px-2 py-1 rounded-full bg-orange-100 text-orange-800"
+          >Legacy</span
+        >
+      </div>
+      <h3 class="text-xl font-semibold text-gray-900 mb-2">var</h3>
+      <p class="text-gray-600 mb-4">
+        Function-scoped, reassignable variable declaration.
+      </p>
+      <ul class="text-sm text-gray-600 space-y-2">
+        <li class="flex items-start">
+          <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+          <span>Can be updated</span>
+        </li>
+        <li class="flex items-start">
+          <i class="fas fa-times text-red-500 mt-1 mr-2"></i>
+          <span>Function-scoped (not block)</span>
+        </li>
+        <li class="flex items-start">
+          <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+          <span>Can be redeclared</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div id = "code" class="code-block">
+    <div class="language-tag">javascript</div>
+    <button class="copy-button">Copy</button>
+    <pre><code><span class="comment">// Using let - can be reassigned</span>
+                  <span class="keyword">let</span> <span class="variable">age</span> <span class="operator">=</span> <span class="number">25</span>;
+                  <span class="variable">age</span> <span class="operator">=</span> <span class="number">26</span>; <span class="comment">// Valid - value updated</span>
+
+                  <span class="comment">// Using const - cannot be reassigned</span>
+                  <span class="keyword">const</span> <span class="variable">PI</span> <span class="operator">=</span> <span class="number">3.14159</span>;
+                  <span class="comment">// PI = 3.14; // Error! Cannot reassign a constant</span>
+
+                  <span class="comment">// Using var (older method)</span>
+                  <span class="keyword">var</span> <span class="variable">score</span> <span class="operator">=</span> <span class="number">100</span>;
+                  <span class="variable">score</span> <span class="operator">=</span> <span class="number">110</span>; <span class="comment">// Valid - value updated</span>
+                  <span class="keyword">var</span> <span class="variable">score</span> <span class="operator">=</span> <span class="number">120</span>; <span class="comment">// Also valid - redeclared (not recommended)</span></code></pre>
+  </div>
+
+  <div class="mt-6 flex items-center justify-between">
+    <a
+      href="#basics"
+      class="text-primary-600 hover:text-primary-700 flex items-center"
+    >
+      <i class="fas fa-arrow-left mr-2"></i>
+      Previous: Basics
+    </a>
+    <a
+      href="#let-vs-const"
+      class="text-primary-600 hover:text-primary-700 flex items-center"
+    >
+      Next: let vs const vs var
+      <i class="fas fa-arrow-right ml-2"></i>
+    </a>
+  </div>
+</section>

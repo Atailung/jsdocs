@@ -1,0 +1,197 @@
+<style>
+  #code{
+    background-color :rgb(62, 63, 64);
+    font-color:rgb(50, 125, 255);
+    border-radius : 15px;
+    padding: 20px;
+  }
+</style>
+
+<section id="scope" class="mb-12 bg-white rounded-lg shadow-md p-8 scroll-mt-4">
+  <h2 class="text-3xl font-bold text-gray-900 mb-6">Variable Scope</h2>
+
+  <p class="text-gray-700 mb-4">
+    Scope determines where variables are accessible in your code. Understanding
+    scope is essential for writing predictable JavaScript programs.
+  </p>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-8">
+    <!-- Global Scope -->
+    <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+      <h3 class="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+        <span class="bg-primary-100 text-primary-600 p-2 rounded-lg mr-3">
+          <i class="fas fa-globe"></i>
+        </span>
+        Global Scope
+      </h3>
+      <p class="text-gray-600 mb-4">
+        Variables declared outside any function or block have global scope and
+        are accessible from anywhere in your code.
+      </p>
+      <div id = "code" class="bg-gray-50 p-4 rounded-lg">
+        <pre
+          class="text-sm" 
+        ><code ><span class="comment">// Global variable</span>
+                  <span class="keyword">let</span> <span class="variable">globalVar</span> <span class="operator">=</span> <span class="string">'I am global'</span>;
+
+                  <span class="keyword">function</span> <span class="function">testScope</span>() {
+                    <span class="variable">console</span>.<span class="function">log</span>(<span class="variable">globalVar</span>); <span class="comment">// Accessible</span>
+                  }</code></pre>
+      </div>
+    </div>
+
+    <!-- Function Scope -->
+    <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+      <h3 class="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+        <span class="bg-primary-100 text-primary-600 p-2 rounded-lg mr-3">
+          <i class="fas fa-code"></i>
+        </span>
+        Function Scope
+      </h3>
+      <p class="text-gray-600 mb-4">
+        Variables declared inside a function are only accessible within that
+        function.
+      </p>
+      <div id = "code" class="bg-gray-50 p-4 rounded-lg">
+        <pre
+          class="text-sm"
+        ><code><span class="keyword">function</span> <span class="function">myFunction</span>() {
+                      <span class="keyword">let</span> <span class="variable">functionVar</span> <span class="operator">=</span> <span class="string">'I am function-scoped'</span>;
+                      <span class="variable">console</span>.<span class="function">log</span>(<span class="variable">functionVar</span>); <span class="comment">// Accessible</span>
+                    }
+
+                    <span class="comment">// console.log(functionVar); // ReferenceError</span></code></pre>
+      </div>
+    </div>
+
+    <!-- Block Scope -->
+    <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+      <h3 class="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+        <span class="bg-primary-100 text-primary-600 p-2 rounded-lg mr-3">
+          <i class="fas fa-cube"></i>
+        </span>
+        Block Scope
+      </h3>
+      <p class="text-gray-600 mb-4">
+        Variables declared with <code>let</code> and <code>const</code> inside a
+        block (denoted by <code>{}</code>) are only accessible within that
+        block.
+      </p>
+      <div id = "code" class="bg-gray-50 p-4 rounded-lg">
+        <pre
+          class="text-sm"
+        ><code><span class="keyword">if</span> (<span class="variable">true</span>) {
+                    <span class="keyword">let</span> <span class="variable">blockVar</span> <span class="operator">=</span> <span class="string">'I am block-scoped'</span>;
+                    <span class="variable">console</span>.<span class="function">log</span>(<span class="variable">blockVar</span>); <span class="comment">// Accessible</span>
+                  }
+
+                  <span class="comment">// console.log(blockVar); // ReferenceError</span></code></pre>
+      </div>
+    </div>
+
+    <!-- Lexical Scope -->
+    <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+      <h3 class="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+        <span class="bg-primary-100 text-primary-600 p-2 rounded-lg mr-3">
+          <i class="fas fa-layer-group"></i>
+        </span>
+        Lexical Scope
+      </h3>
+      <p class="text-gray-600 mb-4">
+        Inner functions have access to variables declared in their outer scope.
+      </p>
+      <div  id = "code" class="bg-gray-50 p-4 rounded-lg">
+        <pre
+          class="text-sm"
+        ><code><span class="keyword">function</span> <span class="function">outer</span>() {
+                  <span class="keyword">let</span> <span class="variable">outerVar</span> <span class="operator">=</span> <span class="string">'I am from outer'</span>;
+  
+                  <span class="keyword">function</span> <span class="function">inner</span>() {
+                    <span class="variable">console</span>.<span class="function">log</span>(<span class="variable">outerVar</span>); <span class="comment">// Accessible</span>
+                  }
+  
+                    <span class="function">inner</span>();
+                  }</code></pre>
+      </div>
+    </div>
+  </div>
+
+  <div  id = "code" class="code-block mt-6">
+    <div class="language-tag">javascript</div>
+    <button class="copy-button">Copy</button>
+    <pre>
+      <code>
+        <span class="comment">// Scope visualization</span>
+            <span class="keyword">let</span> <span class="variable">globalVariable</span> <span class="operator">=</span> <span class="string">'I am global'</span>;
+
+            <span class="keyword">function</span> <span class="function">outerFunction</span>() {
+              <span class="keyword">let</span> <span class="variable">outerVariable</span> <span class="operator">=</span> <span class="string">'I am from outer function'</span>;
+              
+              <span class="comment">// This inner function has access to both outerVariable and globalVariable</span>
+              <span class="keyword">function</span> <span class="function">innerFunction</span>() {
+                <span class="keyword">let</span> <span class="variable">innerVariable</span> <span class="operator">=</span> <span class="string">'I am from inner function'</span>;
+                <span class="variable">console</span>.<span class="function">log</span>(<span class="variable">globalVariable</span>); <span class="comment">// Accessible</span>
+                <span class="variable">console</span>.<span class="function">log</span>(<span class="variable">outerVariable</span>); <span class="comment">// Accessible</span>
+                <span class="variable">console</span>.<span class="function">log</span>(<span class="variable">innerVariable</span>); <span class="comment">// Accessible</span>
+              }
+              
+              <span class="function">innerFunction</span>();
+              
+              <span class="variable">console</span>.<span class="function">log</span>(<span class="variable">globalVariable</span>); <span class="comment">// Accessible</span>
+              <span class="variable">console</span>.<span class="function">log</span>(<span class="variable">outerVariable</span>); <span class="comment">// Accessible</span>
+              <span class="comment">// console.log(innerVariable); // ReferenceError - not accessible here</span>
+            }
+
+         <span class="function">outerFunction</span>();
+
+          <span class="variable">console</span>.<span class="function">log</span>(<span class="variable">globalVariable</span>); <span class="comment">// Accessible</span>
+          <span class="comment">// console.log(outerVariable); // ReferenceError - not accessible here</span>
+         <span class="comment">// console.log(innerVariable); // ReferenceError - not accessible here</span>
+      </code>
+    </pre>
+  </div>
+
+  <div class="mt-8 p-6 bg-yellow-50 rounded-lg border-l-4 border-yellow-500">
+    <h3 class="text-xl font-semibold text-yellow-800 mb-2">Scope Gotchas</h3>
+    <p class="text-gray-700 mb-4">
+      Be careful with these common scope-related issues:
+    </p>
+    <ul class="space-y-2">
+      <li class="flex items-start">
+        <i class="fas fa-exclamation-triangle text-yellow-600 mt-1 mr-2"></i>
+        <span
+          >Variables declared with <code>var</code> inside blocks are not
+          block-scoped</span
+        >
+      </li>
+      <li class="flex items-start">
+        <i class="fas fa-exclamation-triangle text-yellow-600 mt-1 mr-2"></i>
+        <span>Global variables can be accidentally overwritten</span>
+      </li>
+      <li class="flex items-start">
+        <i class="fas fa-exclamation-triangle text-yellow-600 mt-1 mr-2"></i>
+        <span
+          >Closures can capture variables that might change before the closure
+          is executed</span
+        >
+      </li>
+    </ul>
+  </div>
+
+  <div class="mt-6 flex items-center justify-between">
+    <a
+      href="#let-vs-const"
+      class="text-primary-600 hover:text-primary-700 flex items-center"
+    >
+      <i class="fas fa-arrow-left mr-2"></i>
+      Previous: let vs const vs var
+    </a>
+    <a
+      href="#data-types"
+      class="text-primary-600 hover:text-primary-700 flex items-center"
+    >
+      Next: Data Types
+      <i class="fas fa-arrow-right ml-2"></i>
+    </a>
+  </div>
+</section>

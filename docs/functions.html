@@ -1,0 +1,1965 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JavaScript Functions - JS Fundamentals</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet" />
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: {
+                50: '#f0f9ff',
+                100: '#e0f2fe',
+                200: '#bae6fd',
+                300: '#7dd3fc',
+                400: '#38bdf8',
+                500: '#0ea5e9',
+                600: '#0284c7',
+                700: '#0369a1',
+                800: '#075985',
+                900: '#0c4a6e',
+              },
+              code: {
+                bg: '#1e293b',
+                text: '#e2e8f0'
+              }
+            },
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+              mono: ['Fira Code', 'monospace'],
+            },
+            keyframes: {
+              fadeIn: {
+                '0%': { opacity: '0', transform: 'translateY(10px)' },
+                '100%': { opacity: '1', transform: 'translateY(0)' }
+              },
+              float: {
+                '0%, 100%': { transform: 'translateY(0)' },
+                '50%': { transform: 'translateY(-10px)' }
+              },
+              pulse: {
+                '0%, 100%': { opacity: '1' },
+                '50%': { opacity: '0.7' }
+              },
+              highlight: {
+                '0%': { backgroundColor: 'transparent' },
+                '40%': { backgroundColor: 'rgba(14, 165, 233, 0.2)' },
+                '100%': { backgroundColor: 'transparent' }
+              },
+              typewriter: {
+                '0%': { width: '0%' },
+                '100%': { width: '100%' }
+              },
+              codeSlide: {
+                '0%': { transform: 'translateX(-20px)', opacity: '0' },
+                '100%': { transform: 'translateX(0)', opacity: '1' }
+              }
+            },
+            animation: {
+              'fade-in': 'fadeIn 0.5s ease-out forwards',
+              'float': 'float 3s ease-in-out infinite',
+              'pulse': 'pulse 2s ease-in-out infinite',
+              'highlight': 'highlight 2s ease-in-out',
+              'typewriter': 'typewriter 2s steps(40, end)',
+              'code-slide': 'codeSlide 0.5s ease-out forwards'
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      body {
+        font-family: 'Inter', sans-serif;
+        scroll-behavior: smooth;
+      }
+      
+      pre, code {
+        font-family: 'Fira Code', monospace;
+      }
+      
+      pre {
+        background-color: theme('colors.code.bg');
+        color: theme('colors.code.text');
+        padding: 1rem;
+        border-radius: 0.5rem;
+        overflow-x: auto;
+        position: relative;
+      }
+      
+      .code-block {
+        position: relative;
+        margin: 1.5rem 0;
+      }
+      
+      .code-block .copy-button {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+        background-color: rgba(255, 255, 255, 0.1);
+        color: #e2e8f0;
+        border: none;
+        border-radius: 0.25rem;
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+        cursor: pointer;
+        opacity: 0;
+        transition: opacity 0.2s ease-in-out;
+      }
+      
+      .code-block:hover .copy-button {
+        opacity: 1;
+      }
+      
+      .code-block .copy-button:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+      }
+      
+      .code-block .copy-button.copied {
+        background-color: rgba(16, 185, 129, 0.2);
+      }
+      
+      .code-block .language-tag {
+        position: absolute;
+        top: 0.5rem;
+        left: 0.5rem;
+        background-color: rgba(255, 255, 255, 0.1);
+        color: #e2e8f0;
+        border-radius: 0.25rem;
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+      }
+      
+      .progress-bar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 3px;
+        background: theme('colors.primary.500');
+        z-index: 50;
+        width: 0%;
+        transition: width 0.2s ease;
+      }
+      
+      .toc-link {
+        display: block;
+        padding: 0.5rem 1rem;
+        color: #64748b;
+        border-left: 2px solid #e2e8f0;
+        transition: all 0.2s ease;
+      }
+      
+      .toc-link:hover {
+        color: #0ea5e9;
+        border-left-color: #0ea5e9;
+        background-color: rgba(14, 165, 233, 0.05);
+      }
+      
+      .toc-link.active {
+        color: #0ea5e9;
+        border-left-color: #0ea5e9;
+        font-weight: 500;
+      }
+      
+      .section-highlight {
+        animation: highlight 2s ease-in-out;
+      }
+      
+      .typewriter {
+        overflow: hidden;
+        white-space: nowrap;
+        border-right: 2px solid #0ea5e9;
+        animation: typewriter 2s steps(40, end), pulse 1s infinite;
+      }
+      
+      .function-card {
+        transition: all 0.3s ease;
+        border-left: 4px solid transparent;
+      }
+      
+      .function-card:hover {
+        transform: translateY(-5px);
+        border-left: 4px solid theme('colors.primary.500');
+      }
+      
+      .keyword {
+        color: #f472b6;
+        font-weight: 500;
+      }
+      
+      .string {
+        color: #a3e635;
+      }
+      
+      .number {
+        color: #fb923c;
+      }
+      
+      .comment {
+        color: #94a3b8;
+        font-style: italic;
+      }
+      
+      .function {
+        color: #38bdf8;
+      }
+      
+      .variable {
+        color: #e2e8f0;
+      }
+      
+      .operator {
+        color: #e879f9;
+      }
+      
+      .parameter {
+        color: #d8b4fe;
+      }
+      
+      /* Custom scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+      
+      ::-webkit-scrollbar-track {
+        background: #f1f5f9;
+      }
+      
+      ::-webkit-scrollbar-thumb {
+        background: #94a3b8;
+        border-radius: 4px;
+      }
+      
+      ::-webkit-scrollbar-thumb:hover {
+        background: #64748b;
+      }
+      
+      /* Interactive example styles */
+      .interactive-demo {
+        border: 2px solid #e2e8f0;
+        border-radius: 0.5rem;
+        overflow: hidden;
+      }
+      
+      .interactive-demo-header {
+        background-color: #f8fafc;
+        padding: 0.75rem 1rem;
+        border-bottom: 2px solid #e2e8f0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      
+      .interactive-demo-content {
+        padding: 1rem;
+      }
+      
+      .interactive-demo-output {
+        background-color: #f1f5f9;
+        border-radius: 0.25rem;
+        padding: 1rem;
+        margin-top: 1rem;
+        min-height: 3rem;
+      }
+      
+      .tab-button {
+        padding: 0.5rem 1rem;
+        border-radius: 0.25rem;
+        font-weight: 500;
+        transition: all 0.2s ease;
+      }
+      
+      .tab-button.active {
+        background-color: #0ea5e9;
+        color: white;
+      }
+      
+      .tab-content {
+        display: none;
+      }
+      
+      .tab-content.active {
+        display: block;
+        animation: fadeIn 0.3s ease-out forwards;
+      }
+      
+      .code-comparison {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+      
+      @media (min-width: 768px) {
+        .code-comparison {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+      
+      .code-comparison-item {
+        opacity: 0;
+        animation: fadeIn 0.5s ease-out forwards;
+      }
+      
+      .code-comparison-item:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+      
+      .function-visual {
+        position: relative;
+        padding: 2rem;
+        border-radius: 0.5rem;
+        background-color: #f8fafc;
+        overflow: hidden;
+      }
+      
+      .function-input {
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        background-color: #e0f2fe;
+        padding: 1rem;
+        border-radius: 0 0.5rem 0.5rem 0;
+        transition: all 0.3s ease;
+      }
+      
+      .function-process {
+        margin: 0 auto;
+        width: 60%;
+        background-color: #dbeafe;
+        padding: 1.5rem;
+        border-radius: 0.5rem;
+        text-align: center;
+        transition: all 0.3s ease;
+      }
+      
+      .function-output {
+        position: absolute;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        background-color: #e0f2fe;
+        padding: 1rem;
+        border-radius: 0.5rem 0 0 0.5rem;
+        transition: all 0.3s ease;
+      }
+      
+      .function-arrow {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #94a3b8;
+        transition: all 0.3s ease;
+      }
+      
+      .function-arrow.left {
+        left: 25%;
+      }
+      
+      .function-arrow.right {
+        right: 25%;
+      }
+      
+      .function-visual:hover .function-input {
+        background-color: #bae6fd;
+        transform: translateY(-50%) scale(1.05);
+      }
+      
+      .function-visual:hover .function-process {
+        background-color: #93c5fd;
+        transform: scale(1.05);
+      }
+      
+      .function-visual:hover .function-output {
+        background-color: #bae6fd;
+        transform: translateY(-50%) scale(1.05);
+      }
+      
+      .function-visual:hover .function-arrow {
+        color: #0ea5e9;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-50 text-gray-800">
+    <!-- Progress Bar -->
+    <div class="progress-bar" id="progressBar"></div>
+    
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-primary-700 to-primary-900 text-white py-12 relative overflow-hidden">
+      <div class="absolute inset-0 bg-gradient-to-r from-primary-700/30 to-primary-900/30"></div>
+      <div class="container mx-auto px-4 relative z-10">
+        <div class="flex justify-between items-center mb-8">
+          <div class="flex items-center space-x-2">
+            <div class="bg-white text-primary-600 h-10 w-10 rounded-lg flex items-center justify-center shadow-lg animate-float">
+              <span class="text-xl font-bold">JS</span>
+            </div>
+            <a href="/" class="text-xl font-semibold tracking-tight hover:text-primary-200 transition-colors">JSFundamentals</a>
+          </div>
+          <div class="flex items-center space-x-6">
+            <a href="/" class="text-white/80 hover:text-white transition-colors duration-200">Home</a>
+            <a href="#" class="text-white/80 hover:text-white transition-colors duration-200">Docs</a>
+            <a href="#" class="text-white/80 hover:text-white transition-colors duration-200">Examples</a>
+            <a href="#" class="text-white/80 hover:text-white transition-colors duration-200">Community</a>
+            <div class="dark-mode-toggle ml-4 text-white/80 hover:text-white cursor-pointer">
+              <i class="fas fa-moon text-lg"></i>
+            </div>
+          </div>
+        </div>
+        
+        <div class="max-w-3xl">
+          <h1 class="text-4xl md:text-5xl font-bold leading-tight mb-4">JavaScript Functions</h1>
+          <p class="text-xl text-white/90 mb-8 leading-relaxed">Master the art of creating reusable blocks of code - the building blocks that power JavaScript applications and enable modular, maintainable code.</p>
+          <div class="flex flex-wrap gap-4">
+            <a href="#basics" class="bg-white text-primary-700 hover:bg-gray-100 px-6 py-3 rounded-lg font-medium transition-all duration-200 shadow-md hover:shadow-lg flex items-center">
+              <span>Start Learning</span>
+              <i class="fas fa-arrow-right ml-2"></i>
+            </a>
+            <a href="#interactive-demo" class="bg-transparent border border-white/30 backdrop-blur-sm text-white hover:bg-white/10 px-6 py-3 rounded-lg font-medium transition-all duration-200">
+              <i class="fas fa-code mr-2"></i>
+              <span>Try It Yourself</span>
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Decorative Elements -->
+      <div class="absolute right-0 top-0 h-full w-1/3 opacity-10">
+        <div class="absolute right-20 top-20 text-6xl animate-float" style="animation-delay: 0.5s;">( )</div>
+        <div class="absolute right-60 top-40 text-4xl animate-float" style="animation-delay: 1s;">{ }</div>
+        <div class="absolute right-40 top-60 text-5xl animate-float" style="animation-delay: 1.5s;">=></div>
+        <div class="absolute right-80 top-80 text-7xl animate-float" style="animation-delay: 2s;">function</div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container mx-auto px-4 py-8 md:py-16">
+      <div class="flex flex-col lg:flex-row gap-8">
+        <!-- Sidebar / TOC -->
+        <div class="lg:w-1/4">
+          <div class="bg-white rounded-lg shadow-md p-6 sticky top-4">
+            <h2 class="text-xl font-semibold text-gray-900 mb-4">Table of Contents</h2>
+            <nav class="toc">
+              <a href="#basics" class="toc-link">Function Basics</a>
+              <a href="#declaration" class="toc-link">Function Declaration</a>
+              <a href="#expression" class="toc-link">Function Expression</a>
+              <a href="#arrow" class="toc-link">Arrow Functions</a>
+              <a href="#parameters" class="toc-link">Parameters & Arguments</a>
+              <a href="#scope" class="toc-link">Function Scope</a>
+              <a href="#closures" class="toc-link">Closures</a>
+              <a href="#higher-order" class="toc-link">Higher-Order Functions</a>
+              <a href="#best-practices" class="toc-link">Best Practices</a>
+              <a href="#interactive-demo" class="toc-link">Interactive Demo</a>
+              <a href="#common-patterns" class="toc-link">Common Patterns</a>
+            </nav>
+            
+            <div class="mt-8 p-4 bg-primary-50 rounded-lg border border-primary-100">
+              <h3 class="text-sm font-semibold text-primary-800 mb-2">Learning Progress</h3>
+              <div class="w-full bg-gray-200 rounded-full h-2.5">
+                <div class="bg-primary-500 h-2.5 rounded-full" style="width: 0%" id="readingProgress"></div>
+              </div>
+              <p class="text-xs text-gray-500 mt-2">Scroll to track your progress</p>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Main Content -->
+        <main class="lg:w-3/4">
+          <!-- Function Basics -->
+          <section id="basics" class="mb-12 bg-white rounded-lg shadow-md p-8 scroll-mt-4">
+            <h2 class="text-3xl font-bold text-gray-900 mb-6">Function Basics</h2>
+            
+            <p class="text-gray-700 mb-4">
+              Functions are one of the fundamental building blocks in JavaScript. A function is a reusable block of code designed to perform a particular task.
+            </p>
+            
+            <div class="my-6 p-6 bg-primary-50 rounded-lg border-l-4 border-primary-500">
+              <h3 class="text-xl font-semibold text-primary-800 mb-2">Why Functions Matter</h3>
+              <p class="text-gray-700">
+                Functions allow us to:
+              </p>
+              <ul class="mt-2 space-y-2">
+                <li class="flex items-start">
+                  <i class="fas fa-check-circle text-primary-500 mt-1 mr-2"></i>
+                  <span>Write reusable code that can be called multiple times</span>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-check-circle text-primary-500 mt-1 mr-2"></i>
+                  <span>Break down complex problems into smaller, manageable pieces</span>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-check-circle text-primary-500 mt-1 mr-2"></i>
+                  <span>Organize code in a modular, maintainable way</span>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-check-circle text-primary-500 mt-1 mr-2"></i>
+                  <span>Create abstractions that hide implementation details</span>
+                </li>
+              </ul>
+            </div>
+            
+            <div class="function-visual my-8">
+              <div class="function-input">
+                <strong>Input</strong>
+                <p class="text-sm">Arguments</p>
+              </div>
+              <div class="function-arrow left">
+                <i class="fas fa-arrow-right text-xl"></i>
+              </div>
+              <div class="function-process">
+                <strong>Function</strong>
+                <p class="text-sm">Processes the inputs</p>
+              </div>
+              <div class="function-arrow right">
+                <i class="fas fa-arrow-right text-xl"></i>
+              </div>
+              <div class="function-output">
+                <strong>Output</strong>
+                <p class="text-sm">Return value</p>
+              </div>
+            </div>
+            
+            <p class="text-gray-700 mb-4">
+              Think of a function as a machine: you give it some input (arguments), it processes that input according to a set of instructions, and then it produces an output (return value).
+            </p>
+            
+            <div class="code-block">
+              <div class="language-tag">javascript</div>
+              <button class="copy-button">Copy</button>
+              <pre><code><span class="comment">// A simple function that adds two numbers</span>
+<span class="keyword">function</span> <span class="function">add</span>(<span class="parameter">a</span>, <span class="parameter">b</span>) {
+  <span class="keyword">return</span> <span class="parameter">a</span> <span class="operator">+</span> <span class="parameter">b</span>;
+}
+
+<span class="comment">// Calling the function</span>
+<span class="keyword">const</span> <span class="variable">sum</span> <span class="operator">=</span> <span class="function">add</span>(<span class="number">5</span>, <span class="number">3</span>);
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">sum</span>); <span class="comment">// 8</span></code></pre>
+            </div>
+            
+            <div class="mt-6 flex items-center justify-between">
+              <span class="text-sm text-gray-500">
+                <i class="fas fa-lightbulb text-yellow-500 mr-2"></i>
+                Functions are the workhorses of JavaScript programming
+              </span>
+              <a href="#declaration" class="text-primary-600 hover:text-primary-700 flex items-center">
+                Next: Function Declaration
+                <i class="fas fa-arrow-right ml-2"></i>
+              </a>
+            </div>
+          </section>
+          
+          <!-- Function Declaration -->
+          <section id="declaration" class="mb-12 bg-white rounded-lg shadow-md p-8 scroll-mt-4">
+            <h2 class="text-3xl font-bold text-gray-900 mb-6">Function Declaration</h2>
+            
+            <p class="text-gray-700 mb-4">
+              A function declaration (also called a function statement) defines a named function using the <code class="bg-gray-100 text-primary-700 px-1 py-0.5 rounded">function</code> keyword.
+            </p>
+            
+            <div class="code-block">
+              <div class="language-tag">javascript</div>
+              <button class="copy-button">Copy</button>
+              <pre><code><span class="comment">// Function declaration syntax</span>
+<span class="keyword">function</span> <span class="function">functionName</span>(<span class="parameter">parameter1</span>, <span class="parameter">parameter2</span>, ...) {
+  <span class="comment">// Function body - code to be executed</span>
+  <span class="keyword">return</span> <span class="variable">result</span>; <span class="comment">// Optional return statement</span>
+}
+
+<span class="comment">// Example of a function declaration</span>
+<span class="keyword">function</span> <span class="function">greet</span>(<span class="parameter">name</span>) {
+  <span class="keyword">return</span> <span class="string">`Hello, ${</span><span class="parameter">name</span><span class="string">}!`</span>;
+}
+
+<span class="comment">// Calling the function</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="function">greet</span>(<span class="string">'John'</span>)); <span class="comment">// "Hello, John!"</span></code></pre>
+            </div>
+            
+            <div class="mt-6 p-6 bg-yellow-50 rounded-lg border-l-4 border-yellow-500">
+              <h3 class="text-xl font-semibold text-yellow-800 mb-2">Key Characteristics</h3>
+              <ul class="space-y-2">
+                <li class="flex items-start">
+                  <i class="fas fa-check-circle text-yellow-600 mt-1 mr-2"></i>
+                  <div>
+                    <p class="font-medium">Hoisting</p>
+                    <p class="text-sm text-gray-600">Function declarations are hoisted to the top of their scope, meaning you can call the function before it's declared in your code.</p>
+                  </div>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-check-circle text-yellow-600 mt-1 mr-2"></i>
+                  <div>
+                    <p class="font-medium">Named Function</p>
+                    <p class="text-sm text-gray-600">The function has a name that can be used to call it from anywhere in its scope.</p>
+                  </div>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-check-circle text-yellow-600 mt-1 mr-2"></i>
+                  <div>
+                    <p class="font-medium">Function Scope</p>
+                    <p class="text-sm text-gray-600">Creates its own scope for variables declared inside it.</p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            
+            <div class="code-block mt-6">
+              <div class="language-tag">javascript</div>
+              <button class="copy-button">Copy</button>
+              <pre><code><span class="comment">// Hoisting demonstration</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="function">hoistedFunction</span>()); <span class="comment">// "I am hoisted!"</span>
+
+<span class="comment">// This works because function declarations are hoisted</span>
+<span class="keyword">function</span> <span class="function">hoistedFunction</span>() {
+  <span class="keyword">return</span> <span class="string">"I am hoisted!"</span>;
+}</code></pre>
+            </div>
+            
+            <div class="mt-6 flex items-center justify-between">
+              <a href="#basics" class="text-primary-600 hover:text-primary-700 flex items-center">
+                <i class="fas fa-arrow-left mr-2"></i>
+                Previous: Basics
+              </a>
+              <a href="#expression" class="text-primary-600 hover:text-primary-700 flex items-center">
+                Next: Function Expression
+                <i class="fas fa-arrow-right ml-2"></i>
+              </a>
+            </div>
+          </section>
+          
+          <!-- Function Expression -->
+          <section id="expression" class="mb-12 bg-white rounded-lg shadow-md p-8 scroll-mt-4">
+            <h2 class="text-3xl font-bold text-gray-900 mb-6">Function Expression</h2>
+            
+            <p class="text-gray-700 mb-4">
+              A function expression defines a function as part of a larger expression, typically a variable assignment.
+            </p>
+            
+            <div class="code-block">
+              <div class="language-tag">javascript</div>
+              <button class="copy-button">Copy</button>
+              <pre><code><span class="comment">// Function expression syntax</span>
+<span class="keyword">const</span> <span class="variable">functionName</span> <span class="operator">=</span> <span class="keyword">function</span>(<span class="parameter">parameter1</span>, <span class="parameter">parameter2</span>, ...) {
+  <span class="comment">// Function body</span>
+  <span class="keyword">return</span> <span class="variable">result</span>;
+};
+
+<span class="comment">// Example of a function expression</span>
+<span class="keyword">const</span> <span class="variable">greet</span> <span class="operator">=</span> <span class="keyword">function</span>(<span class="parameter">name</span>) {
+  <span class="keyword">return</span> <span class="string">`Hello, ${</span><span class="parameter">name</span><span class="string">}!`</span>;
+};
+
+<span class="comment">// Calling the function</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">greet</span>(<span class="string">'Jane'</span>)); <span class="comment">// "Hello, Jane!"</span></code></pre>
+            </div>
+            
+            <div class="mt-6 p-6 bg-yellow-50 rounded-lg border-l-4 border-yellow-500">
+              <h3 class="text-xl font-semibold text-yellow-800 mb-2">Key Characteristics</h3>
+              <ul class="space-y-2">
+                <li class="flex items-start">
+                  <i class="fas fa-check-circle text-yellow-600 mt-1 mr-2"></i>
+                  <div>
+                    <p class="font-medium">No Hoisting</p>
+                    <p class="text-sm text-gray-600">Function expressions are not hoisted, so you can only call them after they've been defined in your code.</p>
+                  </div>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-check-circle text-yellow-600 mt-1 mr-2"></i>
+                  <div>
+                    <p class="font-medium">Anonymous or Named</p>
+                    <p class="text-sm text-gray-600">Can be anonymous (as shown above) or named (e.g., <code>const greet = function sayHello(name) {...}</code>).</p>
+                  </div>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-check-circle text-yellow-600 mt-1 mr-2"></i>
+                  <div>
+                    <p class="font-medium">First-Class Objects</p>
+                    <p class="text-sm text-gray-600">Can be passed as arguments, returned from other functions, and assigned to variables.</p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            
+            <div class="code-block mt-6">
+              <div class="language-tag">javascript</div>
+              <button class="copy-button">Copy</button>
+              <pre><code><span class="comment">// No hoisting demonstration</span>
+<span class="comment">// console.log(notHoisted()); // Error: notHoisted is not a function</span>
+
+<span class="keyword">const</span> <span class="variable">notHoisted</span> <span class="operator">=</span> <span class="keyword">function</span>() {
+  <span class="keyword">return</span> <span class="string">"I am not hoisted!"</span>;
+};
+
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">notHoisted</span>()); <span class="comment">// "I am not hoisted!"</span>
+
+<span class="comment">// Named function expression</span>
+<span class="keyword">const</span> <span class="variable">factorial</span> <span class="operator">=</span> <span class="keyword">function</span> <span class="function">calculateFactorial</span>(<span class="parameter">n</span>) {
+  <span class="keyword">if</span> (<span class="parameter">n</span> <span class="operator"><=</span> <span class="number">1</span>) <span class="keyword">return</span> <span class="number">1</span>;
+  <span class="keyword">return</span> <span class="parameter">n</span> <span class="operator">*</span> <span class="function">calculateFactorial</span>(<span class="parameter">n</span> <span class="operator">-</span> <span class="number">1</span>);
+};
+
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">factorial</span>(<span class="number">5</span>)); <span class="comment">// 120</span></code></pre>
+            </div>
+            
+            <div class="mt-6 flex items-center justify-between">
+              <a href="#declaration" class="text-primary-600 hover:text-primary-700 flex items-center">
+                <i class="fas fa-arrow-left mr-2"></i>
+                Previous: Function Declaration
+              </a>
+              <a href="#arrow" class="text-primary-600 hover:text-primary-700 flex items-center">
+                Next: Arrow Functions
+                <i class="fas fa-arrow-right ml-2"></i>
+              </a>
+            </div>
+          </section>
+          
+          <!-- Arrow Functions -->
+          <section id="arrow" class="mb-12 bg-white rounded-lg shadow-md p-8 scroll-mt-4">
+            <h2 class="text-3xl font-bold text-gray-900 mb-6">Arrow Functions</h2>
+            
+            <p class="text-gray-700 mb-4">
+              Arrow functions, introduced in ES6 (ECMAScript 2015), provide a more concise syntax for writing function expressions.
+            </p>
+            
+            <div class="code-block">
+              <div class="language-tag">javascript</div>
+              <button class="copy-button">Copy</button>
+              <pre><code><span class="comment">// Arrow function syntax</span>
+<span class="keyword">const</span> <span class="variable">functionName</span> <span class="operator">=</span> (<span class="parameter">parameter1</span>, <span class="parameter">parameter2</span>, ...) <span class="operator">=></span> {
+  <span class="comment">// Function body</span>
+  <span class="keyword">return</span> <span class="variable">result</span>;
+};
+
+<span class="comment">// Example of an arrow function</span>
+<span class="keyword">const</span> <span class="variable">greet</span> <span class="operator">=</span> (<span class="parameter">name</span>) <span class="operator">=></span> {
+  <span class="keyword">return</span> <span class="string">`Hello, ${</span><span class="parameter">name</span><span class="string">}!`</span>;
+};
+
+<span class="comment">// Calling the function</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">greet</span>(<span class="string">'Alex'</span>)); <span class="comment">// "Hello, Alex!"</span></code></pre>
+            </div>
+            
+            <div class="mt-6 p-6 bg-primary-50 rounded-lg border-l-4 border-primary-500">
+              <h3 class="text-xl font-semibold text-primary-800 mb-2">Concise Syntax</h3>
+              <p class="text-gray-700 mb-4">
+                Arrow functions can be even more concise in certain situations:
+              </p>
+              
+              <div class="code-comparison">
+                <div class="code-comparison-item">
+                  <h4 class="font-medium text-gray-900 mb-2">Single Parameter</h4>
+                  <pre class="text-sm bg-gray-100 p-3 rounded"><code><span class="comment">// Parentheses are optional with a single parameter</span>
+<span class="keyword">const</span> <span class="variable">square</span> <span class="operator">=</span> <span class="parameter">x</span> <span class="operator">=></span> <span class="parameter">x</span> <span class="operator">*</span> <span class="parameter">x</span>;</code></pre>
+                </div>
+                
+                <div class="code-comparison-item">
+                  <h4 class="font-medium text-gray-900 mb-2">Implicit Return</h4>
+                  <pre class="text-sm bg-gray-100 p-3 rounded"><code><span class="comment">// Curly braces and return are optional for single expressions</span>
+<span class="keyword">const</span> <span class="variable">add</span> <span class="operator">=</span> (<span class="parameter">a</span>, <span class="parameter">b</span>) <span class="operator">=></span> <span class="parameter">a</span> <span class="operator">+</span> <span class="parameter">b</span>;</code></pre>
+                </div>
+                
+                <div class="code-comparison-item">
+                  <h4 class="font-medium text-gray-900 mb-2">No Parameters</h4>
+                  <pre class="text-sm bg-gray-100 p-3 rounded"><code><span class="comment">// Empty parentheses for no parameters</span>
+<span class="keyword">const</span> <span class="variable">sayHello</span> <span class="operator">=</span> () <span class="operator">=></span> <span class="string">'Hello, world!'</span>;</code></pre>
+                </div>
+                
+                <div class="code-comparison-item">
+                  <h4 class="font-medium text-gray-900 mb-2">Returning Object Literal</h4>
+                  <pre class="text-sm bg-gray-100 p-3 rounded"><code><span class="comment">// Wrap object literal in parentheses for implicit return</span>
+<span class="keyword">const</span> <span class="variable">createPerson</span> <span class="operator">=</span> (<span class="parameter">name</span>, <span class="parameter">age</span>) <span class="operator">=></span> ({ <span class="variable">name</span>, <span class="variable">age</span> });</code></pre>
+                </div>
+              </div>
+            </div>
+            
+            <div class="mt-6 p-6 bg-yellow-50 rounded-lg border-l-4 border-yellow-500">
+              <h3 class="text-xl font-semibold text-yellow-800 mb-2">Key Differences from Regular Functions</h3>
+              <ul class="space-y-2">
+                <li class="flex items-start">
+                  <i class="fas fa-exclamation-circle text-yellow-600 mt-1 mr-2"></i>
+                  <div>
+                    <p class="font-medium">No <code>this</code> Binding</p>
+                    <p class="text-sm text-gray-600">Arrow functions don't have their own <code>this</code> value. They inherit <code>this</code> from the enclosing scope.</p>
+                  </div>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-exclamation-circle text-yellow-600 mt-1 mr-2"></i>
+                  <div>
+                    <p class="font-medium">No <code>arguments</code> Object</p>
+                    <p class="text-sm text-gray-600">Arrow functions don't have their own <code>arguments</code> object. Use rest parameters instead.</p>
+                  </div>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-exclamation-circle text-yellow-600 mt-1 mr-2"></i>
+                  <div>
+                    <p class="font-medium">Cannot Be Used as Constructors</p>
+                    <p class="text-sm text-gray-600">Arrow functions cannot be used with the <code>new</code> keyword.</p>
+                  </div>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-exclamation-circle text-yellow-600 mt-1 mr-2"></i>
+                  <div>
+                    <p class="font-medium">No <code>super</code> or <code>new.target</code></p>
+                    <p class="text-sm text-gray-600">Arrow functions don't have access to <code>super</code> or <code>new.target</code> keywords.</p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            
+            <div class="code-block mt-6">
+              <div class="language-tag">javascript</div>
+              <button class="copy-button">Copy</button>
+              <pre><code><span class="comment">// this binding difference</span>
+<span class="keyword">function</span> <span class="function">RegularFunction</span>() {
+  <span class="variable">this</span>.<span class="variable">value</span> <span class="operator">=</span> <span class="number">42</span>;
+  
+  <span class="comment">// Regular function: 'this' refers to the function's own context</span>
+  <span class="variable">setTimeout</span>(<span class="keyword">function</span>() {
+    <span class="variable">console</span>.<span class="function">log</span>(<span class="string">'Regular function:'</span>, <span class="variable">this</span>.<span class="variable">value</span>); <span class="comment">// undefined (or window.value in browsers)</span>
+  }, <span class="number">1000</span>);
+  
+  <span class="comment">// Arrow function: 'this' is inherited from the enclosing scope</span>
+  <span class="variable">setTimeout</span>(() <span class="operator">=></span> {
+    <span class="variable">console</span>.<span class="function">log</span>(<span class="string">'Arrow function:'</span>, <span class="variable">this</span>.<span class="variable">value</span>); <span class="comment">// 42</span>
+  }, <span class="number">1000</span>);
+}
+
+<span class="keyword">const</span> <span class="variable">obj</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="function">RegularFunction</span>();</code></pre>
+            </div>
+            
+            <div class="mt-6 flex items-center justify-between">
+              <a href="#expression" class="text-primary-600 hover:text-primary-700 flex items-center">
+                <i class="fas fa-arrow-left mr-2"></i>
+                Previous: Function Expression
+              </a>
+              <a href="#parameters" class="text-primary-600 hover:text-primary-700 flex items-center">
+                Next: Parameters & Arguments
+                <i class="fas fa-arrow-right ml-2"></i>
+              </a>
+            </div>
+          </section>
+          
+          <!-- Parameters & Arguments -->
+          <section id="parameters" class="mb-12 bg-white rounded-lg shadow-md p-8 scroll-mt-4">
+            <h2 class="text-3xl font-bold text-gray-900 mb-6">Parameters & Arguments</h2>
+            
+            <p class="text-gray-700 mb-4">
+              Parameters are the names listed in the function definition, while arguments are the actual values passed to the function when it is called.
+            </p>
+            
+            <div class="code-block">
+              <div class="language-tag">javascript</div>
+              <button class="copy-button">Copy</button>
+              <pre><code><span class="comment">// Parameters: a, b</span>
+<span class="keyword">function</span> <span class="function">multiply</span>(<span class="parameter">a</span>, <span class="parameter">b</span>) {
+  <span class="keyword">return</span> <span class="parameter">a</span> <span class="operator">*</span> <span class="parameter">b</span>;
+}
+
+<span class="comment">// Arguments: 5, 3</span>
+<span class="keyword">const</span> <span class="variable">result</span> <span class="operator">=</span> <span class="function">multiply</span>(<span class="number">5</span>, <span class="number">3</span>);
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">result</span>); <span class="comment">// 15</span></code></pre>
+            </div>
+            
+            <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">Default Parameters</h3>
+                <p class="text-gray-600 mb-4">
+                  ES6 introduced default parameters, allowing you to specify default values for parameters that are not provided.
+                </p>
+                <div class="code-block">
+                  <pre><code><span class="keyword">function</span> <span class="function">greet</span>(<span class="parameter">name</span> <span class="operator">=</span> <span class="string">'Guest'</span>, <span class="parameter">greeting</span> <span class="operator">=</span> <span class="string">'Hello'</span>) {
+  <span class="keyword">return</span> <span class="string">`${</span><span class="parameter">greeting</span><span class="string">}, ${</span><span class="parameter">name</span><span class="string">}!`</span>;
+}
+
+<span class="variable">console</span>.<span class="function">log</span>(<span class="function">greet</span>()); <span class="comment">// "Hello, Guest!"</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="function">greet</span>(<span class="string">'John'</span>)); <span class="comment">// "Hello, John!"</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="function">greet</span>(<span class="string">'John'</span>, <span class="string">'Hi'</span>)); <span class="comment">// "Hi, John!"</span></code></pre>
+                </div>
+              </div>
+              
+              <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">Rest Parameters</h3>
+                <p class="text-gray-600 mb-4">
+                  Rest parameters allow a function to accept an indefinite number of arguments as an array.
+                </p>
+                <div class="code-block">
+                  <pre><code><span class="keyword">function</span> <span class="function">sum</span>(...<span class="parameter">numbers</span>) {
+  <span class="keyword">return</span> <span class="parameter">numbers</span>.<span class="function">reduce</span>((<span class="parameter">total</span>, <span class="parameter">num</span>) <span class="operator">=></span> <span class="parameter">total</span> <span class="operator">+</span> <span class="parameter">num</span>, <span class="number">0</span>);
+}
+
+<span class="variable">console</span>.<span class="function">log</span>(<span class="function">sum</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>)); <span class="comment">// 15</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="function">sum</span>(<span class="number">10</span>, <span class="number">20</span>)); <span class="comment">// 30</span></code></pre>
+                </div>
+              </div>
+              
+              <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">Parameter Destructuring</h3>
+                <p class="text-gray-600 mb-4">
+                  You can use object and array destructuring in function parameters.
+                </p>
+                <div class="code-block">
+                  <pre><code><span class="comment">// Object destructuring in parameters</span>
+<span class="keyword">function</span> <span class="function">printUserInfo</span>({ <span class="parameter">name</span>, <span class="parameter">age</span>, <span class="parameter">email</span> <span class="operator">=</span> <span class="string">'N/A'</span> }) {
+  <span class="variable">console</span>.<span class="function">log</span>(<span class="string">`Name: ${</span><span class="parameter">name</span><span class="string">}, Age: ${</span><span class="parameter">age</span><span class="string">}, Email: ${</span><span class="parameter">email</span><span class="string">}`</span>);
+}
+
+<span class="function">printUserInfo</span>({ <span class="variable">name</span>: <span class="string">'John'</span>, <span class="variable">age</span>: <span class="number">30</span> });
+<span class="comment">// "Name: John, Age: 30, Email: N/A"</span>
+
+<span class="comment">// Array destructuring in parameters</span>
+<span class="keyword">function</span> <span class="function">getFirstAndLast</span>([<span class="parameter">first</span>, ...<span class="parameter">rest</span>]) {
+  <span class="keyword">const</span> <span class="variable">last</span> <span class="operator">=</span> <span class="parameter">rest</span>.<span class="function">pop</span>() <span class="operator">||</span> <span class="parameter">first</span>;
+  <span class="keyword">return</span> [<span class="parameter">first</span>, <span class="variable">last</span>];
+}
+
+<span class="variable">console</span>.<span class="function">log</span>(<span class="function">getFirstAndLast</span>([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>])); <span class="comment">// [1, 5]</span></code></pre>
+                </div>
+              </div>
+              
+              <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">The arguments Object</h3>
+                <p class="text-gray-600 mb-4">
+                  Regular functions (not arrow functions) have access to an <code>arguments</code> object containing all passed arguments.
+                </p>
+                <div class="code-block">
+                  <pre><code><span class="keyword">function</span> <span class="function">oldSchoolSum</span>() {
+  <span class="keyword">let</span> <span class="variable">total</span> <span class="operator">=</span> <span class="number">0</span>;
+  <span class="keyword">for</span> (<span class="keyword">let</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; <span class="variable">i</span> <span class="operator"><</span> <span class="variable">arguments</span>.<span class="variable">length</span>; <span class="variable">i</span><span class="operator">++</span>) {
+    <span class="variable">total</span> <span class="operator">+=</span> <span class="variable">arguments</span>[<span class="variable">i</span>];
+  }
+  <span class="keyword">return</span> <span class="variable">total</span>;
+}
+
+<span class="variable">console</span>.<span class="function">log</span>(<span class="function">oldSchoolSum</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>)); <span class="comment">// 10</span>
+
+<span class="comment">// Note: Rest parameters are preferred in modern code</span></code></pre>
+                </div>
+              </div>
+            </div>
+            
+            <div class="mt-6 flex items-center justify-between">
+              <a href="#arrow" class="text-primary-600 hover:text-primary-700 flex items-center">
+                <i class="fas fa-arrow-left mr-2"></i>
+                Previous: Arrow Functions
+              </a>
+              <a href="#scope" class="text-primary-600 hover:text-primary-700 flex items-center">
+                Next: Function Scope
+                <i class="fas fa-arrow-right ml-2"></i>
+              </a>
+            </div>
+          </section>
+          
+          <!-- Function Scope -->
+          <section id="scope" class="mb-12 bg-white rounded-lg shadow-md p-8 scroll-mt-4">
+            <h2 class="text-3xl font-bold text-gray-900 mb-6">Function Scope</h2>
+            
+            <p class="text-gray-700 mb-4">
+              Functions in JavaScript create their own scope, which determines the accessibility of variables defined within the function.
+            </p>
+            
+            <div class="code-block">
+              <div class="language-tag">javascript</div>
+              <button class="copy-button">Copy</button>
+              <pre><code><span class="comment">// Global scope</span>
+<span class="keyword">const</span> <span class="variable">globalVar</span> <span class="operator">=</span> <span class="string">'I am global'</span>;
+
+<span class="keyword">function</span> <span class="function">outerFunction</span>() {
+  <span class="comment">// Function scope</span>
+  <span class="keyword">const</span> <span class="variable">outerVar</span> <span class="operator">=</span> <span class="string">'I am from outer function'</span>;
+  
+  <span class="variable">console</span>.<span class="function">log</span>(<span class="variable">globalVar</span>); <span class="comment">// "I am global" - accessible</span>
+  
+  <span class="keyword">function</span> <span class="function">innerFunction</span>() {
+    <span class="comment">// Nested function scope</span>
+    <span class="keyword">const</span> <span class="variable">innerVar</span> <span class="operator">=</span> <span class="string">'I am from inner function'</span>;
+    
+    <span class="variable">console</span>.<span class="function">log</span>(<span class="variable">globalVar</span>); <span class="comment">// "I am global" - accessible</span>
+    <span class="variable">console</span>.<span class="function">log</span>(<span class="variable">outerVar</span>); <span class="comment">// "I am from outer function" - accessible</span>
+    <span class="variable">console</span>.<span class="function">log</span>(<span class="variable">innerVar</span>); <span class="comment">// "I am from inner function" - accessible</span>
+  }
+  
+  <span class="function">innerFunction</span>();
+  
+  <span class="comment">// innerVar is not accessible here</span>
+  <span class="comment">// console.log(innerVar); // ReferenceError</span>
+}
+
+<span class="function">outerFunction</span>();
+
+<span class="comment">// outerVar and innerVar are not accessible here</span>
+<span class="comment">// console.log(outerVar); // ReferenceError</span>
+<span class="comment">// console.log(innerVar); // ReferenceError</span></code></pre>
+            </div>
+            
+            <div class="mt-6 p-6 bg-primary-50 rounded-lg border-l-4 border-primary-500">
+              <h3 class="text-xl font-semibold text-primary-800 mb-2">Lexical Scope</h3>
+              <p class="text-gray-700 mb-4">
+                JavaScript uses lexical scoping, which means that functions are executed using the variable scope that was in effect when they were defined, not when they are invoked.
+              </p>
+              <div class="code-block mt-4">
+                <pre><code><span class="keyword">function</span> <span class="function">createCounter</span>() {
+  <span class="keyword">let</span> <span class="variable">count</span> <span class="operator">=</span> <span class="number">0</span>; <span class="comment">// This variable is "captured" by the inner function</span>
+  
+  <span class="keyword">return</span> <span class="keyword">function</span>() {
+    <span class="variable">count</span><span class="operator">++</span>;
+    <span class="keyword">return</span> <span class="variable">count</span>;
+  };
+}
+
+<span class="keyword">const</span> <span class="variable">counter</span> <span class="operator">=</span> <span class="function">createCounter</span>();
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">counter</span>()); <span class="comment">// 1</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">counter</span>()); <span class="comment">// 2</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">counter</span>()); <span class="comment">// 3</span>
+
+<span class="comment">// The count variable is not directly accessible</span>
+<span class="comment">// console.log(count); // ReferenceError</span></code></pre>
+              </div>
+            </div>
+            
+            <div class="mt-6 p-6 bg-yellow-50 rounded-lg border-l-4 border-yellow-500">
+              <h3 class="text-xl font-semibold text-yellow-800 mb-2">Block Scope vs. Function Scope</h3>
+              <p class="text-gray-700 mb-4">
+                Variables declared with <code>var</code> are function-scoped, while variables declared with <code>let</code> and <code>const</code> are block-scoped.
+              </p>
+              <div class="code-block mt-4">
+                <pre><code><span class="keyword">function</span> <span class="function">scopeExample</span>() {
+  <span class="keyword">if</span> (<span class="keyword">true</span>) {
+    <span class="keyword">var</span> <span class="variable">functionScoped</span> <span class="operator">=</span> <span class="string">'I am function-scoped'</span>;
+    <span class="keyword">let</span> <span class="variable">blockScoped</span> <span class="operator">=</span> <span class="string">'I am block-scoped'</span>;
+  }
+  
+  <span class="variable">console</span>.<span class="function">log</span>(<span class="variable">functionScoped</span>); <span class="comment">// "I am function-scoped" - accessible</span>
+  <span class="comment">// console.log(blockScoped); // ReferenceError - not accessible</span>
+}
+
+<span class="function">scopeExample</span>();</code></pre>
+              </div>
+            </div>
+            
+            <div class="mt-6 flex items-center justify-between">
+              <a href="#parameters" class="text-primary-600 hover:text-primary-700 flex items-center">
+                <i class="fas fa-arrow-left mr-2"></i>
+                Previous: Parameters & Arguments
+              </a>
+              <a href="#closures" class="text-primary-600 hover:text-primary-700 flex items-center">
+                Next: Closures
+                <i class="fas fa-arrow-right ml-2"></i>
+              </a>
+            </div>
+          </section>
+          
+          <!-- Closures -->
+          <section id="closures" class="mb-12 bg-white rounded-lg shadow-md p-8 scroll-mt-4">
+            <h2 class="text-3xl font-bold text-gray-900 mb-6">Closures</h2>
+            
+            <p class="text-gray-700 mb-4">
+              A closure is the combination of a function and the lexical environment within which that function was declared. This allows a function to access variables from its outer scope even after that scope has closed.
+            </p>
+            
+            <div class="code-block">
+              <div class="language-tag">javascript</div>
+              <button class="copy-button">Copy</button>
+              <pre><code><span class="comment">// Basic closure example</span>
+<span class="keyword">function</span> <span class="function">createGreeting</span>(<span class="parameter">greeting</span>) {
+  <span class="comment">// The inner function has access to the greeting parameter</span>
+  <span class="keyword">return</span> <span class="keyword">function</span>(<span class="parameter">name</span>) {
+    <span class="keyword">return</span> <span class="string">`${</span><span class="parameter">greeting</span><span class="string">}, ${</span><span class="parameter">name</span><span class="string">}!`</span>;
+  };
+}
+
+<span class="keyword">const</span> <span class="variable">sayHello</span> <span class="operator">=</span> <span class="function">createGreeting</span>(<span class="string">'Hello'</span>);
+<span class="keyword">const</span> <span class="variable">sayHi</span> <span class="operator">=</span> <span class="function">createGreeting</span>(<span class="string">'Hi'</span>);
+
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">sayHello</span>(<span class="string">'John'</span>)); <span class="comment">// "Hello, John!"</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">sayHi</span>(<span class="string">'Jane'</span>)); <span class="comment">// "Hi, Jane!"</span>
+
+<span class="comment">// Even though createGreeting has finished executing,</span>
+<span class="comment">// the inner functions still have access to the greeting parameter</span></code></pre>
+            </div>
+            
+            <div class="mt-6 p-6 bg-primary-50 rounded-lg border-l-4 border-primary-500">
+              <h3 class="text-xl font-semibold text-primary-800 mb-2">Practical Uses of Closures</h3>
+              <p class="text-gray-700 mb-4">
+                Closures are powerful and have many practical applications in JavaScript:
+              </p>
+              <ul class="space-y-2">
+                <li class="flex items-start">
+                  <i class="fas fa-check-circle text-primary-600 mt-1 mr-2"></i>
+                  <span><strong>Data Privacy</strong>: Creating private variables and methods</span>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-check-circle text-primary-600 mt-1 mr-2"></i>
+                  <span><strong>Function Factories</strong>: Creating specialized functions</span>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-check-circle text-primary-600 mt-1 mr-2"></i>
+                  <span><strong>Memoization</strong>: Caching function results for better performance</span>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-check-circle text-primary-600 mt-1 mr-2"></i>
+                  <span><strong>Callbacks</strong>: Preserving state in asynchronous operations</span>
+                </li>
+              </ul>
+            </div>
+            
+            <div class="code-block mt-6">
+              <div class="language-tag">javascript</div>
+              <button class="copy-button">Copy</button>
+              <pre><code><span class="comment">// Data privacy example</span>
+<span class="keyword">function</span> <span class="function">createCounter</span>() {
+  <span class="keyword">let</span> <span class="variable">count</span> <span class="operator">=</span> <span class="number">0</span>; <span class="comment">// Private variable</span>
+  
+  <span class="keyword">return</span> {
+    <span class="function">increment</span>() {
+      <span class="variable">count</span><span class="operator">++</span>;
+      <span class="keyword">return</span> <span class="variable">count</span>;
+    },
+    <span class="function">decrement</span>() {
+      <span class="variable">count</span><span class="operator">--</span>;
+      <span class="keyword">return</span> <span class="variable">count</span>;
+    },
+    <span class="function">getCount</span>() {
+      <span class="keyword">return</span> <span class="variable">count</span>;
+    }
+  };
+}
+
+<span class="keyword">const</span> <span class="variable">counter</span> <span class="operator">=</span> <span class="function">createCounter</span>();
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">counter</span>.<span class="function">increment</span>()); <span class="comment">// 1</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">counter</span>.<span class="function">increment</span>()); <span class="comment">// 2</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">counter</span>.<span class="function">getCount</span>()); <span class="comment">// 2</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">counter</span>.<span class="function">decrement</span>()); <span class="comment">// 1</span>
+
+<span class="comment">// The count variable is not directly accessible</span>
+<span class="comment">// console.log(count); // ReferenceError</span></code></pre>
+            </div>
+            
+            <div class="mt-6 flex items-center justify-between">
+              <a href="#scope" class="text-primary-600 hover:text-primary-700 flex items-center">
+                <i class="fas fa-arrow-left mr-2"></i>
+                Previous: Function Scope
+              </a>
+              <a href="#higher-order" class="text-primary-600 hover:text-primary-700 flex items-center">
+                Next: Higher-Order Functions
+                <i class="fas fa-arrow-right ml-2"></i>
+              </a>
+            </div>
+          </section>
+          
+          <!-- Higher-Order Functions -->
+          <section id="higher-order" class="mb-12 bg-white rounded-lg shadow-md p-8 scroll-mt-4">
+            <h2 class="text-3xl font-bold text-gray-900 mb-6">Higher-Order Functions</h2>
+            
+            <p class="text-gray-700 mb-4">
+              Higher-order functions are functions that operate on other functions, either by taking them as arguments or by returning them. They are a powerful feature of JavaScript that enables functional programming patterns.
+            </p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-8">
+              <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">Functions as Arguments</h3>
+                <p class="text-gray-600 mb-4">
+                  Functions can be passed as arguments to other functions.
+                </p>
+                <div class="code-block">
+                  <pre><code><span class="keyword">function</span> <span class="function">executeOperation</span>(<span class="parameter">x</span>, <span class="parameter">y</span>, <span class="parameter">operation</span>) {
+  <span class="keyword">return</span> <span class="parameter">operation</span>(<span class="parameter">x</span>, <span class="parameter">y</span>);
+}
+
+<span class="keyword">function</span> <span class="function">add</span>(<span class="parameter">a</span>, <span class="parameter">b</span>) {
+  <span class="keyword">return</span> <span class="parameter">a</span> <span class="operator">+</span> <span class="parameter">b</span>;
+}
+
+<span class="keyword">function</span> <span class="function">multiply</span>(<span class="parameter">a</span>, <span class="parameter">b</span>) {
+  <span class="keyword">return</span> <span class="parameter">a</span> <span class="operator">*</span> <span class="parameter">b</span>;
+}
+
+<span class="variable">console</span>.<span class="function">log</span>(<span class="function">executeOperation</span>(<span class="number">5</span>, <span class="number">3</span>, <span class="function">add</span>)); <span class="comment">// 8</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="function">executeOperation</span>(<span class="number">5</span>, <span class="number">3</span>, <span class="function">multiply</span>)); <span class="comment">// 15</span></code></pre>
+                </div>
+              </div>
+              
+              <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">Functions as Return Values</h3>
+                <p class="text-gray-600 mb-4">
+                  Functions can return other functions.
+                </p>
+                <div class="code-block">
+                  <pre><code><span class="keyword">function</span> <span class="function">multiplier</span>(<span class="parameter">factor</span>) {
+  <span class="keyword">return</span> <span class="keyword">function</span>(<span class="parameter">number</span>) {
+    <span class="keyword">return</span> <span class="parameter">number</span> <span class="operator">*</span> <span class="parameter">factor</span>;
+  };
+}
+
+<span class="keyword">const</span> <span class="variable">double</span> <span class="operator">=</span> <span class="function">multiplier</span>(<span class="number">2</span>);
+<span class="keyword">const</span> <span class="variable">triple</span> <span class="operator">=</span> <span class="function">multiplier</span>(<span class="number">3</span>);
+
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">double</span>(<span class="number">5</span>)); <span class="comment">// 10</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">triple</span>(<span class="number">5</span>)); <span class="comment">// 15</span></code></pre>
+                </div>
+              </div>
+            </div>
+            
+            <div class="mt-6 p-6 bg-primary-50 rounded-lg border-l-4 border-primary-500">
+              <h3 class="text-xl font-semibold text-primary-800 mb-2">Array Methods as Higher-Order Functions</h3>
+              <p class="text-gray-700 mb-4">
+                Many built-in array methods in JavaScript are higher-order functions that accept callback functions.
+              </p>
+              <div class="code-block mt-4">
+                <pre><code><span class="keyword">const</span> <span class="variable">numbers</span> <span class="operator">=</span> [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>];
+
+<span class="comment">// map: transforms each element</span>
+<span class="keyword">const</span> <span class="variable">squared</span> <span class="operator">=</span> <span class="variable">numbers</span>.<span class="function">map</span>(<span class="parameter">num</span> <span class="operator">=></span> <span class="parameter">num</span> <span class="operator">*</span> <span class="parameter">num</span>);
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">squared</span>); <span class="comment">// [1, 4, 9, 16, 25]</span>
+
+<span class="comment">// filter: selects elements that match a condition</span>
+<span class="keyword">const</span> <span class="variable">evenNumbers</span> <span class="operator">=</span> <span class="variable">numbers</span>.<span class="function">filter</span>(<span class="parameter">num</span> <span class="operator">=></span> <span class="parameter">num</span> <span class="operator">%</span> <span class="number">2</span> <span class="operator">===</span> <span class="number">0</span>);
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">evenNumbers</span>); <span class="comment">// [2, 4]</span>
+
+<span class="comment">// reduce: accumulates values</span>
+<span class="keyword">const</span> <span class="variable">sum</span> <span class="operator">=</span> <span class="variable">numbers</span>.<span class="function">reduce</span>((<span class="parameter">total</span>, <span class="parameter">num</span>) <span class="operator">=></span> <span class="parameter">total</span> <span class="operator">+</span> <span class="parameter">num</span>, <span class="number">0</span>);
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">sum</span>); <span class="comment">// 15</span>
+
+<span class="comment">// forEach: executes a function for each element</span>
+<span class="variable">numbers</span>.<span class="function">forEach</span>(<span class="parameter">num</span> <span class="operator">=></span> <span class="variable">console</span>.<span class="function">log</span>(<span class="parameter">num</span> <span class="operator">*</span> <span class="number">2</span>));
+<span class="comment">// Outputs: 2, 4, 6, 8, 10</span></code></pre>
+              </div>
+            </div>
+            
+            <div class="mt-6 flex items-center justify-between">
+              <a href="#closures" class="text-primary-600 hover:text-primary-700 flex items-center">
+                <i class="fas fa-arrow-left mr-2"></i>
+                Previous: Closures
+              </a>
+              <a href="#best-practices" class="text-primary-600 hover:text-primary-700 flex items-center">
+                Next: Best Practices
+                <i class="fas fa-arrow-right ml-2"></i>
+              </a>
+            </div>
+          </section>
+          
+          <!-- Best Practices -->
+          <section id="best-practices" class="mb-12 bg-white rounded-lg shadow-md p-8 scroll-mt-4">
+            <h2 class="text-3xl font-bold text-gray-900 mb-6">Best Practices</h2>
+            
+            <p class="text-gray-700 mb-4">
+              Following these best practices will help you write cleaner, more maintainable JavaScript functions.
+            </p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+              <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+                  <span class="bg-green-100 text-green-600 p-2 rounded-lg mr-3">
+                    <i class="fas fa-check"></i>
+                  </span>
+                  Do
+                </h3>
+                <ul class="space-y-4">
+                  <li class="flex items-start">
+                    <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                    <div>
+                      <p class="font-medium">Keep functions small and focused</p>
+                      <p class="text-sm text-gray-600">Each function should do one thing and do it well</p>
+                    </div>
+                  </li>
+                  <li class="flex items-start">
+                    <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                    <div>
+                      <p class="font-medium">Use descriptive function names</p>
+                      <p class="text-sm text-gray-600">Names should clearly indicate what the function does</p>
+                    </div>
+                  </li>
+                  <li class="flex items-start">
+                    <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                    <div>
+                      <p class="font-medium">Use default parameters when appropriate</p>
+                      <p class="text-sm text-gray-600">Makes functions more flexible and easier to use</p>
+                    </div>
+                  </li>
+                  <li class="flex items-start">
+                    <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                    <div>
+                      <p class="font-medium">Return early to avoid deep nesting</p>
+                      <p class="text-sm text-gray-600">Improves readability and reduces complexity</p>
+                    </div>
+                  </li>
+                  <li class="flex items-start">
+                    <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                    <div>
+                      <p class="font-medium">Use arrow functions for short callbacks</p>
+                      <p class="text-sm text-gray-600">Makes code more concise and readable</p>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              
+              <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+                  <span class="bg-red-100 text-red-600 p-2 rounded-lg mr-3">
+                    <i class="fas fa-times"></i>
+                  </span>
+                  Don't
+                </h3>
+                <ul class="space-y-4">
+                  <li class="flex items-start">
+                    <i class="fas fa-times-circle text-red-500 mt-1 mr-2"></i>
+                    <div>
+                      <p class="font-medium">Avoid side effects when possible</p>
+                      <p class="text-sm text-gray-600">Functions should not modify variables outside their scope unexpectedly</p>
+                    </div>
+                  </li>
+                  <li class="flex items-start">
+                    <i class="fas fa-times-circle text-red-500 mt-1 mr-2"></i>
+                    <div>
+                      <p class="font-medium">Don't use too many parameters</p>
+                      <p class="text-sm text-gray-600">Consider using an object parameter instead</p>
+                    </div>
+                  </li>
+                  <li class="flex items-start">
+                    <i class="fas fa-times-circle text-red-500 mt-1 mr-2"></i>
+                    <div>
+                      <p class="font-medium">Avoid using the arguments object</p>
+                      <p class="text-sm text-gray-600">Use rest parameters instead for better readability</p>
+                    </div>
+                  </li>
+                  <li class="flex items-start">
+                    <i class="fas fa-times-circle text-red-500 mt-1 mr-2"></i>
+                    <div>
+                      <p class="font-medium">Don't declare functions inside loops</p>
+                      <p class="text-sm text-gray-600">Can lead to performance issues and unexpected behavior</p>
+                    </div>
+                  </li>
+                  <li class="flex items-start">
+                    <i class="fas fa-times-circle text-red-500 mt-1 mr-2"></i>
+                    <div>
+                      <p class="font-medium">Avoid using eval()</p>
+                      <p class="text-sm text-gray-600">Poses security risks and performance issues</p>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            
+            <div class="code-block">
+              <div class="language-tag">javascript</div>
+              <button class="copy-button">Copy</button>
+              <pre><code><span class="comment">// Good practices</span>
+
+<span class="comment">// 1. Small, focused function</span>
+<span class="keyword">function</span> <span class="function">calculateTax</span>(<span class="parameter">amount</span>, <span class="parameter">taxRate</span> <span class="operator">=</span> <span class="number">0.1</span>) {
+  <span class="keyword">return</span> <span class="parameter">amount</span> <span class="operator">*</span> <span class="parameter">taxRate</span>;
+}
+
+<span class="comment">// 2. Descriptive name and early return</span>
+<span class="keyword">function</span> <span class="function">isValidUsername</span>(<span class="parameter">username</span>) {
+  <span class="keyword">if</span> (!<span class="parameter">username</span>) <span class="keyword">return</span> <span class="keyword">false</span>;
+  <span class="keyword">if</span> (<span class="parameter">username</span>.<span class="variable">length</span> <span class="operator"><</span> <span class="number">3</span>) <span class="keyword">return</span> <span class="keyword">false</span>;
+  <span class="keyword">if</span> (<span class="parameter">username</span>.<span class="variable">length</span> <span class="operator">></span> <span class="number">20</span>) <span class="keyword">return</span> <span class="keyword">false</span>;
+  
+  <span class="keyword">return</span> <span class="regex">/^[a-zA-Z0-9_]+$/</span>.<span class="function">test</span>(<span class="parameter">username</span>);
+}
+
+<span class="comment">// 3. Object parameter for many options</span>
+<span class="keyword">function</span> <span class="function">createUser</span>({ <span class="parameter">username</span>, <span class="parameter">email</span>, <span class="parameter">age</span>, <span class="parameter">isAdmin</span> <span class="operator">=</span> <span class="keyword">false</span> }) {
+  <span class="comment">// Create user logic</span>
+  <span class="keyword">return</span> { <span class="parameter">username</span>, <span class="parameter">email</span>, <span class="parameter">age</span>, <span class="parameter">isAdmin</span> };
+}
+
+<span class="comment">// 4. Arrow function for short callbacks</span>
+<span class="keyword">const</span> <span class="variable">numbers</span> <span class="operator">=</span> [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>];
+<span class="keyword">const</span> <span class="variable">doubled</span> <span class="operator">=</span> <span class="variable">numbers</span>.<span class="function">map</span>(<span class="parameter">num</span> <span class="operator">=></span> <span class="parameter">num</span> <span class="operator">*</span> <span class="number">2</span>);</code></pre>
+            </div>
+            
+            <div class="mt-8 p-6 bg-yellow-50 rounded-lg border-l-4 border-yellow-500">
+              <h3 class="text-xl font-semibold text-yellow-800 mb-2">Pure Functions</h3>
+              <p class="text-gray-700 mb-4">
+                A pure function is a function that:
+              </p>
+              <ul class="space-y-2">
+                <li class="flex items-start">
+                  <i class="fas fa-check-circle text-yellow-600 mt-1 mr-2"></i>
+                  <span>Always returns the same output for the same input</span>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-check-circle text-yellow-600 mt-1 mr-2"></i>
+                  <span>Has no side effects (doesn't modify external state)</span>
+                </li>
+              </ul>
+              <p class="text-gray-700 mt-4">
+                Pure functions are easier to test, debug, and reason about. They're a key concept in functional programming.
+              </p>
+              <div class="code-block mt-4">
+                <pre><code><span class="comment">// Pure function</span>
+<span class="keyword">function</span> <span class="function">add</span>(<span class="parameter">a</span>, <span class="parameter">b</span>) {
+  <span class="keyword">return</span> <span class="parameter">a</span> <span class="operator">+</span> <span class="parameter">b</span>;
+}
+
+<span class="comment">// Impure function (has side effects)</span>
+<span class="keyword">let</span> <span class="variable">total</span> <span class="operator">=</span> <span class="number">0</span>;
+<span class="keyword">function</span> <span class="function">addToTotal</span>(<span class="parameter">value</span>) {
+  <span class="variable">total</span> <span class="operator">+=</span> <span class="parameter">value</span>; <span class="comment">// Side effect: modifies external state</span>
+  <span class="keyword">return</span> <span class="variable">total</span>;
+}</code></pre>
+              </div>
+            </div>
+            
+            <div class="mt-6 flex items-center justify-between">
+              <a href="#higher-order" class="text-primary-600 hover:text-primary-700 flex items-center">
+                <i class="fas fa-arrow-left mr-2"></i>
+                Previous: Higher-Order Functions
+              </a>
+              <a href="#interactive-demo" class="text-primary-600 hover:text-primary-700 flex items-center">
+                Next: Interactive Demo
+                <i class="fas fa-arrow-right ml-2"></i>
+              </a>
+            </div>
+          </section>
+          
+          <!-- Interactive Demo -->
+          <section id="interactive-demo" class="mb-12 bg-white rounded-lg shadow-md p-8 scroll-mt-4">
+            <h2 class="text-3xl font-bold text-gray-900 mb-6">Interactive Demo</h2>
+            
+            <p class="text-gray-700 mb-6">
+              Try out different function types and see how they behave. This interactive demo will help you understand the concepts better.
+            </p>
+            
+            <div class="interactive-demo">
+              <div class="interactive-demo-header">
+                <h3 class="font-semibold">Function Explorer</h3>
+                <div class="flex space-x-2">
+                  <button class="tab-button active" data-tab="declaration-demo">Declaration</button>
+                  <button class="tab-button" data-tab="expression-demo">Expression</button>
+                  <button class="tab-button" data-tab="arrow-demo">Arrow</button>
+                </div>
+              </div>
+              
+              <div class="interactive-demo-content">
+                <div class="tab-content active" id="declaration-demo">
+                  <p class="text-gray-700 mb-4">
+                    Function declarations define a named function and are hoisted to the top of their scope.
+                  </p>
+                  <div class="code-block">
+                    <pre><code><span class="comment">// Function declaration</span>
+<span class="keyword">function</span> <span class="function">greet</span>(<span class="parameter">name</span>) {
+  <span class="keyword">return</span> <span class="string">`Hello, ${</span><span class="parameter">name</span><span class="string">}!`</span>;
+}
+
+<span class="comment">// Call the function</span>
+<span class="keyword">const</span> <span class="variable">greeting</span> <span class="operator">=</span> <span class="function">greet</span>(<span class="string">'World'</span>);
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">greeting</span>); <span class="comment">// "Hello, World!"</span>
+
+<span class="comment">// Hoisting demonstration</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="function">hoistedFunction</span>()); <span class="comment">// "I am hoisted!"</span>
+
+<span class="keyword">function</span> <span class="function">hoistedFunction</span>() {
+  <span class="keyword">return</span> <span class="string">"I am hoisted!"</span>;
+}</code></pre>
+                  </div>
+                  <button class="mt-4 bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-md transition-colors" id="run-declaration">
+                    Run Example
+                  </button>
+                  <div class="interactive-demo-output" id="declaration-output">
+                    <p class="text-gray-500 italic">Output will appear here...</p>
+                  </div>
+                </div>
+                
+                <div class="tab-content" id="expression-demo">
+                  <p class="text-gray-700 mb-4">
+                    Function expressions define a function as part of a larger expression, typically a variable assignment.
+                  </p>
+                  <div class="code-block">
+                    <pre><code><span class="comment">// Function expression</span>
+<span class="keyword">const</span> <span class="variable">greet</span> <span class="operator">=</span> <span class="keyword">function</span>(<span class="parameter">name</span>) {
+  <span class="keyword">return</span> <span class="string">`Hello, ${</span><span class="parameter">name</span><span class="string">}!`</span>;
+};
+
+<span class="comment">// Call the function</span>
+<span class="keyword">const</span> <span class="variable">greeting</span> <span class="operator">=</span> <span class="variable">greet</span>(<span class="string">'World'</span>);
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">greeting</span>); <span class="comment">// "Hello, World!"</span>
+
+<span class="comment">// Named function expression</span>
+<span class="keyword">const</span> <span class="variable">factorial</span> <span class="operator">=</span> <span class="keyword">function</span> <span class="function">calculateFactorial</span>(<span class="parameter">n</span>) {
+  <span class="keyword">if</span> (<span class="parameter">n</span> <span class="operator"><=</span> <span class="number">1</span>) <span class="keyword">return</span> <span class="number">1</span>;
+  <span class="keyword">return</span> <span class="parameter">n</span> <span class="operator">*</span> <span class="function">calculateFactorial</span>(<span class="parameter">n</span> <span class="operator">-</span> <span class="number">1</span>);
+};
+
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">factorial</span>(<span class="number">5</span>)); <span class="comment">// 120</span></code></pre>
+                  </div>
+                  <button class="mt-4 bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-md transition-colors" id="run-expression">
+                    Run Example
+                  </button>
+                  <div class="interactive-demo-output" id="expression-output">
+                    <p class="text-gray-500 italic">Output will appear here...</p>
+                  </div>
+                </div>
+                
+                <div class="tab-content" id="arrow-demo">
+                  <p class="text-gray-700 mb-4">
+                    Arrow functions provide a more concise syntax for writing function expressions.
+                  </p>
+                  <div class="code-block">
+                    <pre><code><span class="comment">// Arrow function</span>
+<span class="keyword">const</span> <span class="variable">greet</span> <span class="operator">=</span> (<span class="parameter">name</span>) <span class="operator">=></span> {
+  <span class="keyword">return</span> <span class="string">`Hello, ${</span><span class="parameter">name</span><span class="string">}!`</span>;
+};
+
+<span class="comment">// Call the function</span>
+<span class="keyword">const</span> <span class="variable">greeting</span> <span class="operator">=</span> <span class="variable">greet</span>(<span class="string">'World'</span>);
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">greeting</span>); <span class="comment">// "Hello, World!"</span>
+
+<span class="comment">// Concise arrow function (implicit return)</span>
+<span class="keyword">const</span> <span class="variable">add</span> <span class="operator">=</span> (<span class="parameter">a</span>, <span class="parameter">b</span>) <span class="operator">=></span> <span class="parameter">a</span> <span class="operator">+</span> <span class="parameter">b</span>;
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">add</span>(<span class="number">5</span>, <span class="number">3</span>)); <span class="comment">// 8</span>
+
+<span class="comment">// Single parameter (no parentheses needed)</span>
+<span class="keyword">const</span> <span class="variable">square</span> <span class="operator">=</span> <span class="parameter">x</span> <span class="operator">=></span> <span class="parameter">x</span> <span class="operator">*</span> <span class="parameter">x</span>;
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">square</span>(<span class="number">4</span>)); <span class="comment">// 16</span></code></pre>
+                  </div>
+                  <button class="mt-4 bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-md transition-colors" id="run-arrow">
+                    Run Example
+                  </button>
+                  <div class="interactive-demo-output" id="arrow-output">
+                    <p class="text-gray-500 italic">Output will appear here...</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="mt-6 flex items-center justify-between">
+              <a href="#best-practices" class="text-primary-600 hover:text-primary-700 flex items-center">
+                <i class="fas fa-arrow-left mr-2"></i>
+                Previous: Best Practices
+              </a>
+              <a href="#common-patterns" class="text-primary-600 hover:text-primary-700 flex items-center">
+                Next: Common Patterns
+                <i class="fas fa-arrow-right ml-2"></i>
+              </a>
+            </div>
+          </section>
+          
+          <!-- Common Patterns -->
+          <section id="common-patterns" class="mb-12 bg-white rounded-lg shadow-md p-8 scroll-mt-4">
+            <h2 class="text-3xl font-bold text-gray-900 mb-6">Common Function Patterns</h2>
+            
+            <p class="text-gray-700 mb-4">
+              These common function patterns and techniques will help you write more effective JavaScript code.
+            </p>
+            
+            <div class="space-y-8">
+              <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">Callback Pattern</h3>
+                <p class="text-gray-700 mb-4">
+                  A callback is a function passed as an argument to another function, which is then invoked inside the outer function.
+                </p>
+                <div class="code-block">
+                  <div class="language-tag">javascript</div>
+                  <button class="copy-button">Copy</button>
+                  <pre><code><span class="comment">// Callback pattern example</span>
+<span class="keyword">function</span> <span class="function">fetchData</span>(<span class="parameter">url</span>, <span class="parameter">callback</span>) {
+  <span class="variable">console</span>.<span class="function">log</span>(<span class="string">`Fetching data from ${</span><span class="parameter">url</span><span class="string">}...`</span>);
+  
+  <span class="comment">// Simulate async operation</span>
+  <span class="variable">setTimeout</span>(() <span class="operator">=></span> {
+    <span class="keyword">const</span> <span class="variable">data</span> <span class="operator">=</span> { <span class="variable">id</span>: <span class="number">1</span>, <span class="variable">name</span>: <span class="string">'John Doe'</span> };
+    <span class="parameter">callback</span>(<span class="variable">data</span>);
+  }, <span class="number">1000</span>);
+}
+
+<span class="function">fetchData</span>(<span class="string">'https://api.example.com/users'</span>, (<span class="parameter">data</span>) <span class="operator">=></span> {
+  <span class="variable">console</span>.<span class="function">log</span>(<span class="string">'Data received:'</span>, <span class="parameter">data</span>);
+});</code></pre>
+                </div>
+              </div>
+              
+              <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">Immediately Invoked Function Expression (IIFE)</h3>
+                <p class="text-gray-700 mb-4">
+                  An IIFE is a function that runs as soon as it is defined. It's often used to create a private scope.
+                </p>
+                <div class="code-block">
+                  <div class="language-tag">javascript</div>
+                  <button class="copy-button">Copy</button>
+                  <pre><code><span class="comment">// IIFE pattern</span>
+(<span class="keyword">function</span>() {
+  <span class="comment">// Private scope</span>
+  <span class="keyword">const</span> <span class="variable">privateVar</span> <span class="operator">=</span> <span class="string">'I am private'</span>;
+  <span class="variable">console</span>.<span class="function">log</span>(<span class="variable">privateVar</span>);
+})();
+
+<span class="comment">// With parameters</span>
+(<span class="keyword">function</span>(<span class="parameter">name</span>) {
+  <span class="variable">console</span>.<span class="function">log</span>(<span class="string">`Hello, ${</span><span class="parameter">name</span><span class="string">}!`</span>);
+})(<span class="string">'John'</span>);
+
+<span class="comment">// Arrow function IIFE</span>
+((<span class="parameter">x</span>, <span class="parameter">y</span>) <span class="operator">=></span> {
+  <span class="variable">console</span>.<span class="function">log</span>(<span class="parameter">x</span> <span class="operator">+</span> <span class="parameter">y</span>);
+})(<span class="number">10</span>, <span class="number">20</span>);</code></pre>
+                </div>
+              </div>
+              
+              <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">Currying</h3>
+                <p class="text-gray-700 mb-4">
+                  Currying is the technique of transforming a function that takes multiple arguments into a sequence of functions that each take a single argument.
+                </p>
+                <div class="code-block">
+                  <div class="language-tag">javascript</div>
+                  <button class="copy-button">Copy</button>
+                  <pre><code><span class="comment">// Currying example</span>
+<span class="keyword">function</span> <span class="function">multiply</span>(<span class="parameter">a</span>) {
+  <span class="keyword">return</span> <span class="keyword">function</span>(<span class="parameter">b</span>) {
+    <span class="keyword">return</span> <span class="parameter">a</span> <span class="operator">*</span> <span class="parameter">b</span>;
+  };
+}
+
+<span class="comment">// Using the curried function</span>
+<span class="keyword">const</span> <span class="variable">multiplyByTwo</span> <span class="operator">=</span> <span class="function">multiply</span>(<span class="number">2</span>);
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">multiplyByTwo</span>(<span class="number">4</span>)); <span class="comment">// 8</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">multiplyByTwo</span>(<span class="number">10</span>)); <span class="comment">// 20</span>
+
+<span class="comment">// Arrow function version</span>
+<span class="keyword">const</span> <span class="variable">add</span> <span class="operator">=</span> <span class="parameter">a</span> <span class="operator">=></span> <span class="parameter">b</span> <span class="operator">=></span> <span class="parameter">a</span> <span class="operator">+</span> <span class="parameter">b</span>;
+<span class="keyword">const</span> <span class="variable">addFive</span> <span class="operator">=</span> <span class="variable">add</span>(<span class="number">5</span>);
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">addFive</span>(<span class="number">3</span>)); <span class="comment">// 8</span></code></pre>
+                </div>
+              </div>
+              
+              <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">Memoization</h3>
+                <p class="text-gray-700 mb-4">
+                  Memoization is a technique used to speed up function calls by caching the results of expensive function calls.
+                </p>
+                <div class="code-block">
+                  <div class="language-tag">javascript</div>
+                  <button class="copy-button">Copy</button>
+                  <pre><code><span class="comment">// Memoization example</span>
+<span class="keyword">function</span> <span class="function">memoize</span>(<span class="parameter">fn</span>) {
+  <span class="keyword">const</span> <span class="variable">cache</span> <span class="operator">=</span> {};
+  
+  <span class="keyword">return</span> <span class="keyword">function</span>(...<span class="parameter">args</span>) {
+    <span class="keyword">const</span> <span class="variable">key</span> <span class="operator">=</span> <span class="variable">JSON</span>.<span class="function">stringify</span>(<span class="parameter">args</span>);
+    
+    <span class="keyword">if</span> (<span class="variable">cache</span>[<span class="variable">key</span>]) {
+      <span class="variable">console</span>.<span class="function">log</span>(<span class="string">'Returning from cache'</span>);
+      <span class="keyword">return</span> <span class="variable">cache</span>[<span class="variable">key</span>];
+    }
+    
+    <span class="keyword">const</span> <span class="variable">result</span> <span class="operator">=</span> <span class="parameter">fn</span>.<span class="function">apply</span>(<span class="variable">this</span>, <span class="parameter">args</span>);
+    <span class="variable">cache</span>[<span class="variable">key</span>] <span class="operator">=</span> <span class="variable">result</span>;
+    <span class="keyword">return</span> <span class="variable">result</span>;
+  };
+}
+
+<span class="comment">// Expensive function</span>
+<span class="keyword">function</span> <span class="function">fibonacci</span>(<span class="parameter">n</span>) {
+  <span class="keyword">if</span> (<span class="parameter">n</span> <span class="operator"><=</span> <span class="number">1</span>) <span class="keyword">return</span> <span class="parameter">n</span>;
+  <span class="keyword">return</span> <span class="function">fibonacci</span>(<span class="parameter">n</span> <span class="operator">-</span> <span class="number">1</span>) <span class="operator">+</span> <span class="function">fibonacci</span>(<span class="parameter">n</span> <span class="operator">-</span> <span class="number">2</span>);
+}
+
+<span class="comment">// Memoized version</span>
+<span class="keyword">const</span> <span class="variable">memoizedFibonacci</span> <span class="operator">=</span> <span class="function">memoize</span>(<span class="keyword">function</span>(<span class="parameter">n</span>) {
+  <span class="keyword">if</span> (<span class="parameter">n</span> <span class="operator"><=</span> <span class="number">1</span>) <span class="keyword">return</span> <span class="parameter">n</span>;
+  <span class="keyword">return</span> <span class="variable">memoizedFibonacci</span>(<span class="parameter">n</span> <span class="operator">-</span> <span class="number">1</span>) <span class="operator">+</span> <span class="variable">memoizedFibonacci</span>(<span class="parameter">n</span> <span class="operator">-</span> <span class="number">2</span>);
+});
+
+<span class="variable">console</span>.<span class="function">time</span>(<span class="string">'Regular'</span>);
+<span class="function">fibonacci</span>(<span class="number">30</span>);
+<span class="variable">console</span>.<span class="function">timeEnd</span>(<span class="string">'Regular'</span>);
+
+<span class="variable">console</span>.<span class="function">time</span>(<span class="string">'Memoized'</span>);
+<span class="variable">memoizedFibonacci</span>(<span class="number">30</span>);
+<span class="variable">console</span>.<span class="function">timeEnd</span>(<span class="string">'Memoized'</span>);</code></pre>
+                </div>
+              </div>
+            </div>
+            
+            <div class="mt-8 p-6 bg-primary-50 rounded-lg border-l-4 border-primary-500">
+              <h3 class="text-xl font-semibold text-primary-800 mb-2">Further Learning</h3>
+              <p class="text-gray-700 mb-4">
+                To deepen your understanding of JavaScript functions and related concepts, explore these resources:
+              </p>
+              <ul class="space-y-2">
+                <li class="flex items-start">
+                  <i class="fas fa-book text-primary-600 mt-1 mr-2"></i>
+                  <a href="#" class="text-primary-600 hover:text-primary-700">MDN Web Docs: JavaScript Functions</a>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-book text-primary-600 mt-1 mr-2"></i>
+                  <a href="#" class="text-primary-600 hover:text-primary-700">Eloquent JavaScript by Marijn Haverbeke</a>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-book text-primary-600 mt-1 mr-2"></i>
+                  <a href="#" class="text-primary-600 hover:text-primary-700">Functional-Light JavaScript by Kyle Simpson</a>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-video text-primary-600 mt-1 mr-2"></i>
+                  <a href="#" class="text-primary-600 hover:text-primary-700">JavaScript: The Hard Parts (Course)</a>
+                </li>
+              </ul>
+            </div>
+            
+            <div class="mt-6 flex items-center justify-between">
+              <a href="#interactive-demo" class="text-primary-600 hover:text-primary-700 flex items-center">
+                <i class="fas fa-arrow-left mr-2"></i>
+                Previous: Interactive Demo
+              </a>
+              <a href="/" class="text-primary-600 hover:text-primary-700 flex items-center">
+                Back to Home
+                <i class="fas fa-home ml-2"></i>
+              </a>
+            </div>
+          </section>
+        </main>
+      </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+      <div class="container mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+          <div>
+            <div class="flex items-center space-x-2 mb-4">
+              <div class="bg-white text-primary-600 h-8 w-8 rounded-lg flex items-center justify-center shadow-lg">
+                <span class="text-sm font-bold">JS</span>
+              </div>
+              <span class="text-lg font-semibold tracking-tight">JSFundamentals</span>
+            </div>
+            <p class="text-gray-400 text-sm">Your comprehensive guide to mastering JavaScript fundamentals and beyond.</p>
+          </div>
+          
+          <div>
+            <h3 class="text-lg font-semibold mb-4">Resources</h3>
+            <ul class="space-y-2 text-gray-400">
+              <li><a href="#" class="hover:text-white transition-colors">Documentation</a></li>
+              <li><a href="#" class="hover:text-white transition-colors">Tutorials</a></li>
+              <li><a href="#" class="hover:text-white transition-colors">Examples</a></li>
+              <li><a href="#" class="hover:text-white transition-colors">Cheat Sheets</a></li>
+            </ul>
+          </div>
+          
+          <div>
+            <h3 class="text-lg font-semibold mb-4">Community</h3>
+            <ul class="space-y-2 text-gray-400">
+              <li><a href="#" class="hover:text-white transition-colors">Forums</a></li>
+              <li><a href="#" class="hover:text-white transition-colors">Discord</a></li>
+              <li><a href="#" class="hover:text-white transition-colors">GitHub</a></li>
+              <li><a href="#" class="hover:text-white transition-colors">Stack Overflow</a></li>
+            </ul>
+          </div>
+          
+          <div>
+            <h3 class="text-lg font-semibold mb-4">Connect</h3>
+            <div class="flex space-x-4 mb-4">
+              <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                <i class="fab fa-twitter text-xl"></i>
+              </a>
+              <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                <i class="fab fa-github text-xl"></i>
+              </a>
+              <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                <i class="fab fa-linkedin text-xl"></i>
+              </a>
+              <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                <i class="fab fa-youtube text-xl"></i>
+              </a>
+            </div>
+            <p class="text-gray-400 text-sm">Contact us at <a href="mailto:hello@jsfundamentals.dev" class="text-primary-400 hover:text-primary-300">hello@jsfundamentals.dev</a></p>
+          </div>
+        </div>
+        
+        <div class="pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center">
+          <p class="text-gray-500 text-sm">Created by Arun | JavaScript Learning Journey | April 2025</p>
+          <div class="flex space-x-6 mt-4 md:mt-0">
+            <a href="#" class="text-gray-500 hover:text-gray-400 text-sm">Privacy Policy</a>
+            <a href="#" class="text-gray-500 hover:text-gray-400 text-sm">Terms of Service</a>
+            <a href="#" class="text-gray-500 hover:text-gray-400 text-sm">Cookie Policy</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+    
+    <script>
+      // Progress bar
+      window.addEventListener('scroll', () => {
+        const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrolled = (winScroll / height) * 100;
+        document.getElementById('progressBar').style.width = scrolled + '%';
+        
+        // Update reading progress
+        document.getElementById('readingProgress').style.width = scrolled + '%';
+        
+        // Highlight active section in TOC
+        const sections = document.querySelectorAll('section[id]');
+        let currentSection = '';
+        
+        sections.forEach(section => {
+          const sectionTop = section.offsetTop;
+          const sectionHeight = section.offsetHeight;
+          
+          if (pageYOffset >= sectionTop - 100 && pageYOffset < sectionTop + sectionHeight - 100) {
+            currentSection = section.getAttribute('id');
+          }
+        });
+        
+        document.querySelectorAll('.toc-link').forEach(link => {
+          link.classList.remove('active');
+          if (link.getAttribute('href').substring(1) === currentSection) {
+            link.classList.add('active');
+          }
+        });
+      });
+      
+      // Tab switching for interactive demo
+      document.querySelectorAll('.tab-button').forEach(button => {
+        button.addEventListener('click', () => {
+          // Remove active class from all buttons and content
+          document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+          document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+          
+          // Add active class to clicked button and corresponding content
+          button.classList.add('active');
+          const tabId = button.getAttribute('data-tab');
+          document.getElementById(tabId).classList.add('active');
+        });
+      });
+      
+      // Copy button functionality
+      document.querySelectorAll('.copy-button').forEach(button => {
+        button.addEventListener('click', () => {
+          const codeBlock = button.nextElementSibling;
+          const code = codeBlock.textContent;
+          
+          navigator.clipboard.writeText(code).then(() => {
+            button.textContent = 'Copied!';
+            button.classList.add('copied');
+            
+            setTimeout(() => {
+              button.textContent = 'Copy';
+              button.classList.remove('copied');
+            }, 2000);
+          });
+        });
+      });
+      
+      // Interactive demo functionality
+      document.getElementById('run-declaration').addEventListener('click', () => {
+        const output = document.getElementById('declaration-output');
+        output.innerHTML = '';
+        
+        try {
+          function greet(name) {
+            return `Hello, ${name}!`;
+          }
+          
+          const greeting = greet('World');
+          appendOutput(output, `greeting: ${greeting}`);
+          
+          appendOutput(output, `hoistedFunction(): ${hoistedFunction()}`);
+          
+          function hoistedFunction() {
+            return "I am hoisted!";
+          }
+        } catch (error) {
+          appendOutput(output, `Error: ${error.message}`, true);
+        }
+      });
+      
+      document.getElementById('run-expression').addEventListener('click', () => {
+        const output = document.getElementById('expression-output');
+        output.innerHTML = '';
+        
+        try {
+          const greet = function(name) {
+            return `Hello, ${name}!`;
+          };
+          
+          const greeting = greet('World');
+          appendOutput(output, `greeting: ${greeting}`);
+          
+          const factorial = function calculateFactorial(n) {
+            if (n <= 1) return 1;
+            return n * calculateFactorial(n - 1);
+          };
+          
+          appendOutput(output, `factorial(5): ${factorial(5)}`);
+        } catch (error) {
+          appendOutput(output, `Error: ${error.message}`, true);
+        }
+      });
+      
+      document.getElementById('run-arrow').addEventListener('click', () => {
+        const output = document.getElementById('arrow-output');
+        output.innerHTML = '';
+        
+        try {
+          const greet = (name) => {
+            return `Hello, ${name}!`;
+          };
+          
+          const greeting = greet('World');
+          appendOutput(output, `greeting: ${greeting}`);
+          
+          const add = (a, b) => a + b;
+          appendOutput(output, `add(5, 3): ${add(5, 3)}`);
+          
+          const square = x => x * x;
+          appendOutput(output, `square(4): ${square(4)}`);
+        } catch (error) {
+          appendOutput(output, `Error: ${error.message}`, true);
+        }
+      });
+      
+      function appendOutput(element, text, isError = false) {
+        const p = document.createElement('p');
+        p.textContent = text;
+        if (isError) {
+          p.classList.add('text-red-600');
+        }
+        element.appendChild(p);
+      }
+      
+      // Dark mode toggle (simplified implementation)
+      const darkModeToggle = document.querySelector('.dark-mode-toggle');
+      darkModeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        const icon = darkModeToggle.querySelector('i');
+        if (icon.classList.contains('fa-moon')) {
+          icon.classList.remove('fa-moon');
+          icon.classList.add('fa-sun');
+        } else {
+          icon.classList.remove('fa-sun');
+          icon.classList.add('fa-moon');
+        }
+      });
+      
+      // Smooth scrolling for anchor links
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+          e.preventDefault();
+          
+          const targetId = this.getAttribute('href');
+          const targetElement = document.querySelector(targetId);
+          
+          if (targetElement) {
+            // Add highlight effect
+            targetElement.classList.add('section-highlight');
+            
+            // Remove highlight after animation completes
+            setTimeout(() => {
+              targetElement.classList.remove('section-highlight');
+            }, 2000);
+            
+            // Scroll to the element
+            window.scrollTo({
+              top: targetElement.offsetTop - 20,
+              behavior: 'smooth'
+            });
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

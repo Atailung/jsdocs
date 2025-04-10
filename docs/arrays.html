@@ -1,0 +1,2181 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JavaScript Arrays - JS Fundamentals</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet" />
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: {
+                50: '#f0f9ff',
+                100: '#e0f2fe',
+                200: '#bae6fd',
+                300: '#7dd3fc',
+                400: '#38bdf8',
+                500: '#0ea5e9',
+                600: '#0284c7',
+                700: '#0369a1',
+                800: '#075985',
+                900: '#0c4a6e',
+              },
+              code: {
+                bg: '#1e293b',
+                text: '#e2e8f0'
+              }
+            },
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+              mono: ['Fira Code', 'monospace'],
+            },
+            keyframes: {
+              fadeIn: {
+                '0%': { opacity: '0', transform: 'translateY(10px)' },
+                '100%': { opacity: '1', transform: 'translateY(0)' }
+              },
+              float: {
+                '0%, 100%': { transform: 'translateY(0)' },
+                '50%': { transform: 'translateY(-10px)' }
+              },
+              pulse: {
+                '0%, 100%': { opacity: '1' },
+                '50%': { opacity: '0.7' }
+              },
+              highlight: {
+                '0%': { backgroundColor: 'transparent' },
+                '40%': { backgroundColor: 'rgba(14, 165, 233, 0.2)' },
+                '100%': { backgroundColor: 'transparent' }
+              },
+              typewriter: {
+                '0%': { width: '0%' },
+                '100%': { width: '100%' }
+              },
+              codeSlide: {
+                '0%': { transform: 'translateX(-20px)', opacity: '0' },
+                '100%': { transform: 'translateX(0)', opacity: '1' }
+              },
+              arrayPush: {
+                '0%': { transform: 'translateX(20px)', opacity: '0' },
+                '100%': { transform: 'translateX(0)', opacity: '1' }
+              },
+              arrayPop: {
+                '0%': { transform: 'translateX(0)', opacity: '1' },
+                '100%': { transform: 'translateX(20px)', opacity: '0' }
+              },
+              arrayShift: {
+                '0%': { transform: 'translateX(0)', opacity: '1' },
+                '100%': { transform: 'translateX(-20px)', opacity: '0' }
+              },
+              arrayUnshift: {
+                '0%': { transform: 'translateX(-20px)', opacity: '0' },
+                '100%': { transform: 'translateX(0)', opacity: '1' }
+              }
+            },
+            animation: {
+              'fade-in': 'fadeIn 0.5s ease-out forwards',
+              'float': 'float 3s ease-in-out infinite',
+              'pulse': 'pulse 2s ease-in-out infinite',
+              'highlight': 'highlight 2s ease-in-out',
+              'typewriter': 'typewriter 2s steps(40, end)',
+              'code-slide': 'codeSlide 0.5s ease-out forwards',
+              'array-push': 'arrayPush 0.5s ease-out forwards',
+              'array-pop': 'arrayPop 0.5s ease-out forwards',
+              'array-shift': 'arrayShift 0.5s ease-out forwards',
+              'array-unshift': 'arrayUnshift 0.5s ease-out forwards'
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      body {
+        font-family: 'Inter', sans-serif;
+        scroll-behavior: smooth;
+      }
+      
+      pre, code {
+        font-family: 'Fira Code', monospace;
+      }
+      
+      pre {
+        background-color: theme('colors.code.bg');
+        color: theme('colors.code.text');
+        padding: 1rem;
+        border-radius: 0.5rem;
+        overflow-x: auto;
+        position: relative;
+      }
+      
+      .code-block {
+        position: relative;
+        margin: 1.5rem 0;
+      }
+      
+      .code-block .copy-button {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+        background-color: rgba(255, 255, 255, 0.1);
+        color: #e2e8f0;
+        border: none;
+        border-radius: 0.25rem;
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+        cursor: pointer;
+        opacity: 0;
+        transition: opacity 0.2s ease-in-out;
+      }
+      
+      .code-block:hover .copy-button {
+        opacity: 1;
+      }
+      
+      .code-block .copy-button:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+      }
+      
+      .code-block .copy-button.copied {
+        background-color: rgba(16, 185, 129, 0.2);
+      }
+      
+      .code-block .language-tag {
+        position: absolute;
+        top: 0.5rem;
+        left: 0.5rem;
+        background-color: rgba(255, 255, 255, 0.1);
+        color: #e2e8f0;
+        border-radius: 0.25rem;
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+      }
+      
+      .progress-bar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 3px;
+        background: theme('colors.primary.500');
+        z-index: 50;
+        width: 0%;
+        transition: width 0.2s ease;
+      }
+      
+      .toc-link {
+        display: block;
+        padding: 0.5rem 1rem;
+        color: #64748b;
+        border-left: 2px solid #e2e8f0;
+        transition: all 0.2s ease;
+      }
+      
+      .toc-link:hover {
+        color: #0ea5e9;
+        border-left-color: #0ea5e9;
+        background-color: rgba(14, 165, 233, 0.05);
+      }
+      
+      .toc-link.active {
+        color: #0ea5e9;
+        border-left-color: #0ea5e9;
+        font-weight: 500;
+      }
+      
+      .section-highlight {
+        animation: highlight 2s ease-in-out;
+      }
+      
+      .typewriter {
+        overflow: hidden;
+        white-space: nowrap;
+        border-right: 2px solid #0ea5e9;
+        animation: typewriter 2s steps(40, end), pulse 1s infinite;
+      }
+      
+      .array-card {
+        transition: all 0.3s ease;
+        border-left: 4px solid transparent;
+      }
+      
+      .array-card:hover {
+        transform: translateY(-5px);
+        border-left: 4px solid theme('colors.primary.500');
+      }
+      
+      .keyword {
+        color: #f472b6;
+        font-weight: 500;
+      }
+      
+      .string {
+        color: #a3e635;
+      }
+      
+      .number {
+        color: #fb923c;
+      }
+      
+      .comment {
+        color: #94a3b8;
+        font-style: italic;
+      }
+      
+      .function {
+        color: #38bdf8;
+      }
+      
+      .variable {
+        color: #e2e8f0;
+      }
+      
+      .operator {
+        color: #e879f9;
+      }
+      
+      .parameter {
+        color: #d8b4fe;
+      }
+      
+      /* Custom scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+      
+      ::-webkit-scrollbar-track {
+        background: #f1f5f9;
+      }
+      
+      ::-webkit-scrollbar-thumb {
+        background: #94a3b8;
+        border-radius: 4px;
+      }
+      
+      ::-webkit-scrollbar-thumb:hover {
+        background: #64748b;
+      }
+      
+      /* Interactive example styles */
+      .interactive-demo {
+        border: 2px solid #e2e8f0;
+        border-radius: 0.5rem;
+        overflow: hidden;
+      }
+      
+      .interactive-demo-header {
+        background-color: #f8fafc;
+        padding: 0.75rem 1rem;
+        border-bottom: 2px solid #e2e8f0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      
+      .interactive-demo-content {
+        padding: 1rem;
+      }
+      
+      .interactive-demo-output {
+        background-color: #f1f5f9;
+        border-radius: 0.25rem;
+        padding: 1rem;
+        margin-top: 1rem;
+        min-height: 3rem;
+      }
+      
+      .tab-button {
+        padding: 0.5rem 1rem;
+        border-radius: 0.25rem;
+        font-weight: 500;
+        transition: all 0.2s ease;
+      }
+      
+      .tab-button.active {
+        background-color: #0ea5e9;
+        color: white;
+      }
+      
+      .tab-content {
+        display: none;
+      }
+      
+      .tab-content.active {
+        display: block;
+        animation: fadeIn 0.3s ease-out forwards;
+      }
+      
+      .code-comparison {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+      
+      @media (min-width: 768px) {
+        .code-comparison {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+      
+      .code-comparison-item {
+        opacity: 0;
+        animation: fadeIn 0.5s ease-out forwards;
+      }
+      
+      .code-comparison-item:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+      
+      .array-visual {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin: 1.5rem 0;
+      }
+      
+      .array-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: #f0f9ff;
+        border: 2px solid #bae6fd;
+        border-radius: 0.5rem;
+        padding: 0.75rem 1rem;
+        min-width: 4rem;
+        text-align: center;
+        transition: all 0.3s ease;
+      }
+      
+      .array-item:hover {
+        transform: translateY(-5px);
+        background-color: #e0f2fe;
+        border-color: #38bdf8;
+      }
+      
+      .array-index {
+        font-size: 0.75rem;
+        color: #64748b;
+        margin-top: 0.25rem;
+      }
+      
+      .array-method-demo {
+        position: relative;
+        padding: 2rem;
+        border-radius: 0.5rem;
+        background-color: #f8fafc;
+        overflow: hidden;
+        margin: 2rem 0;
+      }
+      
+      .array-container {
+        display: flex;
+        justify-content: center;
+        gap: 0.5rem;
+        margin-bottom: 1.5rem;
+      }
+      
+      .array-demo-item {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #e0f2fe;
+        border: 2px solid #38bdf8;
+        border-radius: 0.5rem;
+        width: 3rem;
+        height: 3rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+      }
+      
+      .array-demo-controls {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+      
+      .array-demo-button {
+        background-color: #0ea5e9;
+        color: white;
+        border: none;
+        border-radius: 0.5rem;
+        padding: 0.5rem 1rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      
+      .array-demo-button:hover {
+        background-color: #0284c7;
+      }
+      
+      .array-demo-button:disabled {
+        background-color: #94a3b8;
+        cursor: not-allowed;
+      }
+      
+      .array-demo-input {
+        border: 2px solid #e2e8f0;
+        border-radius: 0.5rem;
+        padding: 0.5rem;
+        width: 5rem;
+        text-align: center;
+      }
+      
+      .array-demo-input:focus {
+        outline: none;
+        border-color: #38bdf8;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-50 text-gray-800">
+    <!-- Progress Bar -->
+    <div class="progress-bar" id="progressBar"></div>
+    
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-primary-700 to-primary-900 text-white py-12 relative overflow-hidden">
+      <div class="absolute inset-0 bg-gradient-to-r from-primary-700/30 to-primary-900/30"></div>
+      <div class="container mx-auto px-4 relative z-10">
+        <div class="flex justify-between items-center mb-8">
+          <div class="flex items-center space-x-2">
+            <div class="bg-white text-primary-600 h-10 w-10 rounded-lg flex items-center justify-center shadow-lg animate-float">
+              <span class="text-xl font-bold">JS</span>
+            </div>
+            <a href="/" class="text-xl font-semibold tracking-tight hover:text-primary-200 transition-colors">JSFundamentals</a>
+          </div>
+          <div class="flex items-center space-x-6">
+            <a href="/" class="text-white/80 hover:text-white transition-colors duration-200">Home</a>
+            <a href="#" class="text-white/80 hover:text-white transition-colors duration-200">Docs</a>
+            <a href="#" class="text-white/80 hover:text-white transition-colors duration-200">Examples</a>
+            <a href="#" class="text-white/80 hover:text-white transition-colors duration-200">Community</a>
+            <div class="dark-mode-toggle ml-4 text-white/80 hover:text-white cursor-pointer">
+              <i class="fas fa-moon text-lg"></i>
+            </div>
+          </div>
+        </div>
+        
+        <div class="max-w-3xl">
+          <h1 class="text-4xl md:text-5xl font-bold leading-tight mb-4">JavaScript Arrays</h1>
+          <p class="text-xl text-white/90 mb-8 leading-relaxed">Master the art of working with collections of data - learn how to create, manipulate, and iterate through arrays to build powerful and dynamic JavaScript applications.</p>
+          <div class="flex flex-wrap gap-4">
+            <a href="#basics" class="bg-white text-primary-700 hover:bg-gray-100 px-6 py-3 rounded-lg font-medium transition-all duration-200 shadow-md hover:shadow-lg flex items-center">
+              <span>Start Learning</span>
+              <i class="fas fa-arrow-right ml-2"></i>
+            </a>
+            <a href="#interactive-demo" class="bg-transparent border border-white/30 backdrop-blur-sm text-white hover:bg-white/10 px-6 py-3 rounded-lg font-medium transition-all duration-200">
+              <i class="fas fa-code mr-2"></i>
+              <span>Try It Yourself</span>
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Decorative Elements -->
+      <div class="absolute right-0 top-0 h-full w-1/3 opacity-10">
+        <div class="absolute right-20 top-20 text-6xl animate-float" style="animation-delay: 0.5s;">[</div>
+        <div class="absolute right-60 top-40 text-4xl animate-float" style="animation-delay: 1s;">]</div>
+        <div class="absolute right-40 top-60 text-5xl animate-float" style="animation-delay: 1.5s;">,</div>
+        <div class="absolute right-80 top-80 text-7xl animate-float" style="animation-delay: 2s;">Array</div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container mx-auto px-4 py-8 md:py-16">
+      <div class="flex flex-col lg:flex-row gap-8">
+        <!-- Sidebar / TOC -->
+        <div class="lg:w-1/4">
+          <div class="bg-white rounded-lg shadow-md p-6 sticky top-4">
+            <h2 class="text-xl font-semibold text-gray-900 mb-4">Table of Contents</h2>
+            <nav class="toc">
+              <a href="#basics" class="toc-link">Array Basics</a>
+              <a href="#creating" class="toc-link">Creating Arrays</a>
+              <a href="#accessing" class="toc-link">Accessing Elements</a>
+              <a href="#modifying" class="toc-link">Modifying Arrays</a>
+              <a href="#methods" class="toc-link">Array Methods</a>
+              <a href="#iteration" class="toc-link">Array Iteration</a>
+              <a href="#destructuring" class="toc-link">Array Destructuring</a>
+              <a href="#multidimensional" class="toc-link">Multidimensional Arrays</a>
+              <a href="#best-practices" class="toc-link">Best Practices</a>
+              <a href="#interactive-demo" class="toc-link">Interactive Demo</a>
+              <a href="#common-patterns" class="toc-link">Common Patterns</a>
+            </nav>
+            
+            <div class="mt-8 p-4 bg-primary-50 rounded-lg border border-primary-100">
+              <h3 class="text-sm font-semibold text-primary-800 mb-2">Learning Progress</h3>
+              <div class="w-full bg-gray-200 rounded-full h-2.5">
+                <div class="bg-primary-500 h-2.5 rounded-full" style="width: 0%" id="readingProgress"></div>
+              </div>
+              <p class="text-xs text-gray-500 mt-2">Scroll to track your progress</p>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Main Content -->
+        <main class="lg:w-3/4">
+          <!-- Array Basics -->
+          <section id="basics" class="mb-12 bg-white rounded-lg shadow-md p-8 scroll-mt-4">
+            <h2 class="text-3xl font-bold text-gray-900 mb-6">Array Basics</h2>
+            
+            <p class="text-gray-700 mb-4">
+              Arrays are ordered collections of values that can store multiple items in a single variable. They are one of the most fundamental data structures in JavaScript.
+            </p>
+            
+            <div class="my-6 p-6 bg-primary-50 rounded-lg border-l-4 border-primary-500">
+              <h3 class="text-xl font-semibold text-primary-800 mb-2">Why Arrays Matter</h3>
+              <p class="text-gray-700">
+                Arrays allow us to:
+              </p>
+              <ul class="mt-2 space-y-2">
+                <li class="flex items-start">
+                  <i class="fas fa-check-circle text-primary-500 mt-1 mr-2"></i>
+                  <span>Store multiple values in a single variable</span>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-check-circle text-primary-500 mt-1 mr-2"></i>
+                  <span>Organize related data together</span>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-check-circle text-primary-500 mt-1 mr-2"></i>
+                  <span>Efficiently iterate through collections of data</span>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-check-circle text-primary-500 mt-1 mr-2"></i>
+                  <span>Perform operations on multiple values at once</span>
+                </li>
+              </ul>
+            </div>
+            
+            <div class="array-visual my-8">
+              <div class="array-item">
+                <span>Apple</span>
+                <span class="array-index">0</span>
+              </div>
+              <div class="array-item">
+                <span>Banana</span>
+                <span class="array-index">1</span>
+              </div>
+              <div class="array-item">
+                <span>Cherry</span>
+                <span class="array-index">2</span>
+              </div>
+              <div class="array-item">
+                <span>Date</span>
+                <span class="array-index">3</span>
+              </div>
+              <div class="array-item">
+                <span>Elderberry</span>
+                <span class="array-index">4</span>
+              </div>
+            </div>
+            
+            <p class="text-gray-700 mb-4">
+              In JavaScript, arrays are zero-indexed, meaning the first element is at index 0, the second at index 1, and so on. Arrays can contain any type of data, including numbers, strings, objects, and even other arrays.
+            </p>
+            
+            <div class="code-block">
+              <div class="language-tag">javascript</div>
+              <button class="copy-button">Copy</button>
+              <pre><code><span class="comment">// A simple array of strings</span>
+<span class="keyword">const</span> <span class="variable">fruits</span> <span class="operator">=</span> [<span class="string">'Apple'</span>, <span class="string">'Banana'</span>, <span class="string">'Cherry'</span>, <span class="string">'Date'</span>, <span class="string">'Elderberry'</span>];
+
+<span class="comment">// Arrays can contain different types of data</span>
+<span class="keyword">const</span> <span class="variable">mixed</span> <span class="operator">=</span> [<span class="string">'Hello'</span>, <span class="number">42</span>, <span class="keyword">true</span>, { <span class="variable">name</span>: <span class="string">'John'</span> }, [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]];
+
+<span class="comment">// Getting the length of an array</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">fruits</span>.<span class="variable">length</span>); <span class="comment">// 5</span></code></pre>
+            </div>
+            
+            <div class="mt-6 flex items-center justify-between">
+              <span class="text-sm text-gray-500">
+                <i class="fas fa-lightbulb text-yellow-500 mr-2"></i>
+                Arrays are the workhorses of JavaScript data structures
+              </span>
+              <a href="#creating" class="text-primary-600 hover:text-primary-700 flex items-center">
+                Next: Creating Arrays
+                <i class="fas fa-arrow-right ml-2"></i>
+              </a>
+            </div>
+          </section>
+          
+          <!-- Creating Arrays -->
+          <section id="creating" class="mb-12 bg-white rounded-lg shadow-md p-8 scroll-mt-4">
+            <h2 class="text-3xl font-bold text-gray-900 mb-6">Creating Arrays</h2>
+            
+            <p class="text-gray-700 mb-4">
+              There are several ways to create arrays in JavaScript. Let's explore the different methods.
+            </p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-8">
+              <!-- Array Literal -->
+              <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+                  <span class="bg-primary-100 text-primary-600 p-2 rounded-lg mr-3">
+                    <i class="fas fa-brackets-square"></i>
+                  </span>
+                  Array Literal
+                </h3>
+                <p class="text-gray-600 mb-4">
+                  The most common way to create an array is using square brackets <code>[]</code>.
+                </p>
+                <div class="code-block">
+                  <pre><code><span class="comment">// Empty array</span>
+<span class="keyword">const</span> <span class="variable">emptyArray</span> <span class="operator">=</span> [];
+
+<span class="comment">// Array with initial values</span>
+<span class="keyword">const</span> <span class="variable">numbers</span> <span class="operator">=</span> [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>];
+
+<span class="comment">// Array with mixed types</span>
+<span class="keyword">const</span> <span class="variable">mixed</span> <span class="operator">=</span> [<span class="string">'text'</span>, <span class="number">42</span>, <span class="keyword">true</span>, <span class="keyword">null</span>];</code></pre>
+                </div>
+              </div>
+              
+              <!-- Array Constructor -->
+              <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+                  <span class="bg-primary-100 text-primary-600 p-2 rounded-lg mr-3">
+                    <i class="fas fa-wand-magic-sparkles"></i>
+                  </span>
+                  Array Constructor
+                </h3>
+                <p class="text-gray-600 mb-4">
+                  You can also use the <code>Array()</code> constructor to create arrays.
+                </p>
+                <div class="code-block">
+                  <pre><code><span class="comment">// Empty array</span>
+<span class="keyword">const</span> <span class="variable">emptyArray</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="function">Array</span>();
+
+<span class="comment">// Array with a specific length</span>
+<span class="keyword">const</span> <span class="variable">arrayWithLength</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="function">Array</span>(<span class="number">5</span>);
+<span class="comment">// Creates [empty × 5]</span>
+
+<span class="comment">// Array with initial values</span>
+<span class="keyword">const</span> <span class="variable">numbers</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="function">Array</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>);</code></pre>
+                </div>
+              </div>
+              
+              <!-- Array.from() -->
+              <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+                  <span class="bg-primary-100 text-primary-600 p-2 rounded-lg mr-3">
+                    <i class="fas fa-right-from-bracket"></i>
+                  </span>
+                  Array.from()
+                </h3>
+                <p class="text-gray-600 mb-4">
+                  Creates a new array from an array-like or iterable object. Useful for converting other objects to arrays.
+                </p>
+                <div class="code-block">
+                  <pre><code><span class="comment">// From a string</span>
+<span class="keyword">const</span> <span class="variable">charArray</span> <span class="operator">=</span> <span class="variable">Array</span>.<span class="function">from</span>(<span class="string">'hello'</span>);
+<span class="comment">// ['h', 'e', 'l', 'l', 'o']</span>
+
+<span class="comment">// From a Set</span>
+<span class="keyword">const</span> <span class="variable">uniqueNumbers</span> <span class="operator">=</span> <span class="variable">Array</span>.<span class="function">from</span>(<span class="keyword">new</span> <span class="function">Set</span>([<span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">3</span>]));
+<span class="comment">// [1, 2, 3]</span>
+
+<span class="comment">// With a mapping function</span>
+<span class="keyword">const</span> <span class="variable">doubled</span> <span class="operator">=</span> <span class="variable">Array</span>.<span class="function">from</span>([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>], <span class="parameter">x</span> <span class="operator">=></span> <span class="parameter">x</span> <span class="operator">*</span> <span class="number">2</span>);
+<span class="comment">// [2, 4, 6]</span></code></pre>
+                </div>
+              </div>
+              
+              <!-- Array.of() -->
+              <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+                  <span class="bg-primary-100 text-primary-600 p-2 rounded-lg mr-3">
+                    <i class="fas fa-layer-group"></i>
+                  </span>
+                  Array.of()
+                </h3>
+                <p class="text-gray-600 mb-4">
+                  Creates a new array with the specified elements, regardless of number or type.
+                </p>
+                <div class="code-block">
+                  <pre><code><span class="comment">// Single number (unlike Array constructor)</span>
+<span class="keyword">const</span> <span class="variable">singleItem</span> <span class="operator">=</span> <span class="variable">Array</span>.<span class="function">of</span>(<span class="number">5</span>);
+<span class="comment">// [5] (not an array of length 5)</span>
+
+<span class="comment">// Multiple items</span>
+<span class="keyword">const</span> <span class="variable">numbers</span> <span class="operator">=</span> <span class="variable">Array</span>.<span class="function">of</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>);
+<span class="comment">// [1, 2, 3, 4, 5]</span></code></pre>
+                </div>
+              </div>
+            </div>
+            
+            <div class="mt-6 p-6 bg-yellow-50 rounded-lg border-l-4 border-yellow-500">
+              <h3 class="text-xl font-semibold text-yellow-800 mb-2">Array Constructor Gotcha</h3>
+              <p class="text-gray-700 mb-4">
+                Be careful when using the <code>Array()</code> constructor with a single numeric argument:
+              </p>
+              <div class="code-block mt-4">
+                <pre><code><span class="comment">// This creates an array with 3 empty slots, not [3]</span>
+<span class="keyword">const</span> <span class="variable">arr1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="function">Array</span>(<span class="number">3</span>);
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">arr1</span>); <span class="comment">// [empty × 3]</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">arr1</span>.<span class="variable">length</span>); <span class="comment">// 3</span>
+
+<span class="comment">// To create an array with a single number, use Array.of()</span>
+<span class="keyword">const</span> <span class="variable">arr2</span> <span class="operator">=</span> <span class="variable">Array</span>.<span class="function">of</span>(<span class="number">3</span>);
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">arr2</span>); <span class="comment">// [3]</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">arr2</span>.<span class="variable">length</span>); <span class="comment">// 1</span></code></pre>
+              </div>
+            </div>
+            
+            <div class="mt-6 flex items-center justify-between">
+              <a href="#basics" class="text-primary-600 hover:text-primary-700 flex items-center">
+                <i class="fas fa-arrow-left mr-2"></i>
+                Previous: Basics
+              </a>
+              <a href="#accessing" class="text-primary-600 hover:text-primary-700 flex items-center">
+                Next: Accessing Elements
+                <i class="fas fa-arrow-right ml-2"></i>
+              </a>
+            </div>
+          </section>
+          
+          <!-- Accessing Elements -->
+          <section id="accessing" class="mb-12 bg-white rounded-lg shadow-md p-8 scroll-mt-4">
+            <h2 class="text-3xl font-bold text-gray-900 mb-6">Accessing Elements</h2>
+            
+            <p class="text-gray-700 mb-4">
+              You can access elements in an array using their index. Remember that array indices start at 0.
+            </p>
+            
+            <div class="code-block">
+              <div class="language-tag">javascript</div>
+              <button class="copy-button">Copy</button>
+              <pre><code><span class="keyword">const</span> <span class="variable">fruits</span> <span class="operator">=</span> [<span class="string">'Apple'</span>, <span class="string">'Banana'</span>, <span class="string">'Cherry'</span>, <span class="string">'Date'</span>, <span class="string">'Elderberry'</span>];
+
+<span class="comment">// Accessing by index</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">fruits</span>[<span class="number">0</span>]); <span class="comment">// 'Apple'</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">fruits</span>[<span class="number">2</span>]); <span class="comment">// 'Cherry'</span>
+
+<span class="comment">// Accessing the last element</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">fruits</span>[<span class="variable">fruits</span>.<span class="variable">length</span> <span class="operator">-</span> <span class="number">1</span>]); <span class="comment">// 'Elderberry'</span>
+
+<span class="comment">// Using at() method (ES2022)</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">fruits</span>.<span class="function">at</span>(<span class="number">0</span>)); <span class="comment">// 'Apple'</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">fruits</span>.<span class="function">at</span>(<span class="operator">-</span><span class="number">1</span>)); <span class="comment">// 'Elderberry' (negative indices count from the end)</span>
+
+<span class="comment">// Accessing a non-existent index</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">fruits</span>[<span class="number">10</span>]); <span class="comment">// undefined</span></code></pre>
+            </div>
+            
+            <div class="mt-6 p-6 bg-primary-50 rounded-lg border-l-4 border-primary-500">
+              <h3 class="text-xl font-semibold text-primary-800 mb-2">The at() Method</h3>
+              <p class="text-gray-700 mb-4">
+                The <code>at()</code> method, introduced in ES2022, provides a more intuitive way to access array elements, especially when working with negative indices.
+              </p>
+              <div class="code-comparison">
+                <div class="code-comparison-item">
+                  <h4 class="font-medium text-gray-900 mb-2">Traditional Way</h4>
+                  <pre class="text-sm bg-gray-100 p-3 rounded"><code><span class="comment">// Getting the last element</span>
+<span class="keyword">const</span> <span class="variable">last</span> <span class="operator">=</span> <span class="variable">fruits</span>[<span class="variable">fruits</span>.<span class="variable">length</span> <span class="operator">-</span> <span class="number">1</span>];
+
+<span class="comment">// Getting the second-to-last element</span>
+<span class="keyword">const</span> <span class="variable">secondToLast</span> <span class="operator">=</span> <span class="variable">fruits</span>[<span class="variable">fruits</span>.<span class="variable">length</span> <span class="operator">-</span> <span class="number">2</span>];</code></pre>
+                </div>
+                
+                <div class="code-comparison-item">
+                  <h4 class="font-medium text-gray-900 mb-2">Using at()</h4>
+                  <pre class="text-sm bg-gray-100 p-3 rounded"><code><span class="comment">// Getting the last element</span>
+<span class="keyword">const</span> <span class="variable">last</span> <span class="operator">=</span> <span class="variable">fruits</span>.<span class="function">at</span>(<span class="operator">-</span><span class="number">1</span>);
+
+<span class="comment">// Getting the second-to-last element</span>
+<span class="keyword">const</span> <span class="variable">secondToLast</span> <span class="operator">=</span> <span class="variable">fruits</span>.<span class="function">at</span>(<span class="operator">-</span><span class="number">2</span>);</code></pre>
+                </div>
+              </div>
+            </div>
+            
+            <div class="mt-6 flex items-center justify-between">
+              <a href="#creating" class="text-primary-600 hover:text-primary-700 flex items-center">
+                <i class="fas fa-arrow-left mr-2"></i>
+                Previous: Creating Arrays
+              </a>
+              <a href="#modifying" class="text-primary-600 hover:text-primary-700 flex items-center">
+                Next: Modifying Arrays
+                <i class="fas fa-arrow-right ml-2"></i>
+              </a>
+            </div>
+          </section>
+          
+          <!-- Modifying Arrays -->
+          <section id="modifying" class="mb-12 bg-white rounded-lg shadow-md p-8 scroll-mt-4">
+            <h2 class="text-3xl font-bold text-gray-900 mb-6">Modifying Arrays</h2>
+            
+            <p class="text-gray-700 mb-4">
+              Arrays in JavaScript are mutable, meaning you can change their content after creation.
+            </p>
+            
+            <div class="code-block">
+              <div class="language-tag">javascript</div>
+              <button class="copy-button">Copy</button>
+              <pre><code><span class="keyword">const</span> <span class="variable">fruits</span> <span class="operator">=</span> [<span class="string">'Apple'</span>, <span class="string">'Banana'</span>, <span class="string">'Cherry'</span>];
+
+<span class="comment">// Changing an element</span>
+<span class="variable">fruits</span>[<span class="number">1</span>] <span class="operator">=</span> <span class="string">'Blueberry'</span>;
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">fruits</span>); <span class="comment">// ['Apple', 'Blueberry', 'Cherry']</span>
+
+<span class="comment">// Adding a new element at the end</span>
+<span class="variable">fruits</span>[<span class="number">3</span>] <span class="operator">=</span> <span class="string">'Date'</span>;
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">fruits</span>); <span class="comment">// ['Apple', 'Blueberry', 'Cherry', 'Date']</span>
+
+<span class="comment">// Adding an element at a non-consecutive index creates "empty" slots</span>
+<span class="variable">fruits</span>[<span class="number">6</span>] <span class="operator">=</span> <span class="string">'Fig'</span>;
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">fruits</span>); <span class="comment">// ['Apple', 'Blueberry', 'Cherry', 'Date', empty × 2, 'Fig']</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">fruits</span>.<span class="variable">length</span>); <span class="comment">// 7</span>
+
+<span class="comment">// Deleting an element (not recommended)</span>
+<span class="keyword">delete</span> <span class="variable">fruits</span>[<span class="number">1</span>]; <span class="comment">// Creates a "hole" in the array</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">fruits</span>); <span class="comment">// ['Apple', empty, 'Cherry', 'Date', empty × 2, 'Fig']</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">fruits</span>.<span class="variable">length</span>); <span class="comment">// 7 (length is unchanged)</span></code></pre>
+            </div>
+            
+            <div class="mt-6 p-6 bg-yellow-50 rounded-lg border-l-4 border-yellow-500">
+              <h3 class="text-xl font-semibold text-yellow-800 mb-2">Important Notes</h3>
+              <ul class="space-y-2">
+                <li class="flex items-start">
+                  <i class="fas fa-exclamation-circle text-yellow-600 mt-1 mr-2"></i>
+                  <div>
+                    <p class="font-medium">Arrays declared with <code>const</code> can still be modified</p>
+                    <p class="text-sm text-gray-600">The <code>const</code> declaration prevents reassignment of the variable, but the array contents can still change.</p>
+                  </div>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-exclamation-circle text-yellow-600 mt-1 mr-2"></i>
+                  <div>
+                    <p class="font-medium">Avoid using <code>delete</code> with arrays</p>
+                    <p class="text-sm text-gray-600">It creates "holes" in the array. Use array methods like <code>splice()</code> instead.</p>
+                  </div>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-exclamation-circle text-yellow-600 mt-1 mr-2"></i>
+                  <div>
+                    <p class="font-medium">Sparse arrays can cause unexpected behavior</p>
+                    <p class="text-sm text-gray-600">Arrays with "empty" slots may behave differently with various array methods.</p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            
+            <div class="code-block mt-6">
+              <div class="language-tag">javascript</div>
+              <button class="copy-button">Copy</button>
+              <pre><code><span class="comment">// const doesn't prevent array modification</span>
+<span class="keyword">const</span> <span class="variable">numbers</span> <span class="operator">=</span> [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];
+<span class="variable">numbers</span>[<span class="number">0</span>] <span class="operator">=</span> <span class="number">100</span>; <span class="comment">// This works</span>
+<span class="variable">numbers</span>.<span class="function">push</span>(<span class="number">4</span>); <span class="comment">// This works too</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">numbers</span>); <span class="comment">// [100, 2, 3, 4]</span>
+
+<span class="comment">// But you can't reassign the variable</span>
+<span class="comment">// numbers = [5, 6, 7]; // TypeError: Assignment to constant variable</span>
+
+<span class="comment">// To make an array truly immutable, use Object.freeze()</span>
+<span class="keyword">const</span> <span class="variable">frozenArray</span> <span class="operator">=</span> <span class="variable">Object</span>.<span class="function">freeze</span>([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]);
+<span class="comment">// frozenArray[0] = 100; // Fails silently in non-strict mode</span>
+<span class="comment">// In strict mode, it throws a TypeError</span></code></pre>
+            </div>
+            
+            <div class="mt-6 flex items-center justify-between">
+              <a href="#accessing" class="text-primary-600 hover:text-primary-700 flex items-center">
+                <i class="fas fa-arrow-left mr-2"></i>
+                Previous: Accessing Elements
+              </a>
+              <a href="#methods" class="text-primary-600 hover:text-primary-700 flex items-center">
+                Next: Array Methods
+                <i class="fas fa-arrow-right ml-2"></i>
+              </a>
+            </div>
+          </section>
+          
+          <!-- Array Methods -->
+          <section id="methods" class="mb-12 bg-white rounded-lg shadow-md p-8 scroll-mt-4">
+            <h2 class="text-3xl font-bold text-gray-900 mb-6">Array Methods</h2>
+            
+            <p class="text-gray-700 mb-4">
+              JavaScript arrays come with many built-in methods that make working with them easier and more efficient.
+            </p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-8">
+              <!-- Adding and Removing Elements -->
+              <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">Adding and Removing Elements</h3>
+                <div class="code-block">
+                  <pre><code><span class="keyword">const</span> <span class="variable">fruits</span> <span class="operator">=</span> [<span class="string">'Apple'</span>, <span class="string">'Banana'</span>];
+
+<span class="comment">// push() - Add to the end</span>
+<span class="variable">fruits</span>.<span class="function">push</span>(<span class="string">'Cherry'</span>);
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">fruits</span>); <span class="comment">// ['Apple', 'Banana', 'Cherry']</span>
+
+<span class="comment">// pop() - Remove from the end</span>
+<span class="keyword">const</span> <span class="variable">lastFruit</span> <span class="operator">=</span> <span class="variable">fruits</span>.<span class="function">pop</span>();
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">lastFruit</span>); <span class="comment">// 'Cherry'</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">fruits</span>); <span class="comment">// ['Apple', 'Banana']</span>
+
+<span class="comment">// unshift() - Add to the beginning</span>
+<span class="variable">fruits</span>.<span class="function">unshift</span>(<span class="string">'Apricot'</span>);
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">fruits</span>); <span class="comment">// ['Apricot', 'Apple', 'Banana']</span>
+
+<span class="comment">// shift() - Remove from the beginning</span>
+<span class="keyword">const</span> <span class="variable">firstFruit</span> <span class="operator">=</span> <span class="variable">fruits</span>.<span class="function">shift</span>();
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">firstFruit</span>); <span class="comment">// 'Apricot'</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">fruits</span>); <span class="comment">// ['Apple', 'Banana']</span></code></pre>
+                </div>
+              </div>
+              
+              <!-- Modifying Arrays -->
+              <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">Modifying Arrays</h3>
+                <div class="code-block">
+                  <pre><code><span class="keyword">const</span> <span class="variable">fruits</span> <span class="operator">=</span> [<span class="string">'Apple'</span>, <span class="string">'Banana'</span>, <span class="string">'Cherry'</span>, <span class="string">'Date'</span>];
+
+<span class="comment">// splice() - Add/remove elements at any position</span>
+<span class="comment">// splice(start, deleteCount, item1, item2, ...)</span>
+
+<span class="comment">// Remove 2 elements starting at index 1</span>
+<span class="keyword">const</span> <span class="variable">removed</span> <span class="operator">=</span> <span class="variable">fruits</span>.<span class="function">splice</span>(<span class="number">1</span>, <span class="number">2</span>);
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">removed</span>); <span class="comment">// ['Banana', 'Cherry']</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">fruits</span>); <span class="comment">// ['Apple', 'Date']</span>
+
+<span class="comment">// Insert elements at index 1</span>
+<span class="variable">fruits</span>.<span class="function">splice</span>(<span class="number">1</span>, <span class="number">0</span>, <span class="string">'Blueberry'</span>, <span class="string">'Coconut'</span>);
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">fruits</span>); <span class="comment">// ['Apple', 'Blueberry', 'Coconut', 'Date']</span>
+
+<span class="comment">// Replace 1 element at index 2</span>
+<span class="variable">fruits</span>.<span class="function">splice</span>(<span class="number">2</span>, <span class="number">1</span>, <span class="string">'Cherry'</span>);
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">fruits</span>); <span class="comment">// ['Apple', 'Blueberry', 'Cherry', 'Date']</span></code></pre>
+                </div>
+              </div>
+              
+              <!-- Combining Arrays -->
+              <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">Combining Arrays</h3>
+                <div class="code-block">
+                  <pre><code><span class="keyword">const</span> <span class="variable">fruits1</span> <span class="operator">=</span> [<span class="string">'Apple'</span>, <span class="string">'Banana'</span>];
+<span class="keyword">const</span> <span class="variable">fruits2</span> <span class="operator">=</span> [<span class="string">'Cherry'</span>, <span class="string">'Date'</span>];
+
+<span class="comment">// concat() - Combine arrays</span>
+<span class="keyword">const</span> <span class="variable">allFruits</span> <span class="operator">=</span> <span class="variable">fruits1</span>.<span class="function">concat</span>(<span class="variable">fruits2</span>);
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">allFruits</span>); <span class="comment">// ['Apple', 'Banana', 'Cherry', 'Date']</span>
+
+<span class="comment">// Spread operator - Modern way to combine arrays</span>
+<span class="keyword">const</span> <span class="variable">combined</span> <span class="operator">=</span> [...<span class="variable">fruits1</span>, ...<span class="variable">fruits2</span>];
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">combined</span>); <span class="comment">// ['Apple', 'Banana', 'Cherry', 'Date']</span>
+
+<span class="comment">// You can also add elements in between</span>
+<span class="keyword">const</span> <span class="variable">mixed</span> <span class="operator">=</span> [...<span class="variable">fruits1</span>, <span class="string">'Coconut'</span>, ...<span class="variable">fruits2</span>];
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">mixed</span>); <span class="comment">// ['Apple', 'Banana', 'Coconut', 'Cherry', 'Date']</span></code></pre>
+                </div>
+              </div>
+              
+              <!-- Finding Elements -->
+              <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">Finding Elements</h3>
+                <div class="code-block">
+                  <pre><code><span class="keyword">const</span> <span class="variable">fruits</span> <span class="operator">=</span> [<span class="string">'Apple'</span>, <span class="string">'Banana'</span>, <span class="string">'Cherry'</span>, <span class="string">'Date'</span>, <span class="string">'Banana'</span>];
+
+<span class="comment">// indexOf() - Find the first occurrence</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">fruits</span>.<span class="function">indexOf</span>(<span class="string">'Banana'</span>)); <span class="comment">// 1</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">fruits</span>.<span class="function">indexOf</span>(<span class="string">'Fig'</span>)); <span class="comment">// -1 (not found)</span>
+
+<span class="comment">// lastIndexOf() - Find the last occurrence</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">fruits</span>.<span class="function">lastIndexOf</span>(<span class="string">'Banana'</span>)); <span class="comment">// 4</span>
+
+<span class="comment">// includes() - Check if an element exists</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">fruits</span>.<span class="function">includes</span>(<span class="string">'Cherry'</span>)); <span class="comment">// true</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">fruits</span>.<span class="function">includes</span>(<span class="string">'Fig'</span>)); <span class="comment">// false</span>
+
+<span class="comment">// find() - Find the first element that satisfies a condition</span>
+<span class="keyword">const</span> <span class="variable">found</span> <span class="operator">=</span> <span class="variable">fruits</span>.<span class="function">find</span>(<span class="parameter">fruit</span> <span class="operator">=></span> <span class="parameter">fruit</span>.<span class="function">startsWith</span>(<span class="string">'B'</span>));
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">found</span>); <span class="comment">// 'Banana'</span>
+
+<span class="comment">// findIndex() - Find the index of the first element that satisfies a condition</span>
+<span class="keyword">const</span> <span class="variable">foundIndex</span> <span class="operator">=</span> <span class="variable">fruits</span>.<span class="function">findIndex</span>(<span class="parameter">fruit</span> <span class="operator">=></span> <span class="parameter">fruit</span>.<span class="function">startsWith</span>(<span class="string">'D'</span>));
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">foundIndex</span>); <span class="comment">// 3</span></code></pre>
+                </div>
+              </div>
+            </div>
+            
+            <div class="array-method-demo" id="arrayMethodDemo">
+              <h3 class="text-xl font-semibold text-gray-900 mb-4 text-center">Interactive Array Methods Demo</h3>
+              <div class="array-container" id="arrayContainer">
+                <div class="array-demo-item">A</div>
+                <div class="array-demo-item">B</div>
+                <div class="array-demo-item">C</div>
+              </div>
+              <div class="array-demo-controls">
+                <button class="array-demo-button" id="pushButton">
+                  <i class="fas fa-plus"></i> Push
+                </button>
+                <button class="array-demo-button" id="popButton">
+                  <i class="fas fa-minus"></i> Pop
+                </button>
+                <button class="array-demo-button" id="unshiftButton">
+                  <i class="fas fa-arrow-left"></i> Unshift
+                </button>
+                <button class="array-demo-button" id="shiftButton">
+                  <i class="fas fa-arrow-right"></i> Shift
+                </button>
+                <input type="text" class="array-demo-input" id="arrayInput" maxlength="1" placeholder="Value">
+              </div>
+            </div>
+            
+            <div class="mt-6 p-6 bg-primary-50 rounded-lg border-l-4 border-primary-500">
+              <h3 class="text-xl font-semibold text-primary-800 mb-2">Other Useful Array Methods</h3>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                <div>
+                  <ul class="space-y-2">
+                    <li class="flex items-start">
+                      <i class="fas fa-check-circle text-primary-600 mt-1 mr-2"></i>
+                      <div>
+                        <p class="font-medium"><code>slice()</code></p>
+                        <p class="text-sm text-gray-600">Extract a portion of an array without modifying it</p>
+                      </div>
+                    </li>
+                    <li class="flex items-start">
+                      <i class="fas fa-check-circle text-primary-600 mt-1 mr-2"></i>
+                      <div>
+                        <p class="font-medium"><code>join()</code></p>
+                        <p class="text-sm text-gray-600">Convert array to string with a specified separator</p>
+                      </div>
+                    </li>
+                    <li class="flex items-start">
+                      <i class="fas fa-check-circle text-primary-600 mt-1 mr-2"></i>
+                      <div>
+                        <p class="font-medium"><code>reverse()</code></p>
+                        <p class="text-sm text-gray-600">Reverse the order of elements in an array</p>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+                <div>
+                  <ul class="space-y-2">
+                    <li class="flex items-start">
+                      <i class="fas fa-check-circle text-primary-600 mt-1 mr-2"></i>
+                      <div>
+                        <p class="font-medium"><code>sort()</code></p>
+                        <p class="text-sm text-gray-600">Sort the elements of an array</p>
+                      </div>
+                    </li>
+                    <li class="flex items-start">
+                      <i class="fas fa-check-circle text-primary-600 mt-1 mr-2"></i>
+                      <div>
+                        <p class="font-medium"><code>fill()</code></p>
+                        <p class="text-sm text-gray-600">Fill all elements with a static value</p>
+                      </div>
+                    </li>
+                    <li class="flex items-start">
+                      <i class="fas fa-check-circle text-primary-600 mt-1 mr-2"></i>
+                      <div>
+                        <p class="font-medium"><code>flat()</code></p>
+                        <p class="text-sm text-gray-600">Flatten nested arrays to a specified depth</p>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            
+            <div class="mt-6 flex items-center justify-between">
+              <a href="#modifying" class="text-primary-600 hover:text-primary-700 flex items-center">
+                <i class="fas fa-arrow-left mr-2"></i>
+                Previous: Modifying Arrays
+              </a>
+              <a href="#iteration" class="text-primary-600 hover:text-primary-700 flex items-center">
+                Next: Array Iteration
+                <i class="fas fa-arrow-right ml-2"></i>
+              </a>
+            </div>
+          </section>
+          
+          <!-- Array Iteration -->
+          <section id="iteration" class="mb-12 bg-white rounded-lg shadow-md p-8 scroll-mt-4">
+            <h2 class="text-3xl font-bold text-gray-900 mb-6">Array Iteration</h2>
+            
+            <p class="text-gray-700 mb-4">
+              JavaScript provides several methods to iterate through arrays, each with its own use case.
+            </p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-8">
+              <!-- forEach -->
+              <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">forEach()</h3>
+                <p class="text-gray-600 mb-4">
+                  Executes a provided function once for each array element.
+                </p>
+                <div class="code-block">
+                  <pre><code><span class="keyword">const</span> <span class="variable">fruits</span> <span class="operator">=</span> [<span class="string">'Apple'</span>, <span class="string">'Banana'</span>, <span class="string">'Cherry'</span>];
+
+<span class="variable">fruits</span>.<span class="function">forEach</span>((<span class="parameter">fruit</span>, <span class="parameter">index</span>) <span class="operator">=></span> {
+  <span class="variable">console</span>.<span class="function">log</span>(<span class="string">`${</span><span class="parameter">index</span><span class="string">}: ${</span><span class="parameter">fruit</span><span class="string">}`</span>);
+});
+<span class="comment">// Output:
+// 0: Apple
+// 1: Banana
+// 2: Cherry</span></code></pre>
+                </div>
+              </div>
+              
+              <!-- map -->
+              <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">map()</h3>
+                <p class="text-gray-600 mb-4">
+                  Creates a new array with the results of calling a function on every element.
+                </p>
+                <div class="code-block">
+                  <pre><code><span class="keyword">const</span> <span class="variable">numbers</span> <span class="operator">=</span> [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>];
+
+<span class="keyword">const</span> <span class="variable">squared</span> <span class="operator">=</span> <span class="variable">numbers</span>.<span class="function">map</span>(<span class="parameter">num</span> <span class="operator">=></span> <span class="parameter">num</span> <span class="operator">*</span> <span class="parameter">num</span>);
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">squared</span>); <span class="comment">// [1, 4, 9, 16, 25]</span>
+
+<span class="comment">// Original array remains unchanged</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">numbers</span>); <span class="comment">// [1, 2, 3, 4, 5]</span></code></pre>
+                </div>
+              </div>
+              
+              <!-- filter -->
+              <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">filter()</h3>
+                <p class="text-gray-600 mb-4">
+                  Creates a new array with elements that pass a test.
+                </p>
+                <div class="code-block">
+                  <pre><code><span class="keyword">const</span> <span class="variable">numbers</span> <span class="operator">=</span> [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>];
+
+<span class="keyword">const</span> <span class="variable">evenNumbers</span> <span class="operator">=</span> <span class="variable">numbers</span>.<span class="function">filter</span>(<span class="parameter">num</span> <span class="operator">=></span> <span class="parameter">num</span> <span class="operator">%</span> <span class="number">2</span> <span class="operator">===</span> <span class="number">0</span>);
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">evenNumbers</span>); <span class="comment">// [2, 4, 6]</span>
+
+<span class="keyword">const</span> <span class="variable">fruits</span> <span class="operator">=</span> [<span class="string">'Apple'</span>, <span class="string">'Banana'</span>, <span class="string">'Cherry'</span>, <span class="string">'Date'</span>];
+<span class="keyword">const</span> <span class="variable">longFruits</span> <span class="operator">=</span> <span class="variable">fruits</span>.<span class="function">filter</span>(<span class="parameter">fruit</span> <span class="operator">=></span> <span class="parameter">fruit</span>.<span class="variable">length</span> <span class="operator">></span> <span class="number">5</span>);
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">longFruits</span>); <span class="comment">// ['Banana', 'Cherry']</span></code></pre>
+                </div>
+              </div>
+              
+              <!-- reduce -->
+              <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">reduce()</h3>
+                <p class="text-gray-600 mb-4">
+                  Reduces an array to a single value by applying a function to each element.
+                </p>
+                <div class="code-block">
+                  <pre><code><span class="keyword">const</span> <span class="variable">numbers</span> <span class="operator">=</span> [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>];
+
+<span class="comment">// Sum all numbers</span>
+<span class="keyword">const</span> <span class="variable">sum</span> <span class="operator">=</span> <span class="variable">numbers</span>.<span class="function">reduce</span>(
+  (<span class="parameter">accumulator</span>, <span class="parameter">currentValue</span>) <span class="operator">=></span> <span class="parameter">accumulator</span> <span class="operator">+</span> <span class="parameter">currentValue</span>,
+  <span class="number">0</span> <span class="comment">// Initial value</span>
+);
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">sum</span>); <span class="comment">// 15</span>
+
+<span class="comment">// Create an object from an array</span>
+<span class="keyword">const</span> <span class="variable">fruits</span> <span class="operator">=</span> [<span class="string">'Apple'</span>, <span class="string">'Banana'</span>, <span class="string">'Cherry'</span>];
+<span class="keyword">const</span> <span class="variable">fruitObj</span> <span class="operator">=</span> <span class="variable">fruits</span>.<span class="function">reduce</span>((<span class="parameter">obj</span>, <span class="parameter">fruit</span>, <span class="parameter">index</span>) <span class="operator">=></span> {
+  <span class="parameter">obj</span>[<span class="parameter">fruit</span>] <span class="operator">=</span> <span class="parameter">index</span>;
+  <span class="keyword">return</span> <span class="parameter">obj</span>;
+}, {});
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">fruitObj</span>); <span class="comment">// { Apple: 0, Banana: 1, Cherry: 2 }</span></code></pre>
+                </div>
+              </div>
+              
+              <!-- some and every -->
+              <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">some() and every()</h3>
+                <p class="text-gray-600 mb-4">
+                  Test if some or all elements in an array pass a test.
+                </p>
+                <div class="code-block">
+                  <pre><code><span class="keyword">const</span> <span class="variable">numbers</span> <span class="operator">=</span> [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>];
+
+<span class="comment">// some() - Checks if at least one element passes the test</span>
+<span class="keyword">const</span> <span class="variable">hasEven</span> <span class="operator">=</span> <span class="variable">numbers</span>.<span class="function">some</span>(<span class="parameter">num</span> <span class="operator">=></span> <span class="parameter">num</span> <span class="operator">%</span> <span class="number">2</span> <span class="operator">===</span> <span class="number">0</span>);
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">hasEven</span>); <span class="comment">// true</span>
+
+<span class="comment">// every() - Checks if all elements pass the test</span>
+<span class="keyword">const</span> <span class="variable">allPositive</span> <span class="operator">=</span> <span class="variable">numbers</span>.<span class="function">every</span>(<span class="parameter">num</span> <span class="operator">=></span> <span class="parameter">num</span> <span class="operator">></span> <span class="number">0</span>);
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">allPositive</span>); <span class="comment">// true</span>
+
+<span class="keyword">const</span> <span class="variable">allEven</span> <span class="operator">=</span> <span class="variable">numbers</span>.<span class="function">every</span>(<span class="parameter">num</span> <span class="operator">=></span> <span class="parameter">num</span> <span class="operator">%</span> <span class="number">2</span> <span class="operator">===</span> <span class="number">0</span>);
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">allEven</span>); <span class="comment">// false</span></code></pre>
+                </div>
+              </div>
+              
+              <!-- for...of Loop -->
+              <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">for...of Loop</h3>
+                <p class="text-gray-600 mb-4">
+                  A modern way to iterate through array elements.
+                </p>
+                <div class="code-block">
+                  <pre><code><span class="keyword">const</span> <span class="variable">fruits</span> <span class="operator">=</span> [<span class="string">'Apple'</span>, <span class="string">'Banana'</span>, <span class="string">'Cherry'</span>];
+
+<span class="comment">// Simple iteration</span>
+<span class="keyword">for</span> (<span class="keyword">const</span> <span class="variable">fruit</span> <span class="keyword">of</span> <span class="variable">fruits</span>) {
+  <span class="variable">console</span>.<span class="function">log</span>(<span class="variable">fruit</span>);
+}
+<span class="comment">// Output:
+// Apple
+// Banana
+// Cherry</span>
+
+<span class="comment">// With index using entries()</span>
+<span class="keyword">for</span> (<span class="keyword">const</span> [<span class="variable">index</span>, <span class="variable">fruit</span>] <span class="keyword">of</span> <span class="variable">fruits</span>.<span class="function">entries</span>()) {
+  <span class="variable">console</span>.<span class="function">log</span>(<span class="string">`${</span><span class="variable">index</span><span class="string">}: ${</span><span class="variable">fruit</span><span class="string">}`</span>);
+}
+<span class="comment">// Output:
+// 0: Apple
+// 1: Banana
+// 2: Cherry</span></code></pre>
+                </div>
+              </div>
+            </div>
+            
+            <div class="mt-6 p-6 bg-yellow-50 rounded-lg border-l-4 border-yellow-500">
+              <h3 class="text-xl font-semibold text-yellow-800 mb-2">Choosing the Right Iteration Method</h3>
+              <p class="text-gray-700 mb-4">
+                Each iteration method has its own use case:
+              </p>
+              <ul class="space-y-2">
+                <li class="flex items-start">
+                  <i class="fas fa-check-circle text-yellow-600 mt-1 mr-2"></i>
+                  <div>
+                    <p class="font-medium">Use <code>forEach()</code> when:</p>
+                    <p class="text-sm text-gray-600">You need to execute code for each element without creating a new array.</p>
+                  </div>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-check-circle text-yellow-600 mt-1 mr-2"></i>
+                  <div>
+                    <p class="font-medium">Use <code>map()</code> when:</p>
+                    <p class="text-sm text-gray-600">You need to transform each element and create a new array with the results.</p>
+                  </div>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-check-circle text-yellow-600 mt-1 mr-2"></i>
+                  <div>
+                    <p class="font-medium">Use <code>filter()</code> when:</p>
+                    <p class="text-sm text-gray-600">You need to select a subset of elements based on a condition.</p>
+                  </div>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-check-circle text-yellow-600 mt-1 mr-2"></i>
+                  <div>
+                    <p class="font-medium">Use <code>reduce()</code> when:</p>
+                    <p class="text-sm text-gray-600">You need to accumulate a single result from all elements.</p>
+                  </div>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-check-circle text-yellow-600 mt-1 mr-2"></i>
+                  <div>
+                    <p class="font-medium">Use <code>for...of</code> when:</p>
+                    <p class="text-sm text-gray-600">You need more control over the iteration process, like using <code>break</code> or <code>continue</code>.</p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            
+            <div class="mt-6 flex items-center justify-between">
+              <a href="#methods" class="text-primary-600 hover:text-primary-700 flex items-center">
+                <i class="fas fa-arrow-left mr-2"></i>
+                Previous: Array Methods
+              </a>
+              <a href="#destructuring" class="text-primary-600 hover:text-primary-700 flex items-center">
+                Next: Array Destructuring
+                <i class="fas fa-arrow-right ml-2"></i>
+              </a>
+            </div>
+          </section>
+          
+          <!-- Array Destructuring -->
+          <section id="destructuring" class="mb-12 bg-white rounded-lg shadow-md p-8 scroll-mt-4">
+            <h2 class="text-3xl font-bold text-gray-900 mb-6">Array Destructuring</h2>
+            
+            <p class="text-gray-700 mb-4">
+              Array destructuring is a convenient way to extract values from arrays and assign them to variables.
+            </p>
+            
+            <div class="code-block">
+              <div class="language-tag">javascript</div>
+              <button class="copy-button">Copy</button>
+              <pre><code><span class="comment">// Basic destructuring</span>
+<span class="keyword">const</span> <span class="variable">colors</span> <span class="operator">=</span> [<span class="string">'red'</span>, <span class="string">'green'</span>, <span class="string">'blue'</span>];
+
+<span class="keyword">const</span> [<span class="variable">firstColor</span>, <span class="variable">secondColor</span>, <span class="variable">thirdColor</span>] <span class="operator">=</span> <span class="variable">colors</span>;
+
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">firstColor</span>);  <span class="comment">// 'red'</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">secondColor</span>); <span class="comment">// 'green'</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">thirdColor</span>);  <span class="comment">// 'blue'</span></code></pre>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-8">
+              <!-- Skipping Elements -->
+              <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">Skipping Elements</h3>
+                <p class="text-gray-600 mb-4">
+                  You can skip elements you're not interested in.
+                </p>
+                <div class="code-block">
+                  <pre><code><span class="keyword">const</span> <span class="variable">colors</span> <span class="operator">=</span> [<span class="string">'red'</span>, <span class="string">'green'</span>, <span class="string">'blue'</span>, <span class="string">'yellow'</span>];
+
+<span class="comment">// Skip the second element</span>
+<span class="keyword">const</span> [<span class="variable">first</span>, , <span class="variable">third</span>] <span class="operator">=</span> <span class="variable">colors</span>;
+
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">first</span>);  <span class="comment">// 'red'</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">third</span>);  <span class="comment">// 'blue'</span></code></pre>
+                </div>
+              </div>
+              
+              <!-- Rest Operator -->
+              <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">Rest Operator</h3>
+                <p class="text-gray-600 mb-4">
+                  Collect remaining elements into a new array.
+                </p>
+                <div class="code-block">
+                  <pre><code><span class="keyword">const</span> <span class="variable">numbers</span> <span class="operator">=</span> [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>];
+
+<span class="comment">// Get first element and the rest</span>
+<span class="keyword">const</span> [<span class="variable">first</span>, ...<span class="variable">rest</span>] <span class="operator">=</span> <span class="variable">numbers</span>;
+
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">first</span>); <span class="comment">// 1</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">rest</span>);  <span class="comment">// [2, 3, 4, 5]</span></code></pre>
+                </div>
+              </div>
+              
+              <!-- Default Values -->
+              <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">Default Values</h3>
+                <p class="text-gray-600 mb-4">
+                  Provide fallback values for undefined elements.
+                </p>
+                <div class="code-block">
+                  <pre><code><span class="keyword">const</span> <span class="variable">colors</span> <span class="operator">=</span> [<span class="string">'red'</span>, <span class="string">'green'</span>];
+
+<span class="comment">// Provide default for missing element</span>
+<span class="keyword">const</span> [<span class="variable">first</span>, <span class="variable">second</span>, <span class="variable">third</span> <span class="operator">=</span> <span class="string">'blue'</span>] <span class="operator">=</span> <span class="variable">colors</span>;
+
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">first</span>);  <span class="comment">// 'red'</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">second</span>); <span class="comment">// 'green'</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">third</span>);  <span class="comment">// 'blue' (default value)</span></code></pre>
+                </div>
+              </div>
+              
+              <!-- Swapping Variables -->
+              <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">Swapping Variables</h3>
+                <p class="text-gray-600 mb-4">
+                  Easily swap values without a temporary variable.
+                </p>
+                <div class="code-block">
+                  <pre><code><span class="keyword">let</span> <span class="variable">a</span> <span class="operator">=</span> <span class="number">1</span>;
+<span class="keyword">let</span> <span class="variable">b</span> <span class="operator">=</span> <span class="number">2</span>;
+
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">a</span>, <span class="variable">b</span>); <span class="comment">// 1 2</span>
+
+<span class="comment">// Swap values using destructuring</span>
+[<span class="variable">a</span>, <span class="variable">b</span>] <span class="operator">=</span> [<span class="variable">b</span>, <span class="variable">a</span>];
+
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">a</span>, <span class="variable">b</span>); <span class="comment">// 2 1</span></code></pre>
+                </div>
+              </div>
+            </div>
+            
+            <div class="mt-6 p-6 bg-primary-50 rounded-lg border-l-4 border-primary-500">
+              <h3 class="text-xl font-semibold text-primary-800 mb-2">Practical Use Cases</h3>
+              <div class="code-block mt-4">
+                <pre><code><span class="comment">// Function that returns multiple values</span>
+<span class="keyword">function</span> <span class="function">getUser</span>() {
+  <span class="keyword">return</span> [<span class="string">'John'</span>, <span class="number">30</span>, <span  [<span class="string">'John'</span>, <span class="number">30</span>, <span class="string">'john@example.com'</span>];
+}
+
+<span class="comment">// Destructure the returned array</span>
+<span class="keyword">const</span> [<span class="variable">name</span>, <span class="variable">age</span>, <span class="variable">email</span>] <span class="operator">=</span> <span class="function">getUser</span>();
+
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">name</span>);  <span class="comment">// 'John'</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">age</span>);   <span class="comment">// 30</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">email</span>); <span class="comment">// 'john@example.com'</span>
+
+<span class="comment">// Destructuring function parameters</span>
+<span class="keyword">function</span> <span class="function">printUserInfo</span>([<span class="parameter">name</span>, <span class="parameter">age</span>, <span class="parameter">email</span>]) {
+  <span class="variable">console</span>.<span class="function">log</span>(<span class="string">`Name: ${</span><span class="parameter">name</span><span class="string">}, Age: ${</span><span class="parameter">age</span><span class="string">}, Email: ${</span><span class="parameter">email</span><span class="string">}`</span>);
+}
+
+<span class="function">printUserInfo</span>(<span class="function">getUser</span>()); <span class="comment">// "Name: John, Age: 30, Email: john@example.com"</span></code></pre>
+              </div>
+            </div>
+            
+            <div class="mt-6 flex items-center justify-between">
+              <a href="#iteration" class="text-primary-600 hover:text-primary-700 flex items-center">
+                <i class="fas fa-arrow-left mr-2"></i>
+                Previous: Array Iteration
+              </a>
+              <a href="#multidimensional" class="text-primary-600 hover:text-primary-700 flex items-center">
+                Next: Multidimensional Arrays
+                <i class="fas fa-arrow-right ml-2"></i>
+              </a>
+            </div>
+          </section>
+          
+          <!-- Multidimensional Arrays -->
+          <section id="multidimensional" class="mb-12 bg-white rounded-lg shadow-md p-8 scroll-mt-4">
+            <h2 class="text-3xl font-bold text-gray-900 mb-6">Multidimensional Arrays</h2>
+            
+            <p class="text-gray-700 mb-4">
+              Multidimensional arrays are arrays that contain other arrays as elements. They're useful for representing grids, matrices, or hierarchical data.
+            </p>
+            
+            <div class="code-block">
+              <div class="language-tag">javascript</div>
+              <button class="copy-button">Copy</button>
+              <pre><code><span class="comment">// 2D array (matrix)</span>
+<span class="keyword">const</span> <span class="variable">matrix</span> <span class="operator">=</span> [
+  [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>],
+  [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>],
+  [<span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>]
+];
+
+<span class="comment">// Accessing elements</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">matrix</span>[<span class="number">0</span>][<span class="number">0</span>]); <span class="comment">// 1</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">matrix</span>[<span class="number">1</span>][<span class="number">2</span>]); <span class="comment">// 6</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">matrix</span>[<span class="number">2</span>][<span class="number">1</span>]); <span class="comment">// 8</span></code></pre>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-8">
+              <!-- Iterating Over 2D Arrays -->
+              <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">Iterating Over 2D Arrays</h3>
+                <div class="code-block">
+                  <pre><code><span class="keyword">const</span> <span class="variable">matrix</span> <span class="operator">=</span> [
+  [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>],
+  [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>],
+  [<span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>]
+];
+
+<span class="comment">// Using nested for loops</span>
+<span class="keyword">for</span> (<span class="keyword">let</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; <span class="variable">i</span> <span class="operator"><</span> <span class="variable">matrix</span>.<span class="variable">length</span>; <span class="variable">i</span><span class="operator">++</span>) {
+  <span class="keyword">for</span> (<span class="keyword">let</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">0</span>; <span class="variable">j</span> <span class="operator"><</span> <span class="variable">matrix</span>[<span class="variable">i</span>].<span class="variable">length</span>; <span class="variable">j</span><span class="operator">++</span>) {
+    <span class="variable">console</span>.<span class="function">log</span>(<span class="variable">matrix</span>[<span class="variable">i</span>][<span class="variable">j</span>]);
+  }
+}
+
+<span class="comment">// Using forEach</span>
+<span class="variable">matrix</span>.<span class="function">forEach</span>(<span class="parameter">row</span> <span class="operator">=></span> {
+  <span class="parameter">row</span>.<span class="function">forEach</span>(<span class="parameter">element</span> <span class="operator">=></span> {
+    <span class="variable">console</span>.<span class="function">log</span>(<span class="parameter">element</span>);
+  });
+});</code></pre>
+                </div>
+              </div>
+              
+              <!-- Practical Example -->
+              <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">Practical Example: Tic-Tac-Toe</h3>
+                <div class="code-block">
+                  <pre><code><span class="comment">// Representing a Tic-Tac-Toe board</span>
+<span class="keyword">const</span> <span class="variable">board</span> <span class="operator">=</span> [
+  [<span class="string">'X'</span>, <span class="string">'O'</span>, <span class="string">'X'</span>],
+  [<span class="string">'O'</span>, <span class="string">'X'</span>, <span class="string">'O'</span>],
+  [<span class="string">'X'</span>, <span class="string">'O'</span>, <span class="string">'X'</span>]
+];
+
+<span class="comment">// Print the board</span>
+<span class="keyword">function</span> <span class="function">printBoard</span>(<span class="parameter">board</span>) {
+  <span class="parameter">board</span>.<span class="function">forEach</span>(<span class="parameter">row</span> <span class="operator">=></span> {
+    <span class="variable">console</span>.<span class="function">log</span>(<span class="parameter">row</span>.<span class="function">join</span>(<span class="string">' | '</span>));
+    <span class="variable">console</span>.<span class="function">log</span>(<span class="string">'---------'</span>);
+  });
+}
+
+<span class="function">printBoard</span>(<span class="variable">board</span>);
+<span class="comment">// Output:
+// X | O | X
+// ---------
+// O | X | O
+// ---------
+// X | O | X
+// ---------</span></code></pre>
+                </div>
+              </div>
+            </div>
+            
+            <div class="mt-6 p-6 bg-primary-50 rounded-lg border-l-4 border-primary-500">
+              <h3 class="text-xl font-semibold text-primary-800 mb-2">Working with Jagged Arrays</h3>
+              <p class="text-gray-700 mb-4">
+                Jagged arrays are multidimensional arrays where the member arrays can have different lengths.
+              </p>
+              <div class="code-block mt-4">
+                <pre><code><span class="comment">// Jagged array</span>
+<span class="keyword">const</span> <span class="variable">jaggedArray</span> <span class="operator">=</span> [
+  [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>],
+  [<span class="number">4</span>, <span class="number">5</span>],
+  [<span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>]
+];
+
+<span class="comment">// Print the lengths of each row</span>
+<span class="variable">jaggedArray</span>.<span class="function">forEach</span>((<span class="parameter">row</span>, <span class="parameter">index</span>) <span class="operator">=></span> {
+  <span class="variable">console</span>.<span class="function">log</span>(<span class="string">`Row ${</span><span class="parameter">index</span><span class="string">} has ${</span><span class="parameter">row</span>.<span class="variable">length</span><span class="string">} elements`</span>);
+});
+<span class="comment">// Output:
+// Row 0 has 3 elements
+// Row 1 has 2 elements
+// Row 2 has 4 elements</span>
+
+<span class="comment">// Flattening a multidimensional array</span>
+<span class="keyword">const</span> <span class="variable">flattened</span> <span class="operator">=</span> <span class="variable">jaggedArray</span>.<span class="function">flat</span>();
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">flattened</span>); <span class="comment">// [1, 2, 3, 4, 5, 6, 7, 8, 9]</span></code></pre>
+              </div>
+            </div>
+            
+            <div class="mt-6 flex items-center justify-between">
+              <a href="#destructuring" class="text-primary-600 hover:text-primary-700 flex items-center">
+                <i class="fas fa-arrow-left mr-2"></i>
+                Previous: Array Destructuring
+              </a>
+              <a href="#best-practices" class="text-primary-600 hover:text-primary-700 flex items-center">
+                Next: Best Practices
+                <i class="fas fa-arrow-right ml-2"></i>
+              </a>
+            </div>
+          </section>
+          
+          <!-- Best Practices -->
+          <section id="best-practices" class="mb-12 bg-white rounded-lg shadow-md p-8 scroll-mt-4">
+            <h2 class="text-3xl font-bold text-gray-900 mb-6">Best Practices</h2>
+            
+            <p class="text-gray-700 mb-4">
+              Following these best practices will help you write cleaner, more efficient JavaScript code when working with arrays.
+            </p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+              <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+                  <span class="bg-green-100 text-green-600 p-2 rounded-lg mr-3">
+                    <i class="fas fa-check"></i>
+                  </span>
+                  Do
+                </h3>
+                <ul class="space-y-4">
+                  <li class="flex items-start">
+                    <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                    <div>
+                      <p class="font-medium">Use array methods instead of loops when possible</p>
+                      <p class="text-sm text-gray-600">Methods like <code>map()</code>, <code>filter()</code>, and <code>reduce()</code> are more readable and less error-prone</p>
+                    </div>
+                  </li>
+                  <li class="flex items-start">
+                    <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                    <div>
+                      <p class="font-medium">Use the spread operator for copying arrays</p>
+                      <p class="text-sm text-gray-600">Creates a new array instead of modifying the original</p>
+                    </div>
+                  </li>
+                  <li class="flex items-start">
+                    <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                    <div>
+                      <p class="font-medium">Use destructuring for cleaner code</p>
+                      <p class="text-sm text-gray-600">Makes your code more readable and concise</p>
+                    </div>
+                  </li>
+                  <li class="flex items-start">
+                    <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                    <div>
+                      <p class="font-medium">Check if an array is empty with <code>length</code></p>
+                      <p class="text-sm text-gray-600"><code>if (array.length === 0)</code> or <code>if (!array.length)</code></p>
+                    </div>
+                  </li>
+                  <li class="flex items-start">
+                    <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                    <div>
+                      <p class="font-medium">Use array methods that return new arrays for immutability</p>
+                      <p class="text-sm text-gray-600">Helps prevent unexpected side effects</p>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              
+              <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+                  <span class="bg-red-100 text-red-600 p-2 rounded-lg mr-3">
+                    <i class="fas fa-times"></i>
+                  </span>
+                  Don't
+                </h3>
+                <ul class="space-y-4">
+                  <li class="flex items-start">
+                    <i class="fas fa-times-circle text-red-500 mt-1 mr-2"></i>
+                    <div>
+                      <p class="font-medium">Avoid using <code>delete</code> on arrays</p>
+                      <p class="text-sm text-gray-600">Creates "holes" in the array; use <code>splice()</code> instead</p>
+                    </div>
+                  </li>
+                  <li class="flex items-start">
+                    <i class="fas fa-times-circle text-red-500 mt-1 mr-2"></i>
+                    <div>
+                      <p class="font-medium">Don't use <code>for...in</code> loops with arrays</p>
+                      <p class="text-sm text-gray-600">It iterates over all enumerable properties, not just array indices</p>
+                    </div>
+                  </li>
+                  <li class="flex items-start">
+                    <i class="fas fa-times-circle text-red-500 mt-1 mr-2"></i>
+                    <div>
+                      <p class="font-medium">Avoid comparing arrays with <code>==</code> or <code>===</code></p>
+                      <p class="text-sm text-gray-600">Arrays are objects, so they're compared by reference, not content</p>
+                    </div>
+                  </li>
+                  <li class="flex items-start">
+                    <i class="fas fa-times-circle text-red-500 mt-1 mr-2"></i>
+                    <div>
+                      <p class="font-medium">Don't use <code>new Array()</code> with a single numeric argument</p>
+                      <p class="text-sm text-gray-600">Creates an array with empty slots, not an array with a single number</p>
+                    </div>
+                  </li>
+                  <li class="flex items-start">
+                    <i class="fas fa-times-circle text-red-500 mt-1 mr-2"></i>
+                    <div>
+                      <p class="font-medium">Avoid modifying arrays during iteration</p>
+                      <p class="text-sm text-gray-600">Can lead to unexpected behavior and hard-to-find bugs</p>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            
+            <div class="code-block">
+              <div class="language-tag">javascript</div>
+              <button class="copy-button">Copy</button>
+              <pre><code><span class="comment">// Good practices</span>
+
+<span class="comment">// 1. Use array methods instead of loops</span>
+<span class="keyword">const</span> <span class="variable">numbers</span> <span class="operator">=</span> [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>];
+
+<span class="comment">// Instead of:</span>
+<span class="keyword">const</span> <span class="variable">doubled</span> <span class="operator">=</span> [];
+<span class="keyword">for</span> (<span class="keyword">let</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; <span class="variable">i</span> <span class="operator"><</span> <span class="variable">numbers</span>.<span class="variable">length</span>; <span class="variable">i</span><span class="operator">++</span>) {
+  <span class="variable">doubled</span>.<span class="function">push</span>(<span class="variable">numbers</span>[<span class="variable">i</span>] <span class="operator">*</span> <span class="number">2</span>);
+}
+
+<span class="comment">// Do this:</span>
+<span class="keyword">const</span> <span class="variable">doubled</span> <span class="operator">=</span> <span class="variable">numbers</span>.<span class="function">map</span>(<span class="parameter">num</span> <span class="operator">=></span> <span class="parameter">num</span> <span class="operator">*</span> <span class="number">2</span>);
+
+<span class="comment">// 2. Use spread operator for copying</span>
+<span class="comment">// Instead of:</span>
+<span class="keyword">const</span> <span class="variable">copy</span> <span class="operator">=</span> <span class="variable">numbers</span>.<span class="function">slice</span>();
+
+<span class="comment">// Do this:</span>
+<span class="keyword">const</span> <span class="variable">copy</span> <span class="operator">=</span> [...<span class="variable">numbers</span>];
+
+<span class="comment">// 3. Use destructuring</span>
+<span class="comment">// Instead of:</span>
+<span class="keyword">const</span> <span class="variable">first</span> <span class="operator">=</span> <span class="variable">numbers</span>[<span class="number">0</span>];
+<span class="keyword">const</span> <span class="variable">second</span> <span class="operator">=</span> <span class="variable">numbers</span>[<span class="number">1</span>];
+
+<span class="comment">// Do this:</span>
+<span class="keyword">const</span> [<span class="variable">first</span>, <span class="variable">second</span>] <span class="operator">=</span> <span class="variable">numbers</span>;</code></pre>
+            </div>
+            
+            <div class="mt-8 p-6 bg-yellow-50 rounded-lg border-l-4 border-yellow-500">
+              <h3 class="text-xl font-semibold text-yellow-800 mb-2">Performance Considerations</h3>
+              <p class="text-gray-700 mb-4">
+                When working with large arrays, keep these performance tips in mind:
+              </p>
+              <ul class="space-y-2">
+                <li class="flex items-start">
+                  <i class="fas fa-bolt text-yellow-600 mt-1 mr-2"></i>
+                  <span>Prefer <code>for</code> loops over array methods for very large arrays when performance is critical</span>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-bolt text-yellow-600 mt-1 mr-2"></i>
+                  <span>Use <code>push()</code> instead of concatenation with <code>+</code> when building arrays dynamically</span>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-bolt text-yellow-600 mt-1 mr-2"></i>
+                  <span>Pre-allocate arrays with a known size when possible</span>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-bolt text-yellow-600 mt-1 mr-2"></i>
+                  <span>Consider using typed arrays for numeric data when working with large datasets</span>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-bolt text-yellow-600 mt-1 mr-2"></i>
+                  <span>Chain array methods carefully; each method creates a new array</span>
+                </li>
+              </ul>
+            </div>
+            
+            <div class="mt-6 flex items-center justify-between">
+              <a href="#multidimensional" class="text-primary-600 hover:text-primary-700 flex items-center">
+                <i class="fas fa-arrow-left mr-2"></i>
+                Previous: Multidimensional Arrays
+              </a>
+              <a href="#interactive-demo" class="text-primary-600 hover:text-primary-700 flex items-center">
+                Next: Interactive Demo
+                <i class="fas fa-arrow-right ml-2"></i>
+              </a>
+            </div>
+          </section>
+          
+          <!-- Interactive Demo -->
+          <section id="interactive-demo" class="mb-12 bg-white rounded-lg shadow-md p-8 scroll-mt-4">
+            <h2 class="text-3xl font-bold text-gray-900 mb-6">Interactive Demo</h2>
+            
+            <p class="text-gray-700 mb-6">
+              Try out different array operations and see how they work. This interactive demo will help you understand the concepts better.
+            </p>
+            
+            <div class="interactive-demo">
+              <div class="interactive-demo-header">
+                <h3 class="font-semibold">Array Explorer</h3>
+                <div class="flex space-x-2">
+                  <button class="tab-button active" data-tab="creation-demo">Creation</button>
+                  <button class="tab-button" data-tab="methods-demo">Methods</button>
+                  <button class="tab-button" data-tab="iteration-demo">Iteration</button>
+                </div>
+              </div>
+              
+              <div class="interactive-demo-content">
+                <div class="tab-content active" id="creation-demo">
+                  <p class="text-gray-700 mb-4">
+                    Different ways to create arrays in JavaScript.
+                  </p>
+                  <div class="code-block">
+                    <pre><code><span class="comment">// Array literal</span>
+<span class="keyword">const</span> <span class="variable">fruits</span> <span class="operator">=</span> [<span class="string">'Apple'</span>, <span class="string">'Banana'</span>, <span class="string">'Cherry'</span>];
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">fruits</span>);
+
+<span class="comment">// Array constructor</span>
+<span class="keyword">const</span> <span class="variable">numbers</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="function">Array</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>);
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">numbers</span>);
+
+<span class="comment">// Array.from()</span>
+<span class="keyword">const</span> <span class="variable">letters</span> <span class="operator">=</span> <span class="variable">Array</span>.<span class="function">from</span>(<span class="string">'HELLO'</span>);
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">letters</span>);
+
+<span class="comment">// Array.of()</span>
+<span class="keyword">const</span> <span class="variable">single</span> <span class="operator">=</span> <span class="variable">Array</span>.<span class="function">of</span>(<span class="number">42</span>);
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">single</span>);
+
+<span class="comment">// Spread operator with another array</span>
+<span class="keyword">const</span> <span class="variable">moreFruits</span> <span class="operator">=</span> [...<span class="variable">fruits</span>, <span class="string">'Date'</span>, <span class="string">'Elderberry'</span>];
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">moreFruits</span>);</code></pre>
+                  </div>
+                  <button class="mt-4 bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-md transition-colors" id="run-creation">
+                    Run Example
+                  </button>
+                  <div class="interactive-demo-output" id="creation-output">
+                    <p class="text-gray-500 italic">Output will appear here...</p>
+                  </div>
+                </div>
+                
+                <div class="tab-content" id="methods-demo">
+                  <p class="text-gray-700 mb-4">
+                    Common array methods for adding, removing, and finding elements.
+                  </p>
+                  <div class="code-block">
+                    <pre><code><span class="keyword">let</span> <span class="variable">fruits</span> <span class="operator">=</span> [<span class="string">'Apple'</span>, <span class="string">'Banana'</span>, <span class="string">'Cherry'</span>];
+<span class="variable">console</span>.<span class="function">log</span>(<span class="string">'Original array:'</span>, <span class="variable">fruits</span>);
+
+<span class="comment">// Adding elements</span>
+<span class="variable">fruits</span>.<span class="function">push</span>(<span class="string">'Date'</span>);
+<span class="variable">console</span>.<span class="function">log</span>(<span class="string">'After push:'</span>, <span class="variable">fruits</span>);
+
+<span class="variable">fruits</span>.<span class="function">unshift</span>(<span class="string">'Apricot'</span>);
+<span class="variable">console</span>.<span class="function">log</span>(<span class="string">'After unshift:'</span>, <span class="variable">fruits</span>);
+
+<span class="comment">// Removing elements</span>
+<span class="keyword">const</span> <span class="variable">lastFruit</span> <span class="operator">=</span> <span class="variable">fruits</span>.<span class="function">pop</span>();
+<span class="variable">console</span>.<span class="function">log</span>(<span class="string">'Popped:'</span>, <span class="variable">lastFruit</span>);
+<span class="variable">console</span>.<span class="function">log</span>(<span class="string">'After pop:'</span>, <span class="variable">fruits</span>);
+
+<span class="keyword">const</span> <span class="variable">firstFruit</span> <span class="operator">=</span> <span class="variable">fruits</span>.<span class="function">shift</span>();
+<span class="variable">console</span>.<span class="function">log</span>(<span class="string">'Shifted:'</span>, <span class="variable">firstFruit</span>);
+<span class="variable">console</span>.<span class="function">log</span>(<span class="string">'After shift:'</span>, <span class="variable">fruits</span>);
+
+<span class="comment">// Finding elements</span>
+<span class="keyword">const</span> <span class="variable">index</span> <span class="operator">=</span> <span class="variable">fruits</span>.<span class="function">indexOf</span>(<span class="string"(<span class="string">'Banana'</span>);
+<span class="variable">console</span>.<span class="function">log</span>(<span class="string">'Index of Banana:'</span>, <span class="variable">index</span>);
+
+<span class="keyword">const</span> <span class="variable">hasDragon</span> <span class="operator">=</span> <span class="variable">fruits</span>.<span class="function">includes</span>(<span class="string">'Dragon Fruit'</span>);
+<span class="variable">console</span>.<span class="function">log</span>(<span class="string">'Has Dragon Fruit:'</span>, <span class="variable">hasDragon</span>);</code></pre>
+                  </div>
+                  <button class="mt-4 bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-md transition-colors" id="run-methods">
+                    Run Example
+                  </button>
+                  <div class="interactive-demo-output" id="methods-output">
+                    <p class="text-gray-500 italic">Output will appear here...</p>
+                  </div>
+                </div>
+                
+                <div class="tab-content" id="iteration-demo">
+                  <p class="text-gray-700 mb-4">
+                    Different ways to iterate through arrays.
+                  </p>
+                  <div class="code-block">
+                    <pre><code><span class="keyword">const</span> <span class="variable">numbers</span> <span class="operator">=</span> [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>];
+
+<span class="comment">// forEach</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="string">'forEach:'</span>);
+<span class="variable">numbers</span>.<span class="function">forEach</span>((<span class="parameter">num</span>, <span class="parameter">index</span>) <span class="operator">=></span> {
+  <span class="variable">console</span>.<span class="function">log</span>(<span class="string">`numbers[${</span><span class="parameter">index</span><span class="string">}] = ${</span><span class="parameter">num</span><span class="string">}`</span>);
+});
+
+<span class="comment">// map</span>
+<span class="keyword">const</span> <span class="variable">doubled</span> <span class="operator">=</span> <span class="variable">numbers</span>.<span class="function">map</span>(<span class="parameter">num</span> <span class="operator">=></span> <span class="parameter">num</span> <span class="operator">*</span> <span class="number">2</span>);
+<span class="variable">console</span>.<span class="function">log</span>(<span class="string">'map (doubled):'</span>, <span class="variable">doubled</span>);
+
+<span class="comment">// filter</span>
+<span class="keyword">const</span> <span class="variable">evenNumbers</span> <span class="operator">=</span> <span class="variable">numbers</span>.<span class="function">filter</span>(<span class="parameter">num</span> <span class="operator">=></span> <span class="parameter">num</span> <span class="operator">%</span> <span class="number">2</span> <span class="operator">===</span> <span class="number">0</span>);
+<span class="variable">console</span>.<span class="function">log</span>(<span class="string">'filter (even):'</span>, <span class="variable">evenNumbers</span>);
+
+<span class="comment">// reduce</span>
+<span class="keyword">const</span> <span class="variable">sum</span> <span class="operator">=</span> <span class="variable">numbers</span>.<span class="function">reduce</span>((<span class="parameter">total</span>, <span class="parameter">num</span>) <span class="operator">=></span> <span class="parameter">total</span> <span class="operator">+</span> <span class="parameter">num</span>, <span class="number">0</span>);
+<span class="variable">console</span>.<span class="function">log</span>(<span class="string">'reduce (sum):'</span>, <span class="variable">sum</span>);
+
+<span class="comment">// for...of</span>
+<span class="variable">console</span>.<span class="function">log</span>(<span class="string">'for...of:'</span>);
+<span class="keyword">for</span> (<span class="keyword">const</span> <span class="variable">num</span> <span class="keyword">of</span> <span class="variable">numbers</span>) {
+  <span class="variable">console</span>.<span class="function">log</span>(<span class="variable">num</span>);
+}</code></pre>
+                  </div>
+                  <button class="mt-4 bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-md transition-colors" id="run-iteration">
+                    Run Example
+                  </button>
+                  <div class="interactive-demo-output" id="iteration-output">
+                    <p class="text-gray-500 italic">Output will appear here...</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="mt-6 flex items-center justify-between">
+              <a href="#best-practices" class="text-primary-600 hover:text-primary-700 flex items-center">
+                <i class="fas fa-arrow-left mr-2"></i>
+                Previous: Best Practices
+              </a>
+              <a href="#common-patterns" class="text-primary-600 hover:text-primary-700 flex items-center">
+                Next: Common Patterns
+                <i class="fas fa-arrow-right ml-2"></i>
+              </a>
+            </div>
+          </section>
+          
+          <!-- Common Patterns -->
+          <section id="common-patterns" class="mb-12 bg-white rounded-lg shadow-md p-8 scroll-mt-4">
+            <h2 class="text-3xl font-bold text-gray-900 mb-6">Common Array Patterns</h2>
+            
+            <p class="text-gray-700 mb-4">
+              These common array patterns and techniques will help you write more effective JavaScript code.
+            </p>
+            
+            <div class="space-y-8">
+              <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">Removing Duplicates</h3>
+                <p class="text-gray-700 mb-4">
+                  Several ways to remove duplicate values from an array.
+                </p>
+                <div class="code-block">
+                  <div class="language-tag">javascript</div>
+                  <button class="copy-button">Copy</button>
+                  <pre><code><span class="keyword">const</span> <span class="variable">numbers</span> <span class="operator">=</span> [<span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">5</span>];
+
+<span class="comment">// Using Set</span>
+<span class="keyword">const</span> <span class="variable">uniqueWithSet</span> <span class="operator">=</span> [...<span class="keyword">new</span> <span class="function">Set</span>(<span class="variable">numbers</span>)];
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">uniqueWithSet</span>); <span class="comment">// [1, 2, 3, 4, 5]</span>
+
+<span class="comment">// Using filter</span>
+<span class="keyword">const</span> <span class="variable">uniqueWithFilter</span> <span class="operator">=</span> <span class="variable">numbers</span>.<span class="function">filter</span>((<span class="parameter">value</span>, <span class="parameter">index</span>, <span class="parameter">array</span>) <span class="operator">=></span> {
+  <span class="keyword">return</span> <span class="parameter">array</span>.<span class="function">indexOf</span>(<span class="parameter">value</span>) <span class="operator">===</span> <span class="parameter">index</span>;
+});
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">uniqueWithFilter</span>); <span class="comment">// [1, 2, 3, 4, 5]</span>
+
+<span class="comment">// Using reduce</span>
+<span class="keyword">const</span> <span class="variable">uniqueWithReduce</span> <span class="operator">=</span> <span class="variable">numbers</span>.<span class="function">reduce</span>((<span class="parameter">unique</span>, <span class="parameter">item</span>) <span class="operator">=></span> {
+  <span class="keyword">return</span> <span class="parameter">unique</span>.<span class="function">includes</span>(<span class="parameter">item</span>) ? <span class="parameter">unique</span> : [...<span class="parameter">unique</span>, <span class="parameter">item</span>];
+}, []);
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">uniqueWithReduce</span>); <span class="comment">// [1, 2, 3, 4, 5]</span></code></pre>
+                </div>
+              </div>
+              
+              <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">Grouping Array Elements</h3>
+                <p class="text-gray-700 mb-4">
+                  Group array elements by a specific property or condition.
+                </p>
+                <div class="code-block">
+                  <div class="language-tag">javascript</div>
+                  <button class="copy-button">Copy</button>
+                  <pre><code><span class="keyword">const</span> <span class="variable">people</span> <span class="operator">=</span> [
+  { <span class="variable">name</span>: <span class="string">'John'</span>, <span class="variable">age</span>: <span class="number">25</span>, <span class="variable">city</span>: <span class="string">'New York'</span> },
+  { <span class="variable">name</span>: <span class="string">'Jane'</span>, <span class="variable">age</span>: <span class="number">30</span>, <span class="variable">city</span>: <span class="string">'Boston'</span> },
+  { <span class="variable">name</span>: <span class="string">'Bob'</span>, <span class="variable">age</span>: <span class="number">25</span>, <span class="variable">city</span>: <span class="string">'Chicago'</span> },
+  { <span class="variable">name</span>: <span class="string">'Alice'</span>, <span class="variable">age</span>: <span class="number">35</span>, <span class="variable">city</span>: <span class="string">'Boston'</span> }
+];
+
+<span class="comment">// Group by age</span>
+<span class="keyword">const</span> <span class="variable">groupedByAge</span> <span class="operator">=</span> <span class="variable">people</span>.<span class="function">reduce</span>((<span class="parameter">groups</span>, <span class="parameter">person</span>) <span class="operator">=></span> {
+  <span class="keyword">const</span> <span class="variable">age</span> <span class="operator">=</span> <span class="parameter">person</span>.<span class="variable">age</span>;
+  <span class="parameter">groups</span>[<span class="variable">age</span>] <span class="operator">=</span> <span class="parameter">groups</span>[<span class="variable">age</span>] <span class="operator">||</span> [];
+  <span class="parameter">groups</span>[<span class="variable">age</span>].<span class="function">push</span>(<span class="parameter">person</span>);
+  <span class="keyword">return</span> <span class="parameter">groups</span>;
+}, {});
+
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">groupedByAge</span>);
+<span class="comment">// {
+//   25: [
+//     { name: 'John', age: 25, city: 'New York' },
+//     { name: 'Bob', age: 25, city: 'Chicago' }
+//   ],
+//   30: [{ name: 'Jane', age: 30, city: 'Boston' }],
+//   35: [{ name: 'Alice', age: 35, city: 'Boston' }]
+// }</span>
+
+<span class="comment">// Group by city</span>
+<span class="keyword">const</span> <span class="variable">groupedByCity</span> <span class="operator">=</span> <span class="variable">people</span>.<span class="function">reduce</span>((<span class="parameter">groups</span>, <span class="parameter">person</span>) <span class="operator">=></span> {
+  <span class="keyword">const</span> <span class="variable">city</span> <span class="operator">=</span> <span class="parameter">person</span>.<span class="variable">city</span>;
+  <span class="parameter">groups</span>[<span class="variable">city</span>] <span class="operator">=</span> <span class="parameter">groups</span>[<span class="variable">city</span>] <span class="operator">||</span> [];
+  <span class="parameter">groups</span>[<span class="variable">city</span>].<span class="function">push</span>(<span class="parameter">person</span>);
+  <span class="keyword">return</span> <span class="parameter">groups</span>;
+}, {});
+
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">groupedByCity</span>);</code></pre>
+                </div>
+              </div>
+              
+              <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">Chunking Arrays</h3>
+                <p class="text-gray-700 mb-4">
+                  Split an array into smaller chunks of a specified size.
+                </p>
+                <div class="code-block">
+                  <div class="language-tag">javascript</div>
+                  <button class="copy-button">Copy</button>
+                  <pre><code><span class="keyword">function</span> <span class="function">chunkArray</span>(<span class="parameter">array</span>, <span class="parameter">size</span>) {
+  <span class="keyword">const</span> <span class="variable">chunked</span> <span class="operator">=</span> [];
+  <span class="keyword">for</span> (<span class="keyword">let</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; <span class="variable">i</span> <span class="operator"><</span> <span class="parameter">array</span>.<span class="variable">length</span>; <span class="variable">i</span> <span class="operator">+=</span> <span class="parameter">size</span>) {
+    <span class="variable">chunked</span>.<span class="function">push</span>(<span class="parameter">array</span>.<span class="function">slice</span>(<span class="variable">i</span>, <span class="variable">i</span> <span class="operator">+</span> <span class="parameter">size</span>));
+  }
+  <span class="keyword">return</span> <span class="variable">chunked</span>;
+}
+
+<span class="keyword">const</span> <span class="variable">numbers</span> <span class="operator">=</span> [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>, <span class="number">10</span>];
+<span class="keyword">const</span> <span class="variable">chunks</span> <span class="operator">=</span> <span class="function">chunkArray</span>(<span class="variable">numbers</span>, <span class="number">3</span>);
+
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">chunks</span>);
+<span class="comment">// [[1, 2, 3], [4, 5, 6], [7, 8, 9], [10]]</span>
+
+<span class="comment">// Alternative using reduce</span>
+<span class="keyword">function</span> <span class="function">chunkWithReduce</span>(<span class="parameter">array</span>, <span class="parameter">size</span>) {
+  <span class="keyword">return</span> <span class="parameter">array</span>.<span class="function">reduce</span>((<span class="parameter">chunks</span>, <span class="parameter">item</span>, <span class="parameter">index</span>) <span class="operator">=></span> {
+    <span class="keyword">const</span> <span class="variable">chunkIndex</span> <span class="operator">=</span> <span class="variable">Math</span>.<span class="function">floor</span>(<span class="parameter">index</span> <span class="operator">/</span> <span class="parameter">size</span>);
+    
+    <span class="keyword">if</span> (!<span class="parameter">chunks</span>[<span class="variable">chunkIndex</span>]) {
+      <span class="parameter">chunks</span>[<span class="variable">chunkIndex</span>] <span class="operator">=</span> [];
+    }
+    
+    <span class="parameter">chunks</span>[<span class="variable">chunkIndex</span>].<span class="function">push</span>(<span class="parameter">item</span>);
+    <span class="keyword">return</span> <span class="parameter">chunks</span>;
+  }, []);
+}</code></pre>
+                </div>
+              </div>
+              
+              <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">Finding Intersections and Differences</h3>
+                <p class="text-gray-700 mb-4">
+                  Find common elements or differences between arrays.
+                </p>
+                <div class="code-block">
+                  <div class="language-tag">javascript</div>
+                  <button class="copy-button">Copy</button>
+                  <pre><code><span class="keyword">const</span> <span class="variable">array1</span> <span class="operator">=</span> [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>];
+<span class="keyword">const</span> <span class="variable">array2</span> <span class="operator">=</span> [<span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>];
+
+<span class="comment">// Intersection (elements in both arrays)</span>
+<span class="keyword">const</span> <span class="variable">intersection</span> <span class="operator">=</span> <span class="variable">array1</span>.<span class="function">filter</span>(<span class="parameter">item</span> <span class="operator">=></span> <span class="variable">array2</span>.<span class="function">includes</span>(<span class="parameter">item</span>));
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">intersection</span>); <span class="comment">// [3, 4, 5]</span>
+
+<span class="comment">// Difference (elements in array1 that are not in array2)</span>
+<span class="keyword">const</span> <span class="variable">difference</span> <span class="operator">=</span> <span class="variable">array1</span>.<span class="function">filter</span>(<span class="parameter">item</span> <span class="operator">=></span> !<span class="variable">array2</span>.<span class="function">includes</span>(<span class="parameter">item</span>));
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">difference</span>); <span class="comment">// [1, 2]</span>
+
+<span class="comment">// Symmetric difference (elements in either array but not both)</span>
+<span class="keyword">const</span> <span class="variable">symmetricDifference</span> <span class="operator">=</span> [
+  ...<span class="variable">array1</span>.<span class="function">filter</span>(<span class="parameter">item</span> <span class="operator">=></span> !<span class="variable">array2</span>.<span class="function">includes</span>(<span class="parameter">item</span>)),
+  ...<span class="variable">array2</span>.<span class="function">filter</span>(<span class="parameter">item</span> <span class="operator">=></span> !<span class="variable">array1</span>.<span class="function">includes</span>(<span class="parameter">item</span>))
+];
+<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">symmetricDifference</span>); <span class="comment">// [1, 2, 6, 7]</span></code></pre>
+                </div>
+              </div>
+            </div>
+            
+            <div class="mt-8 p-6 bg-primary-50 rounded-lg border-l-4 border-primary-500">
+              <h3 class="text-xl font-semibold text-primary-800 mb-2">Further Learning</h3>
+              <p class="text-gray-700 mb-4">
+                To deepen your understanding of JavaScript arrays and related concepts, explore these resources:
+              </p>
+              <ul class="space-y-2">
+                <li class="flex items-start">
+                  <i class="fas fa-book text-primary-600 mt-1 mr-2"></i>
+                  <a href="#" class="text-primary-600 hover:text-primary-700">MDN Web Docs: JavaScript Arrays</a>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-book text-primary-600 mt-1 mr-2"></i>
+                  <a href="#" class="text-primary-600 hover:text-primary-700">Eloquent JavaScript by Marijn Haverbeke</a>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-book text-primary-600 mt-1 mr-2"></i>
+                  <a href="#" class="text-primary-600 hover:text-primary-700">JavaScript: The Good Parts by Douglas Crockford</a>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-video text-primary-600 mt-1 mr-2"></i>
+                  <a href="#" class="text-primary-600 hover:text-primary-700">Functional Programming in JavaScript (Course)</a>
+                </li>
+              </ul>
+            </div>
+            
+            <div class="mt-6 flex items-center justify-between">
+              <a href="#interactive-demo" class="text-primary-600 hover:text-primary-700 flex items-center">
+                <i class="fas fa-arrow-left mr-2"></i>
+                Previous: Interactive Demo
+              </a>
+              <a href="/" class="text-primary-600 hover:text-primary-700 flex items-center">
+                Back to Home
+                <i class="fas fa-home ml-2"></i>
+              </a>
+            </div>
+          </section>
+        </main>
+      </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+      <div class="container mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+          <div>
+            <div class="flex items-center space-x-2 mb-4">
+              <div class="bg-white text-primary-600 h-8 w-8 rounded-lg flex items-center justify-center shadow-lg">
+                <span class="text-sm font-bold">JS</span>
+              </div>
+              <span class="text-lg font-semibold tracking-tight">JSFundamentals</span>
+            </div>
+            <p class="text-gray-400 text-sm">Your comprehensive guide to mastering JavaScript fundamentals and beyond.</p>
+          </div>
+          
+          <div>
+            <h3 class="text-lg font-semibold mb-4">Resources</h3>
+            <ul class="space-y-2 text-gray-400">
+              <li><a href="#" class="hover:text-white transition-colors">Documentation</a></li>
+              <li><a href="#" class="hover:text-white transition-colors">Tutorials</a></li>
+              <li><a href="#" class="hover:text-white transition-colors">Examples</a></li>
+              <li><a href="#" class="hover:text-white transition-colors">Cheat Sheets</a></li>
+            </ul>
+          </div>
+          
+          <div>
+            <h3 class="text-lg font-semibold mb-4">Community</h3>
+            <ul class="space-y-2 text-gray-400">
+              <li><a href="#" class="hover:text-white transition-colors">Forums</a></li>
+              <li><a href="#" class="hover:text-white transition-colors">Discord</a></li>
+              <li><a href="#" class="hover:text-white transition-colors">GitHub</a></li>
+              <li><a href="#" class="hover:text-white transition-colors">Stack Overflow</a></li>
+            </ul>
+          </div>
+          
+          <div>
+            <h3 class="text-lg font-semibold mb-4">Connect</h3>
+            <div class="flex space-x-4 mb-4">
+              <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                <i class="fab fa-twitter text-xl"></i>
+              </a>
+              <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                <i class="fab fa-github text-xl"></i>
+              </a>
+              <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                <i class="fab fa-linkedin text-xl"></i>
+              </a>
+              <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                <i class="fab fa-youtube text-xl"></i>
+              </a>
+            </div>
+            <p class="text-gray-400 text-sm">Contact us at <a href="mailto:hello@jsfundamentals.dev" class="text-primary-400 hover:text-primary-300">hello@jsfundamentals.dev</a></p>
+          </div>
+        </div>
+        
+        <div class="pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center">
+          <p class="text-gray-500 text-sm">Created by Arun | JavaScript Learning Journey | April 2025</p>
+          <div class="flex space-x-6 mt-4 md:mt-0">
+            <a href="#" class="text-gray-500 hover:text-gray-400 text-sm">Privacy Policy</a>
+            <a href="#" class="text-gray-500 hover:text-gray-400 text-sm">Terms of Service</a>
+            <a href="#" class="text-gray-500 hover:text-gray-400 text-sm">Cookie Policy</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+    
+    <script>
+      // Progress bar
+      window.addEventListener('scroll', () => {
+        const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrolled = (winScroll / height) * 100;
+        document.getElementById('progressBar').style.width = scrolled + '%';
+        
+        // Update reading progress
+        document.getElementById('readingProgress').style.width = scrolled + '%';
+        
+        // Highlight active section in TOC
+        const sections = document.querySelectorAll('section[id]');
+        let currentSection = '';
+        
+        sections.forEach(section => {
+          const sectionTop = section.offsetTop;
+          const sectionHeight = section.offsetHeight;
+          
+          if (pageYOffset >= sectionTop - 100 && pageYOffset < sectionTop + sectionHeight - 100) {
+            currentSection = section.getAttribute('id');
+          }
+        });
+        
+        document.querySelectorAll('.toc-link').forEach(link => {
+          link.classList.remove('active');
+          if (link.getAttribute('href').substring(1) === currentSection) {
+            link.classList.add('active');
+          }
+        });
+      });
+      
+      // Tab switching for interactive demo
+      document.querySelectorAll('.tab-button').forEach(button => {
+        button.addEventListener('click', () => {
+          // Remove active class from all buttons and content
+          document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+          document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+          
+          // Add active class to clicked button and corresponding content
+          button.classList.add('active');
+          const tabId = button.getAttribute('data-tab');
+          document.getElementById(tabId).classList.add('active');
+        });
+      });
+      
+      // Copy button functionality
+      document.querySelectorAll('.copy-button').forEach(button => {
+        button.addEventListener('click', () => {
+          const codeBlock = button.nextElementSibling;
+          const code = codeBlock.textContent;
+          
+          navigator.clipboard.writeText(code).then(() => {
+            button.textContent = 'Copied!';
+            button.classList.add('copied');
+            
+            setTimeout(() => {
+              button.textContent = 'Copy';
+              button.classList.remove('copied');
+            }, 2000);
+          });
+        });
+      });

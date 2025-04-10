@@ -1,0 +1,240 @@
+<section
+  id="advanced-concepts"
+  class="mb-12 bg-white rounded-lg shadow-md p-8 scroll-mt-4"
+>
+  <h2 class="text-3xl font-bold text-gray-900 mb-6">Advanced Concepts</h2>
+
+  <p class="text-gray-700 mb-6">
+    Once you've mastered the basics, these advanced concepts will help you
+    understand JavaScript variables at a deeper level.
+  </p>
+
+  <div class="space-y-8">
+    <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+      <h3 class="text-xl font-semibold text-gray-900 mb-4">Closures</h3>
+      <p class="text-gray-700 mb-4">
+        A closure is the combination of a function and the lexical environment
+        within which that function was declared. This allows a function to
+        access variables from its outer scope even after that scope has closed.
+      </p>
+      <div id = "code" class="code-block">
+        <div   class="language-tag">javascript</div>
+        <button class="copy-button">Copy</button>
+        <pre><code><span class="keyword">function</span> <span class="function">createCounter</span>() {
+                      <span class="keyword">let</span> <span class="variable">count</span> <span class="operator">=</span> <span class="number">0</span>; <span class="comment">// This variable is "closed over"</span>
+                      
+                      <span class="keyword">return</span> {
+                        <span class="function">increment</span>() {
+                          <span class="variable">count</span><span class="operator">++</span>;
+                          <span class="keyword">return</span> <span class="variable">count</span>;
+                        },
+                        <span class="function">decrement</span>() {
+                          <span class="variable">count</span><span class="operator">--</span>;
+                          <span class="keyword">return</span> <span class="variable">count</span>;
+                        },
+                        <span class="function">getCount</span>() {
+                          <span class="keyword">return</span> <span class="variable">count</span>;
+                        }
+                      };
+                    }
+
+                    <span class="keyword">const</span> <span class="variable">counter</span> <span class="operator">=</span> <span class="function">createCounter</span>();
+                    <span class="variable">console</span>.<span class="function">log</span>(<span class="variable">counter</span>.<span class="function">increment</span>()); <span class="comment">// 1</span>
+                    <span class="variable">console</span>.<span class="function">log</span>(<span class="variable">counter</span>.<span class="function">increment</span>()); <span class="comment">// 2</span>
+                    <span class="variable">console</span>.<span class="function">log</span>(<span class="variable">counter</span>.<span class="function">decrement</span>()); <span class="comment">// 1</span>
+
+                    <span class="comment">// The count variable is private and can only be accessed through the returned methods</span></code></pre>
+      </div>
+    </div>
+
+    <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+      <h3 class="text-xl font-semibold text-gray-900 mb-4">
+        Temporal Dead Zone (TDZ)
+      </h3>
+      <p class="text-gray-700 mb-4">
+        The TDZ is the period between entering a scope where a variable is
+        declared and the actual declaration. During this time, the variable
+        exists but cannot be accessed.
+      </p>
+      <div id = "code" class="code-block">
+        <div class="language-tag">javascript</div>
+        <button class="copy-button">Copy</button>
+        <pre><code>{
+                    <span class="comment">// TDZ starts here for myVar</span>
+                    <span class="variable">console</span>.<span class="function">log</span>(<span class="variable">myVar</span>); <span class="comment">// ReferenceError: Cannot access 'myVar' before initialization</span>
+                    
+                    <span class="keyword">let</span> <span class="variable">myVar</span> <span class="operator">=</span> <span class="string">'Hello'</span>; <span class="comment">// TDZ ends here</span>
+                    <span class="variable">console</span>.<span class="function">log</span>(<span class="variable">myVar</span>); <span class="comment">// 'Hello'</span>
+                  }</code></pre>
+      </div>
+      <p class="mt-4 text-gray-700">
+        The TDZ helps catch errors by preventing access to variables before
+        they're properly initialized.
+      </p>
+    </div>
+
+    <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+      <h3 class="text-xl font-semibold text-gray-900 mb-4">Module Scope</h3>
+      <p class="text-gray-700 mb-4">
+        In modern JavaScript, each module has its own scope. Variables declared
+        in a module are not automatically added to the global scope.
+      </p>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <p class="font-medium text-gray-900 mb-2">module1.js</p>
+          <div id = "code" class="code-block">
+            <pre><code><span class="comment">// Variables are module-scoped by default</span>
+                      <span class="keyword">const</span> <span class="variable">privateVar</span> <span class="operator">=</span> <span class="string">'Not accessible outside'</span>;
+
+                      <span class="comment">// Export to make accessible</span>
+                      <span class="keyword">export</span> <span class="keyword">const</span> <span class="variable">publicVar</span> <span class="operator">=</span> <span class="string">'Accessible when imported'</span>;
+
+                      <span class="keyword">export</span> <span class="keyword">function</span> <span class="function">getPrivateVar</span>() {
+                        <span class="keyword">return</span> <span class="variable">privateVar</span>;
+                      }</code></pre>
+          </div>
+        </div>
+        <div>
+          <p class="font-medium text-gray-900 mb-2">module2.js</p>
+          <div  id = "code" class="code-block">
+            <pre><code><span class="keyword">import</span> { <span class="variable">publicVar</span>, <span class="function">getPrivateVar</span> } <span class="keyword">from</span> <span class="string">'./module1.js'</span>;
+
+                      <span class="variable">console</span>.<span class="function">log</span>(<span class="variable">publicVar</span>); <span class="comment">// 'Accessible when imported'</span>
+                      <span class="variable">console</span>.<span class="function">log</span>(<span class="function">getPrivateVar</span>()); <span class="comment">// 'Not accessible outside'</span>
+
+                      <span class="comment">// console.log(privateVar); // ReferenceError</span></code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+      <h3 class="text-xl font-semibold text-gray-900 mb-4">
+        Destructuring Assignment
+      </h3>
+      <p class="text-gray-700 mb-4">
+        Destructuring allows you to extract(unpack) values from arrays or properties
+        from objects into distinct variables in a concise way.
+      </p>
+      <div id = "code" class="code-block">
+        <div class="language-tag">javascript</div>
+        <button class="copy-button">Copy</button>
+        <pre><code><span class="comment">// Array destructuring</span>
+                  <span class="keyword">const</span> <span class="variable">numbers</span> <span class="operator">=</span> [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>];
+                  <span class="keyword">const</span> [<span class="variable">first</span>, <span class="variable">second</span>, ...<span class="variable">rest</span>] <span class="operator">=</span> <span class="variable">numbers</span>;
+
+                  <span class="variable">console</span>.<span class="function">log</span>(<span class="variable">first</span>);  <span class="comment">// 1</span>
+                  <span class="variable">console</span>.<span class="function">log</span>(<span class="variable">second</span>); <span class="comment">// 2</span>
+                  <span class="variable">console</span>.<span class="function">log</span>(<span class="variable">rest</span>);   <span class="comment">// [3, 4, 5]</span>
+
+                  <span class="comment">// Object destructuring</span>
+                  <span class="keyword">const</span> <span class="variable">person</span> <span class="operator">=</span> {
+                    <span class="variable">name</span>: <span class="string">'John'</span>,
+                    <span class="variable">age</span>: <span class="number">30</span>,
+                    <span class="variable">address</span>: {
+                      <span class="variable">city</span>: <span class="string">'New York'</span>,
+                      <span class="variable">country</span>: <span class="string">'USA'</span>
+                    }
+                  };
+
+                  <span class="comment">// Basic destructuring</span>
+                  <span class="keyword">const</span> { <span class="variable">name</span>, <span class="variable">age</span> } <span class="operator">=</span> <span class="variable">person</span>;
+                  <span class="variable">console</span>.<span class="function">log</span>(<span class="variable">name</span>); <span class="comment">// 'John'</span>
+                  <span class="variable">console</span>.<span class="function">log</span>(<span class="variable">age</span>);  <span class="comment">// 30</span>
+
+                  <span class="comment">// Nested destructuring</span>
+                  <span class="keyword">const</span> { <span class="variable">address</span>: { <span class="variable">city</span>, <span class="variable">country</span> } } <span class="operator">=</span> <span class="variable">person</span>;
+                  <span class="variable">console</span>.<span class="function">log</span>(<span class="variable">city</span>);    <span class="comment">// 'New York'</span>
+                  <span class="variable">console</span>.<span class="function">log</span>(<span class="variable">country</span>); <span class="comment">// 'USA'</span>
+
+                  <span class="comment">// Renaming variables</span>
+                  <span class="keyword">const</span> { <span class="variable">name</span>: <span class="variable">personName</span> } <span class="operator">=</span> <span class="variable">person</span>;
+                  <span class="variable">console</span>.<span class="function">log</span>(<span class="variable">personName</span>); <span class="comment">// 'John'</span>
+
+                  <span class="comment">// Default values</span>
+                  <span class="keyword">const</span> { <span class="variable">job</span> <span class="operator">=</span> <span class="string">'Developer'</span> } <span class="operator">=</span> <span class="variable">person</span>;
+                  <span class="variable">console</span>.<span class="function">log</span>(<span class="variable">job</span>); <span class="comment">// 'Developer' (default value used)</span></code></pre>
+      </div>
+    </div>
+
+    <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+      <h3 class="text-xl font-semibold text-gray-900 mb-4">
+        Global Object and globalThis
+      </h3>
+      <p class="text-gray-700 mb-4">
+        The global object provides variables and functions that are available
+        anywhere. <code>globalThis</code> provides a standard way to access the
+        global object across environments.
+      </p>
+      <div id = "code" class="code-block">
+        <div class="language-tag">javascript</div>
+        <button onclick="myfunction" id ="code-example" class="copy-button">Copy</button>
+        <pre><code><span class="comment">// Variables declared with var at the top level become properties of the global object</span>
+                  <span class="keyword">var</span> <span class="variable">globalVar</span> <span class="operator">=</span> <span class="string">'I am global'</span>;
+                  <span class="variable">console</span>.<span class="function">log</span>(<span class="variable">globalThis</span>.<span class="variable">globalVar</span>); <span class="comment">// 'I am global'</span>
+
+                  <span class="comment">// let and const do NOT become properties of the global object</span>
+                  <span class="keyword">let</span> <span class="variable">localVar</span> <span class="operator">=</span> <span class="string">'I am not global'</span>;
+                  <span class="variable">console</span>.<span class="function">log</span>(<span class="variable">globalThis</span>.<span class="variable">localVar</span>); <span class="comment">// undefined</span>
+
+                  <span class="comment">// globalThis works across different JavaScript environments</span>
+                  <span class="comment">// In a browser: globalThis === window</span>
+                  <span class="comment">// In Node.js: globalThis === global</span>
+                  <span class="comment">// In a Web Worker: globalThis === self</span></code></pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-8 p-6 bg-primary-50 rounded-lg border-l-4 border-primary-500">
+    <h3 class="text-xl font-semibold text-primary-800 mb-2">
+      Further Learning
+    </h3>
+    <p class="text-gray-700 mb-4">
+      To deepen your understanding of JavaScript variables and related concepts,
+      explore these resources:
+    </p>
+    <ul class="space-y-2">
+      <li class="flex items-start">
+        <i class="fas fa-book text-primary-600 mt-1 mr-2"></i>
+        <a href="#" class="text-primary-600 hover:text-primary-700"
+          >MDN Web Docs: JavaScript Variables</a
+        >
+      </li>
+      <li class="flex items-start">
+        <i class="fas fa-book text-primary-600 mt-1 mr-2"></i>
+        <a href="#" class="text-primary-600 hover:text-primary-700"
+          >JavaScript: The Good Parts by Douglas Crockford</a
+        >
+      </li>
+      <li class="flex items-start">
+        <i class="fas fa-book text-primary-600 mt-1 mr-2"></i>
+        <a href="#" class="text-primary-600 hover:text-primary-700"
+          >You Don't Know JS by Kyle Simpson</a
+        >
+      </li>
+      <li class="flex items-start">
+        <i class="fas fa-video text-primary-600 mt-1 mr-2"></i>
+        <a href="#" class="text-primary-600 hover:text-primary-700"
+          >JavaScript: Understanding the Weird Parts (Course)</a
+        >
+      </li>
+    </ul>
+  </div>
+
+  <div class="mt-6 flex items-center justify-between">
+    <a
+      href="#common-mistakes"
+      class="text-primary-600 hover:text-primary-700 flex items-center"
+    >
+      <i class="fas fa-arrow-left mr-2"></i>
+      Previous: Common Mistakes
+    </a>
+    <a
+      href="/"
+      class="text-primary-600 hover:text-primary-700 flex items-center"
+    >
+      Back to Home
+      <i class="fas fa-home ml-2"></i>
+    </a>
+  </div>
+</section>
